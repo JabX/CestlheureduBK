@@ -1,0 +1,64 @@
+﻿@page "/"
+@using CestlheureduBK.Model
+@using System.Net
+@using Microsoft.EntityFrameworkCore
+@inject BKDbContext context;
+@attribute [StreamRendering]
+
+<PageTitle>C'est l'heure du BK ! - Rentabilité des couronnes</PageTitle>
+
+<h1>Rentabilité des couronnes</h1>
+
+@if (offers == null)
+{
+    <p><em>Chargement...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Produit</th>
+                <th>Prix</th>
+                <th>Couronnes</th>
+                <th>Valeur couronne</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var offer in offers)
+            {
+                <tr>
+                    <td>@offer.Type</td>
+                    <td>@offer.Name</td>
+                    <td>@offer.Price.ToString("0.00 €")</td>
+                    <td>@offer.Points</td>
+                    <td>@offer.PointValue.ToString("0.000 €")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private OfferDisplay[]? offers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        offers = await context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).Include(off => off.Promotion).ThenInclude(prm => prm.Menus)
+            .AsAsyncEnumerable()
+            .SelectMany(off => 
+                off.Promotion.Products.Select(prd => new OfferDisplay("Produit", prd.Name, off.Points, prd.Price))
+                .Concat(off.Promotion.Menus.Select(prd => new OfferDisplay("Menu", prd.Name, off.Points, prd.Price)))
+                .ToAsyncEnumerable())
+            .OrderByDescending(off => off.PointValue)
+            .ThenBy(off => off.Points)
+            .ThenBy(off => off.Name)
+            .ToArrayAsync();
+    }
+
+    private record OfferDisplay(string Type, string Name, int Points, decimal Price)
+    {
+        public decimal PointValue => Price / Points;
+    }
+}

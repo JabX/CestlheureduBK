@@ -1,0 +1,76 @@
+﻿@page "/data"
+@using System.Net
+@using CestlheureduBK.Model
+@using System.Net.Http.Headers
+@rendermode InteractiveServer
+@inject BKDbContext context;
+
+<PageTitle>C'est l'heure du BK ! - Chargement des données</PageTitle>
+
+<h1>Chargement des données</h1>
+
+<label for"codeRestaurant">Code restaurant</label>
+<input id="codeRestaurant" @bind="@codeRestaurant" />
+<br />
+<label for"accessToken">Access Token pour l'API BK</label>
+<input id="accessToken" @bind="@accessToken" />
+
+<button class="btn btn-primary" @onclick="ReloadData">Recharger</button>
+<p class="@ClassName">@message</p>
+@if (loading)
+{
+    <p>Chargement...</p>
+}
+
+@code {
+    string codeRestaurant = "K0157";
+    bool loading;
+    string? accessToken;
+    string? message;
+    bool error;
+
+    string ClassName => error ? "alert-danger" : "";
+
+    private async Task ReloadData()
+    {
+        var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip });
+        try
+        {
+            loading = true;
+            var catalogue = await client.GetAsync($"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json");
+            catalogue.EnsureSuccessStatusCode();
+            var data = (await catalogue.Content.ReadFromJsonAsync<Catalogue>())!;
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var points = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
+            points.EnsureSuccessStatusCode();
+            var dataPoints = (await points.Content.ReadFromJsonAsync<Points>())!;
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            var products = data.Products.Select(prd => new ProductDb { Id = prd.Id, Name = prd.Name, Price = prd.Price }).ToList();
+            var menus = data.Menus.Select(prd => new MenuDb { Id = prd.Id, Name = prd.Name, Price = prd.Price, PriceL = prd.PriceL, PriceXL = prd.PriceXL }).ToList();
+            var promotions = data.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList() }).ToList();
+            var offers = dataPoints.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb { Id = off.TransformationId, Title = off.Title, Points = off.Points, Promotion = promotions.Single(prm => prm.Id == off.PromotionId) })).ToList();
+
+            context.AddRange(products);
+            context.AddRange(menus);
+            context.AddRange(promotions);
+            context.AddRange(offers);
+            await context.SaveChangesAsync();
+
+            error = false;
+            message = "Chargement des données OK !";
+        }
+        catch (Exception e)
+        {
+            error = true;
+            message = $"Une erreur est survenue lors de l'actualisation des données : {e.Message}";
+        } finally
+        {
+            loading = false;
+        }
+    }
+}
