@@ -16,6 +16,7 @@ namespace CestlheureduBK.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
                     PriceL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
                     PriceXL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true)
@@ -31,6 +32,7 @@ namespace CestlheureduBK.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false)
                 },
                 constraints: table =>

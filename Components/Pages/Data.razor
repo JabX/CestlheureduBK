@@ -50,8 +50,8 @@
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var products = data.Products.Select(prd => new ProductDb { Id = prd.Id, Name = prd.Name, Price = prd.Price }).ToList();
-            var menus = data.Menus.Select(prd => new MenuDb { Id = prd.Id, Name = prd.Name, Price = prd.Price, PriceL = prd.PriceL, PriceXL = prd.PriceXL }).ToList();
+            var products = data.Products.Select(prd => new ProductDb { Id = prd.Id, Name = prd.Name, Image = prd.Image, Price = prd.Price }).ToList();
+            var menus = data.Menus.Select(men => new MenuDb { Id = men.Id, Name = men.Name, Image = men.Image, Price = men.Price, PriceL = men.PriceL, PriceXL = men.PriceXL }).ToList();
             var promotions = data.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList() }).ToList();
             var offers = dataPoints.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb { Id = off.TransformationId, Title = off.Title, Points = off.Points, Promotion = promotions.Single(prm => prm.Id == off.PromotionId) })).ToList();
 
@@ -68,7 +68,8 @@
         {
             error = true;
             message = $"Une erreur est survenue lors de l'actualisation des données : {e.Message}";
-        } finally
+        }
+        finally
         {
             loading = false;
         }

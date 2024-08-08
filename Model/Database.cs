@@ -21,6 +21,8 @@ public record MenuDb
 
     public required string Name { get; set; }
 
+    public string? Image { get; set; }
+
     [Column(TypeName = "decimal(4, 2)")]
     public required decimal Price { get; set; }
 
@@ -52,6 +54,8 @@ public record ProductDb
     public required string Id { get; set; }
 
     public required string Name { get; set; }
+
+    public string? Image { get; set; }
 
 
     [Column(TypeName = "decimal(4, 2)")]

@@ -28,9 +28,9 @@ else
         <tbody>
             @foreach (var offer in offers)
             {
-                <tr>
+                <tr style="vertical-align:middle">
                     <td>@offer.Type</td>
-                    <td>@offer.Name</td>
+                    <td><img src="@offer.Image" width="100" /> @offer.Name</td>
                     <td>@offer.Price.ToString("0.00 €")</td>
                     <td>@offer.Points</td>
                     <td>@offer.PointValue.ToString("0.000 €")</td>
@@ -48,8 +48,8 @@ else
         offers = await context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).Include(off => off.Promotion).ThenInclude(prm => prm.Menus)
             .AsAsyncEnumerable()
             .SelectMany(off => 
-                off.Promotion.Products.Select(prd => new OfferDisplay("Produit", prd.Name, off.Points, prd.Price))
-                .Concat(off.Promotion.Menus.Select(prd => new OfferDisplay("Menu", prd.Name, off.Points, prd.Price)))
+                off.Promotion.Products.Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price))
+                .Concat(off.Promotion.Menus.Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price)))
                 .ToAsyncEnumerable())
             .OrderByDescending(off => off.PointValue)
             .ThenBy(off => off.Points)
@@ -57,7 +57,7 @@ else
             .ToArrayAsync();
     }
 
-    private record OfferDisplay(string Type, string Name, int Points, decimal Price)
+    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price)
     {
         public decimal PointValue => Price / Points;
     }

@@ -22,6 +22,9 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -65,6 +68,9 @@ namespace CestlheureduBK.Migrations
             modelBuilder.Entity("CestlheureduBK.Model.ProductDb", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
