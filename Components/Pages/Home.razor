@@ -17,8 +17,7 @@ else
 {
     <table class="table">
         <thead>
-            <tr>
-                <th>Type</th>
+            <tr style="white-space:nowrap">
                 <th>Produit</th>
                 <th>Prix €</th>
                 <th>Prix 👑</th>
@@ -29,11 +28,10 @@ else
             @foreach (var offer in offers)
             {
                 <tr style="vertical-align:middle">
-                    <td>@offer.Type</td>
-                    <td><img src="@offer.Image" width="100" /> @offer.Name</td>
-                    <td>@offer.Price.ToString("0.00 €")</td>
-                    <td>@offer.Points</td>
-                    <td>@offer.PointValue.ToString("0.000 €")</td>
+                    <td><span style="display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;"><img src="@offer.Image" width="100" /><span>@offer.Name</span></span></td>
+                    <td style="white-space:nowrap">@offer.Price.ToString("0.00 €")</td>
+                    <td style="white-space:nowrap">@offer.Points</td>
+                    <td style="white-space:nowrap">@offer.PointValue.ToString("0.000 €")</td>
                 </tr>
             }
         </tbody>
