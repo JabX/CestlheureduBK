@@ -55,6 +55,16 @@
             var promotions = data.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList() }).ToList();
             var offers = dataPoints.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb { Id = off.TransformationId, Title = off.Title, Points = off.Points, Promotion = promotions.Single(prm => prm.Id == off.PromotionId) })).ToList();
 
+            foreach (var product in products.Where(prd => prd.Image == null))
+            {
+                product.Image = products.FirstOrDefault(prd => prd.Name.StartsWith(product.Name) && prd.Image != null)?.Image;
+            }
+
+            foreach (var menu in menus.Where(men => men.Image == null))
+            {
+                menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(menu.Name) && men.Image != null)?.Image;
+            }
+
             context.AddRange(products);
             context.AddRange(menus);
             context.AddRange(promotions);
