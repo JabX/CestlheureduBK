@@ -9,7 +9,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 Directory.CreateDirectory("./data");
-builder.Services.AddDbContext<BKDbContext>(e => e.UseSqlite("Data Source=./data/bk.db"));
+builder.Services.AddDbContext<BKDbContext>(e => e
+    .UseSqlite("Data Source=./data/bk.db")
+    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 var app = builder.Build();
 

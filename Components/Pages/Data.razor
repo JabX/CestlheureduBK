@@ -2,6 +2,7 @@
 @using System.Net
 @using CestlheureduBK.Model
 @using System.Net.Http.Headers
+@using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
 @inject BKDbContext context;
 
@@ -9,13 +10,27 @@
 
 <h1>Chargement des données</h1>
 
-<label for"codeRestaurant">Code restaurant</label>
-<input id="codeRestaurant" @bind="@codeRestaurant" />
+<br />
+<button class="btn btn-primary" @onclick="ReloadRestaurants">Recharger les restaurants</button>
+<br />
+<br />
+
+<label for"codeRestaurant">Restaurant</label>
+<select id="codeRestaurant" @bind="@codeRestaurant">
+    @foreach (var restaurant in restaurants)
+    {
+        <option value="@restaurant.Id">@restaurant.Departement - @restaurant.Name</option>
+    }
+</select>
+<button class="btn btn-primary" @onclick="ReloadMenusAndProducts">Recharger le catalogue</button>
+<br />
 <br />
 <label for"accessToken">Access Token pour l'API BK</label>
 <input id="accessToken" @bind="@accessToken" />
-
-<button class="btn btn-primary" @onclick="ReloadData">Recharger</button>
+<button class="btn btn-primary" @onclick="ReloadOffers">Recharger les offres</button>
+<br />
+<br />
+<button class="btn btn-primary" @onclick="ResetDb">Tout recharger</button>
 <p class="@ClassName">@message</p>
 @if (loading)
 {
@@ -29,31 +44,129 @@
     string? message;
     bool error;
 
+    RestaurantDb[] restaurants = [];
+
     string ClassName => error ? "alert-danger" : "";
 
-    private async Task ReloadData()
+    protected override async Task OnInitializedAsync()
     {
-        var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip });
         try
         {
+            restaurants = await context.Restaurants
+                .Where(r => r.Opened)
+                .OrderBy(r => r.Departement)
+                .ThenBy(r => r.Name)
+                .ToArrayAsync();
+        }
+        catch
+        {
+
+        }
+    }
+
+    private async Task ResetDb()
+    {
+        try
+        {
+            message = null;
             loading = true;
-            var catalogue = await client.GetAsync($"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json");
-            catalogue.EnsureSuccessStatusCode();
-            var data = (await catalogue.Content.ReadFromJsonAsync<Catalogue>())!;
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var client = GetClient(true);
+            var result = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
+            result.EnsureSuccessStatusCode();
 
-            var points = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
-            points.EnsureSuccessStatusCode();
-            var dataPoints = (await points.Content.ReadFromJsonAsync<Points>())!;
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
 
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            await ReloadRestaurants();
+            await ReloadMenusAndProducts();
+            await ReloadOffers();
 
-            var products = data.Products.Select(prd => new ProductDb { Id = prd.Id, Name = prd.Name, Image = prd.Image, Price = prd.Price }).ToList();
-            var menus = data.Menus.Select(men => new MenuDb { Id = men.Id, Name = men.Name, Image = men.Image, Price = men.Price, PriceL = men.PriceL, PriceXL = men.PriceXL }).ToList();
-            var promotions = data.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList() }).ToList();
-            var offers = dataPoints.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb { Id = off.TransformationId, Title = off.Title, Points = off.Points, Promotion = promotions.Single(prm => prm.Id == off.PromotionId) })).ToList();
+            error = false;
+            message = "Base reconstruite avec succès !";
+        }
+        catch (Exception e)
+        {
+            error = true;
+            message = $"Une erreur est survenue lors de la reconstruction de la base : {e.Message}";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task ReloadRestaurants()
+    {
+        using var client = GetClient();
+
+        try
+        {
+            message = null;
+            loading = true;
+            var storeLocator = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/public/store-locator");
+            storeLocator.EnsureSuccessStatusCode();
+            var stores = (await storeLocator.Content.ReadFromJsonAsync<StoreLocator>())!;
+
+            var restaux = await stores.Markers.ToAsyncEnumerable().SelectAwait(async store =>
+            {
+                var restaurant = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}");
+                restaurant.EnsureSuccessStatusCode();
+                var restaurantData = (await restaurant.Content.ReadFromJsonAsync<Restaurant>())!;
+                return new RestaurantDb
+                    {
+                        AddressFull = restaurantData.AddressFull,
+                        Id = restaurantData.Id,
+                        Name = restaurantData.Name,
+                        Departement = restaurantData.AddressFull.Split(" - ").Last().Trim()[..2]
+                    };
+            }).ToArrayAsync();
+
+            var restaurantsDb = await context.Restaurants.ToDictionaryAsync(r => r.Id);
+
+            context.AddRange(restaux.Where(r => !restaurantsDb.ContainsKey(r.Id)));
+            context.UpdateRange(restaux.Where(r => restaurantsDb.ContainsKey(r.Id)));
+            await context.SaveChangesAsync();
+            context.ChangeTracker.Clear();
+
+            await context.Restaurants
+                .Where(r => !restaux.Select(re => re.Id).Contains(r.Id))
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Opened, false));
+
+            await OnInitializedAsync();
+
+            error = false;
+            message = "Restaurants rechargés avec succès !";
+        }
+        catch (Exception e)
+        {
+            error = true;
+            message = $"Une erreur est survenue lors de l'actualisation des données : {e.Message}";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task ReloadMenusAndProducts()
+    {
+        using var client = GetClient();
+
+        try
+        {
+            message = null;
+            loading = true;
+
+            var result = await client.GetAsync($"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json");
+            result.EnsureSuccessStatusCode();
+            var catalogue = (await result.Content.ReadFromJsonAsync<Catalogue>())!;
+
+            var restaurant = await context.Restaurants.AsTracking().SingleAsync(r => r.Id == codeRestaurant);
+
+            var products = catalogue.Products.Select(prd => new ProductDb { Id = prd.Id, Name = prd.Name, Image = prd.Image, Price = prd.Price, Restaurant = restaurant }).ToList();
+            var menus = catalogue.Menus.Select(men => new MenuDb { Id = men.Id, Name = men.Name, Image = men.Image, Price = men.Price, PriceL = men.PriceL, PriceXL = men.PriceXL, Restaurant = restaurant }).ToList();
+            var promotions = catalogue.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList(), Restaurant = restaurant }).ToList();
 
             foreach (var product in products.Where(prd => prd.Image == null))
             {
@@ -65,14 +178,38 @@
                 menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(menu.Name) && men.Image != null)?.Image;
             }
 
-            context.AddRange(products);
-            context.AddRange(menus);
-            context.AddRange(promotions);
-            context.AddRange(offers);
+            await context.Database.ExecuteSqlRawAsync(@"
+                delete from MenuDbPromotionDb;
+                delete from ProductDbPromotionDb;
+            ");
+
+            var productsDb = await context.Products.ToDictionaryAsync(p => p.Id);
+            var menusDb = await context.Menus.ToDictionaryAsync(p => p.Id);
+            var promotionsDb = await context.Promotions.ToDictionaryAsync(p => p.Id);
+
+            context.AddRange(products.Where(r => !productsDb.ContainsKey(r.Id)));
+            context.UpdateRange(products.Where(r => productsDb.ContainsKey(r.Id)));
+            context.AddRange(menus.Where(r => !menusDb.ContainsKey(r.Id)));
+            context.UpdateRange(menus.Where(r => menusDb.ContainsKey(r.Id)));
+            context.AddRange(promotions.Where(r => !promotionsDb.ContainsKey(r.Id)));
+            context.UpdateRange(promotions.Where(r => promotionsDb.ContainsKey(r.Id)));
+
             await context.SaveChangesAsync();
+            context.ChangeTracker.Clear();
+
+
+            await context.Products
+                .Where(r => !products.Select(re => re.Id).Contains(r.Id))
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
+            await context.Menus
+                .Where(r => !menus.Select(re => re.Id).Contains(r.Id))
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
+            await context.Promotions
+                .Where(r => !promotions.Select(re => re.Id).Contains(r.Id))
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
 
             error = false;
-            message = "Chargement des données OK !";
+            message = "Catalogue rechargé avec succès !";
         }
         catch (Exception e)
         {
@@ -83,5 +220,60 @@
         {
             loading = false;
         }
+    }
+
+    private async Task ReloadOffers()
+    {
+        using var client = GetClient(true);
+
+        try
+        {
+            message = null;
+            loading = true;
+
+            var result = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
+            result.EnsureSuccessStatusCode();
+            var points = (await result.Content.ReadFromJsonAsync<Points>())!;
+
+            var promotions = await context.Promotions.AsTracking().ToDictionaryAsync(p => p.Id);
+
+            var offers = points.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb
+            {
+                Id = off.TransformationId,
+                Title = off.Title,
+                Points = off.Points,
+                Promotion = promotions[off.PromotionId]
+            })).ToList();
+
+            await context.Offers.ExecuteDeleteAsync();
+            context.AddRange(offers);
+            await context.SaveChangesAsync();
+            context.ChangeTracker.Clear();
+
+            error = false;
+            message = "Offres rechargées avec succès !";
+        }
+        catch (Exception e)
+        {
+            error = true;
+            message = $"Une erreur est survenue lors de l'actualisation des données : {e.Message}";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private HttpClient GetClient(bool withToken = false)
+    {
+        var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip });
+        client.DefaultRequestHeaders.Accept.Add(new("application/json"));
+
+        if (withToken && !string.IsNullOrEmpty(accessToken))
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        return client;
     }
 }

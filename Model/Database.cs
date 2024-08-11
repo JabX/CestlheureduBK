@@ -12,6 +12,8 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
     public DbSet<ProductDb> Products { get; set; }
 
     public DbSet<PromotionDb> Promotions { get; set; }
+
+    public DbSet<RestaurantDb> Restaurants { get; set; }
 }
 
 [Table("Menus")]
@@ -33,6 +35,10 @@ public record MenuDb
     public decimal? PriceXL { get; set; }
 
     public IList<PromotionDb>? Promotions { get; set; } = [];
+
+    public required RestaurantDb Restaurant { get; set; }
+
+    public bool Available { get; set; } = true;
 }
 
 
@@ -62,6 +68,10 @@ public record ProductDb
     public required decimal Price { get; set; }
 
     public IList<PromotionDb>? Promotions { get; set; } = [];
+
+    public required RestaurantDb Restaurant { get; set; }
+
+    public bool Available { get; set; } = true;
 }
 
 [Table("Promotions")]
@@ -74,4 +84,22 @@ public record PromotionDb
     public IList<MenuDb> Menus { get; set; } = [];
 
     public IList<ProductDb> Products { get; set; } = [];
+
+    public required RestaurantDb Restaurant { get; set; }
+
+    public bool Available { get; set; } = true;
+}
+
+[Table("Restaurants")]
+public class RestaurantDb
+{
+    public required string Id { get; set; }
+
+    public required string Name { get; set; }
+
+    public required string AddressFull { get; set; }
+
+    public required string Departement { get; set; }
+
+    public bool Opened { get; set; } = true;
 }

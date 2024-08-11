@@ -9,12 +9,13 @@
 
 <h1>Rentabilité des couronnes</h1>
 
-@if (offers == null)
+@if (offers == null || restaurant == null)
 {
     <p><em>Chargement...</em></p>
 }
 else
 {
+    <p>Restaurant : @restaurant.Name (@restaurant.Departement)</p>
     <table class="table">
         <thead>
             <tr style="white-space:nowrap">
@@ -40,19 +41,22 @@ else
 
 @code {
     private OfferDisplay[]? offers;
+    private RestaurantDb? restaurant;
 
     protected override async Task OnInitializedAsync()
     {
         offers = await context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).Include(off => off.Promotion).ThenInclude(prm => prm.Menus)
             .AsAsyncEnumerable()
-            .SelectMany(off => 
-                off.Promotion.Products.Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price))
-                .Concat(off.Promotion.Menus.Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price)))
+            .SelectMany(off =>
+                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price))
+                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price)))
                 .ToAsyncEnumerable())
             .OrderByDescending(off => off.PointValue)
             .ThenBy(off => off.Points)
             .ThenBy(off => off.Name)
             .ToArrayAsync();
+
+        restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
     }
 
     private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price)
