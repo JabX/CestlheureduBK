@@ -11,6 +11,20 @@ namespace CestlheureduBK.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
+                    SubCategory = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Restaurants",
                 columns: table => new
                 {
@@ -89,6 +103,54 @@ namespace CestlheureduBK.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CategorieDbMenuDb",
+                columns: table => new
+                {
+                    CategoriesId = table.Column<string>(type: "TEXT", nullable: false),
+                    MenusId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategorieDbMenuDb", x => new { x.CategoriesId, x.MenusId });
+                    table.ForeignKey(
+                        name: "FK_CategorieDbMenuDb_Categories_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategorieDbMenuDb_Menus_MenusId",
+                        column: x => x.MenusId,
+                        principalTable: "Menus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategorieDbProductDb",
+                columns: table => new
+                {
+                    CategoriesId = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductsId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategorieDbProductDb", x => new { x.CategoriesId, x.ProductsId });
+                    table.ForeignKey(
+                        name: "FK_CategorieDbProductDb_Categories_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategorieDbProductDb_Products_ProductsId",
+                        column: x => x.ProductsId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MenuDbPromotionDb",
                 columns: table => new
                 {
@@ -156,6 +218,16 @@ namespace CestlheureduBK.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CategorieDbMenuDb_MenusId",
+                table: "CategorieDbMenuDb",
+                column: "MenusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategorieDbProductDb_ProductsId",
+                table: "CategorieDbProductDb",
+                column: "ProductsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MenuDbPromotionDb_PromotionsId",
                 table: "MenuDbPromotionDb",
                 column: "PromotionsId");
@@ -190,6 +262,12 @@ namespace CestlheureduBK.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CategorieDbMenuDb");
+
+            migrationBuilder.DropTable(
+                name: "CategorieDbProductDb");
+
+            migrationBuilder.DropTable(
                 name: "MenuDbPromotionDb");
 
             migrationBuilder.DropTable(
@@ -197,6 +275,9 @@ namespace CestlheureduBK.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductDbPromotionDb");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Menus");

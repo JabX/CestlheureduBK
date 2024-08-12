@@ -5,6 +5,8 @@ namespace CestlheureduBK.Model;
 
 public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(options)
 {
+    public DbSet<CategorieDb> Categories { get; set; }
+
     public DbSet<MenuDb> Menus { get; set; }
 
     public DbSet<OfferDb> Offers { get; set; }
@@ -14,6 +16,22 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
     public DbSet<PromotionDb> Promotions { get; set; }
 
     public DbSet<RestaurantDb> Restaurants { get; set; }
+}
+
+[Table("Categories")]
+public record CategorieDb
+{
+    public required string Id { get; set; }
+
+    public required string Name { get; set; }
+
+    public string? Image { get; set; }
+
+    public bool SubCategory { get; set; }
+
+    public IList<ProductDb> Products { get; set; } = [];
+
+    public IList<MenuDb> Menus { get; set; } = [];
 }
 
 [Table("Menus")]
@@ -33,6 +51,8 @@ public record MenuDb
 
     [Column(TypeName = "decimal(4, 2)")]
     public decimal? PriceXL { get; set; }
+
+    public IList<CategorieDb> Categories { get; set; } = [];
 
     public IList<PromotionDb>? Promotions { get; set; } = [];
 
@@ -67,7 +87,9 @@ public record ProductDb
     [Column(TypeName = "decimal(4, 2)")]
     public required decimal Price { get; set; }
 
-    public IList<PromotionDb>? Promotions { get; set; } = [];
+    public IList<CategorieDb> Categories { get; set; } = [];
+
+    public IList<PromotionDb> Promotions { get; set; } = [];
 
     public required RestaurantDb Restaurant { get; set; }
 

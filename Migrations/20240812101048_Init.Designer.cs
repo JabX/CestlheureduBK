@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CestlheureduBK.Migrations
 {
     [DbContext(typeof(BKDbContext))]
-    [Migration("20240811100528_Init")]
+    [Migration("20240812101048_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -19,6 +19,56 @@ namespace CestlheureduBK.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
+
+            modelBuilder.Entity("CategorieDbMenuDb", b =>
+                {
+                    b.Property<string>("CategoriesId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MenusId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoriesId", "MenusId");
+
+                    b.HasIndex("MenusId");
+
+                    b.ToTable("CategorieDbMenuDb");
+                });
+
+            modelBuilder.Entity("CategorieDbProductDb", b =>
+                {
+                    b.Property<string>("CategoriesId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductsId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoriesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("CategorieDbProductDb");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.CategorieDb", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("SubCategory")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("CestlheureduBK.Model.MenuDb", b =>
                 {
@@ -179,6 +229,36 @@ namespace CestlheureduBK.Migrations
                     b.HasIndex("PromotionsId");
 
                     b.ToTable("ProductDbPromotionDb");
+                });
+
+            modelBuilder.Entity("CategorieDbMenuDb", b =>
+                {
+                    b.HasOne("CestlheureduBK.Model.CategorieDb", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CestlheureduBK.Model.MenuDb", null)
+                        .WithMany()
+                        .HasForeignKey("MenusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CategorieDbProductDb", b =>
+                {
+                    b.HasOne("CestlheureduBK.Model.CategorieDb", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CestlheureduBK.Model.ProductDb", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CestlheureduBK.Model.MenuDb", b =>

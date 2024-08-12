@@ -164,29 +164,65 @@
 
             var restaurant = await context.Restaurants.AsTracking().SingleAsync(r => r.Id == codeRestaurant);
 
-            var products = catalogue.Products.Select(prd => new ProductDb { Id = prd.Id, Name = prd.Name, Image = prd.Image, Price = prd.Price, Restaurant = restaurant }).ToList();
-            var menus = catalogue.Menus.Select(men => new MenuDb { Id = men.Id, Name = men.Name, Image = men.Image, Price = men.Price, PriceL = men.PriceL, PriceXL = men.PriceXL, Restaurant = restaurant }).ToList();
+            var categories = catalogue.Categories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image })
+                .Concat(catalogue.SubCategories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image, SubCategory = true }))
+                .ToList();
+            var products = catalogue.Products.Select(prd => new ProductDb
+                {
+                    Id = prd.Id,
+                    Name = prd.Name.Replace("Lousiane", "Louisiane").Replace("(6) King Nuggets", "King Nuggets® (6)"),
+                    Image = prd.Image,
+                    Price = prd.Price,
+                    Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    Restaurant = restaurant
+                }).ToList();
+            var menus = catalogue.Menus.Select(men => new MenuDb
+                {
+                    Id = men.Id,
+                    Name = men.Name.Replace("Steakhouse Louisiane", "Louisiane Steakhouse"),
+                    Image = men.Image,
+                    Price = men.Price,
+                    PriceL = men.PriceL,
+                    PriceXL = men.PriceXL,
+                    Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    Restaurant = restaurant
+                }).ToList();
             var promotions = catalogue.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList(), Restaurant = restaurant }).ToList();
 
             foreach (var product in products.Where(prd => prd.Image == null))
             {
-                product.Image = products.FirstOrDefault(prd => prd.Name.StartsWith(product.Name) && prd.Image != null)?.Image;
+                product.Image = products.FirstOrDefault(prd => prd.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase) && prd.Image != null)?.Image;
+            }
+
+            foreach (var product in products)
+            {
+                product.Categories = product.Categories.Concat(products.Where(prd => prd.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
             }
 
             foreach (var menu in menus.Where(men => men.Image == null))
             {
-                menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(menu.Name) && men.Image != null)?.Image;
+                menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(FixMenuName(menu.Name), StringComparison.InvariantCultureIgnoreCase) && men.Image != null)?.Image;
+            }
+
+            foreach (var menu in menus)
+            {
+                menu.Categories = menu.Categories.Concat(menus.Where(prd => prd.Name.StartsWith(FixMenuName(menu.Name), StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
             }
 
             await context.Database.ExecuteSqlRawAsync(@"
+                delete from CategorieDbProductDb;
+                delete from CategorieDbMenuDb;
                 delete from MenuDbPromotionDb;
                 delete from ProductDbPromotionDb;
             ");
 
+            var categoriesDb = await context.Categories.ToDictionaryAsync(p => p.Id);
             var productsDb = await context.Products.ToDictionaryAsync(p => p.Id);
             var menusDb = await context.Menus.ToDictionaryAsync(p => p.Id);
             var promotionsDb = await context.Promotions.ToDictionaryAsync(p => p.Id);
 
+            context.AddRange(categories.Where(r => !categoriesDb.ContainsKey(r.Id)));
+            context.UpdateRange(categories.Where(r => categoriesDb.ContainsKey(r.Id)));
             context.AddRange(products.Where(r => !productsDb.ContainsKey(r.Id)));
             context.UpdateRange(products.Where(r => productsDb.ContainsKey(r.Id)));
             context.AddRange(menus.Where(r => !menusDb.ContainsKey(r.Id)));
@@ -196,7 +232,6 @@
 
             await context.SaveChangesAsync();
             context.ChangeTracker.Clear();
-
 
             await context.Products
                 .Where(r => !products.Select(re => re.Id).Contains(r.Id))
@@ -238,12 +273,12 @@
             var promotions = await context.Promotions.AsTracking().ToDictionaryAsync(p => p.Id);
 
             var offers = points.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb
-            {
-                Id = off.TransformationId,
-                Title = off.Title,
-                Points = off.Points,
-                Promotion = promotions[off.PromotionId]
-            })).ToList();
+                {
+                    Id = off.TransformationId,
+                    Title = off.Title,
+                    Points = off.Points,
+                    Promotion = promotions[off.PromotionId]
+                })).ToList();
 
             await context.Offers.ExecuteDeleteAsync();
             context.AddRange(offers);
@@ -275,5 +310,15 @@
         }
 
         return client;
+    }
+
+    private string FixMenuName(string name)
+    {
+        return name
+            .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
+            .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
+            .Trim()
+            .Trim('-')
+            .Trim();
     }
 }

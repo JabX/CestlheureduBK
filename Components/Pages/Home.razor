@@ -29,7 +29,20 @@ else
             @foreach (var offer in offers)
             {
                 <tr style="vertical-align:middle">
-                    <td><span style="display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;"><img src="@offer.Image" width="100" /><span>@offer.Name</span></span></td>
+                    <td>
+                        <span style="display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;">
+                            <img src="@offer.Image" width="100" />
+                            <span style="display:inline-flex;flex-direction:column">
+                                <span>@offer.Name</span>
+                                <span style="font-size:0.8em;display:inline-flex;column-gap:6px;flex-wrap:wrap">
+                                    @foreach (var categorie in offer.Categories ?? [])
+                                    {
+                                        <span style="@(categorie.SubCategory ? "font-style:italic" : "font-weight:600")">@categorie.Name</span>
+                                    }
+                                </span>
+                            </span>
+                        </span>
+                    </td>
                     <td style="white-space:nowrap">@offer.Price.ToString("0.00 €")</td>
                     <td style="white-space:nowrap">@offer.Points</td>
                     <td style="white-space:nowrap">@offer.PointValue.ToString("0.000 €")</td>
@@ -45,11 +58,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        offers = await context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).Include(off => off.Promotion).ThenInclude(prm => prm.Menus)
+        offers = await context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).ThenInclude(prd => prd.Categories).Include(off => off.Promotion).ThenInclude(prm => prm.Menus).ThenInclude(men => men.Categories)
             .AsAsyncEnumerable()
             .SelectMany(off =>
-                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price))
-                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price)))
+                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
+                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
                 .ToAsyncEnumerable())
             .OrderByDescending(off => off.PointValue)
             .ThenBy(off => off.Points)
@@ -59,7 +72,7 @@ else
         restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
     }
 
-    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price)
+    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, CategorieDb[] Categories)
     {
         public decimal PointValue => Price / Points;
     }
