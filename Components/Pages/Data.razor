@@ -22,7 +22,7 @@
         <option value="@restaurant.Id">@restaurant.Departement - @restaurant.Name</option>
     }
 </select>
-<button class="btn btn-primary" @onclick="ReloadMenusAndProducts">Recharger le catalogue</button>
+<button class="btn btn-primary" @onclick="ReloadCatalogue">Recharger le catalogue</button>
 <br />
 <br />
 <label for"accessToken">Access Token pour l'API BK</label>
@@ -78,8 +78,12 @@
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
 
+            context.Updates.Add(new());
+            await context.SaveChangesAsync();
+            context.ChangeTracker.Clear();
+
             await ReloadRestaurants();
-            await ReloadMenusAndProducts();
+            await ReloadCatalogue();
             await ReloadOffers();
 
             error = false;
@@ -133,6 +137,8 @@
                 .Where(r => !restaux.Select(re => re.Id).Contains(r.Id))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Opened, false));
 
+            await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Restaurants, DateTime.UtcNow));
+
             await OnInitializedAsync();
 
             error = false;
@@ -149,7 +155,7 @@
         }
     }
 
-    private async Task ReloadMenusAndProducts()
+    private async Task ReloadCatalogue()
     {
         using var client = GetClient();
 
@@ -243,6 +249,8 @@
                 .Where(r => !promotions.Select(re => re.Id).Contains(r.Id))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
 
+            await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Catalogue, DateTime.UtcNow));
+
             error = false;
             message = "Catalogue rechargé avec succès !";
         }
@@ -284,6 +292,8 @@
             context.AddRange(offers);
             await context.SaveChangesAsync();
             context.ChangeTracker.Clear();
+
+            await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Offers, DateTime.UtcNow));
 
             error = false;
             message = "Offres rechargées avec succès !";

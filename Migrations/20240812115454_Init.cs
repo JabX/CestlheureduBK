@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -37,6 +38,21 @@ namespace CestlheureduBK.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Restaurants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Update",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Restaurants = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Catalogue = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Offers = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Update", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -275,6 +291,9 @@ namespace CestlheureduBK.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductDbPromotionDb");
+
+            migrationBuilder.DropTable(
+                name: "Update");
 
             migrationBuilder.DropTable(
                 name: "Categories");

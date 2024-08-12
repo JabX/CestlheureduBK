@@ -198,6 +198,26 @@ namespace CestlheureduBK.Migrations
                     b.ToTable("Restaurants");
                 });
 
+            modelBuilder.Entity("CestlheureduBK.Model.UpdateDb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Catalogue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Offers")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Restaurants")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Update");
+                });
+
             modelBuilder.Entity("MenuDbPromotionDb", b =>
                 {
                     b.Property<string>("MenusId")

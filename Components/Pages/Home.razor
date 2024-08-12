@@ -9,13 +9,16 @@
 
 <h1>Rentabilité des couronnes</h1>
 
-@if (offers == null || restaurant == null)
+@if (offers == null || restaurant == null || update == null)
 {
     <p><em>Chargement...</em></p>
 }
 else
 {
-    <p>Restaurant : @restaurant.Name (@restaurant.Departement)</p>
+    <p>
+        Restaurant : <strong>@restaurant.Name</strong> (@restaurant.Departement)<br />
+        <em style="font-size:0.8em">Dernières mises à jour : catalogue le @ToLocalTime(update.Catalogue) et offres le @ToLocalTime(update.Offers)</em>
+    </p>
     <table class="table">
         <thead>
             <tr style="white-space:nowrap">
@@ -55,6 +58,7 @@ else
 @code {
     private OfferDisplay[]? offers;
     private RestaurantDb? restaurant;
+    private UpdateDb? update;
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,6 +74,19 @@ else
             .ToArrayAsync();
 
         restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
+
+        update = await context.Updates.SingleAsync();
+    }
+
+    private string ToLocalTime(DateTime? date)
+    {
+        if (date == null)
+        {
+            return string.Empty;
+        }
+
+        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
+            .ToString("dd/MM/yyyy à HH:mm");
     }
 
     private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, CategorieDb[] Categories)

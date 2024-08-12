@@ -16,6 +16,8 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
     public DbSet<PromotionDb> Promotions { get; set; }
 
     public DbSet<RestaurantDb> Restaurants { get; set; }
+
+    public DbSet<UpdateDb> Updates { get; set; }
 }
 
 [Table("Categories")]
@@ -124,4 +126,16 @@ public class RestaurantDb
     public required string Departement { get; set; }
 
     public bool Opened { get; set; } = true;
+}
+
+[Table("Update")]
+public record UpdateDb
+{
+    public int Id { get; set; }
+
+    public DateTime? Restaurants { get; set; }
+
+    public DateTime? Catalogue { get; set; }
+
+    public DateTime? Offers { get; set; }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CestlheureduBK.Migrations
 {
     [DbContext(typeof(BKDbContext))]
-    [Migration("20240812101048_Init")]
+    [Migration("20240812115454_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -199,6 +199,26 @@ namespace CestlheureduBK.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.UpdateDb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Catalogue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Offers")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Restaurants")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Update");
                 });
 
             modelBuilder.Entity("MenuDbPromotionDb", b =>
