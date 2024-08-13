@@ -3,7 +3,7 @@
 @using System.Net
 @using Microsoft.EntityFrameworkCore
 @inject BKDbContext context;
-@attribute [StreamRendering]
+@rendermode InteractiveServer
 
 <PageTitle>C'est l'heure du BK ! - Rentabilité des couronnes</PageTitle>
 
@@ -25,7 +25,7 @@ else
                 <th>Produit</th>
                 <th>Prix €</th>
                 <th>Prix 👑</th>
-                <th>Valeur 👑</th>
+                <th class="toggle" @onclick=ToggleSort>@(asc ? "⬆️" : "⬇️") <span>Valeur</span> 👑</th>
             </tr>
         </thead>
         <tbody>
@@ -59,23 +59,38 @@ else
     private OfferDisplay[]? offers;
     private RestaurantDb? restaurant;
     private UpdateDb? update;
+    private bool asc;
 
     protected override async Task OnInitializedAsync()
     {
-        offers = await context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).ThenInclude(prd => prd.Categories).Include(off => off.Promotion).ThenInclude(prm => prm.Menus).ThenInclude(men => men.Categories)
+        await LoadOffers();
+        restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
+        update = await context.Updates.SingleAsync();
+    }
+
+    private async Task ToggleSort()
+    {
+        asc = !asc;
+        await LoadOffers();
+    }
+
+    private async Task LoadOffers()
+    {
+        var query = context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).ThenInclude(prd => prd.Categories).Include(off => off.Promotion).ThenInclude(prm => prm.Menus).ThenInclude(men => men.Categories)
             .AsAsyncEnumerable()
             .SelectMany(off =>
                 off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
                 .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
-                .ToAsyncEnumerable())
-            .OrderByDescending(off => off.PointValue)
+                .ToAsyncEnumerable());
+
+        offers = await (asc switch
+        {
+            false => query.OrderByDescending(off => off.PointValue),
+            true => query.OrderBy(off => off.PointValue)
+        })
             .ThenBy(off => off.Points)
             .ThenBy(off => off.Name)
             .ToArrayAsync();
-
-        restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
-
-        update = await context.Updates.SingleAsync();
     }
 
     private string ToLocalTime(DateTime? date)
