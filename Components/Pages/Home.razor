@@ -19,6 +19,30 @@ else
         Restaurant : <strong>@restaurant.Name</strong> (@restaurant.Departement)<br />
         <em style="font-size:0.8em">Dernières mises à jour : catalogue le @ToLocalTime(update.Catalogue) et offres le @ToLocalTime(update.Offers)</em>
     </p>
+    <h5 class="toggle" @onclick="() => filter = !filter">@(filter ? "⬆️" : "⬇️") <span>Filtres</span></h5>
+    @if (filter && points != null)
+    {
+        <div class="filters">
+            <label for="name">Nom</label>
+            <input id="name" type="search" @oninput="OnNameChange" />
+            <br />
+            <span>Couronnes</span>
+            <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
+                <span>
+                    <input type="checkbox" id="points-all" checked="@(points.Count == allPoints.Count)" @oninput="args => OnPointsChange(0, (bool)args.Value!)" />
+                    <label for="points-all">Tout</label>
+                </span>
+                @foreach (var point in allPoints)
+                {
+                    <span>
+                        <input type="checkbox" id="points-@point" checked="@points.Contains(point)" @oninput="args => OnPointsChange(point, (bool)args.Value!)" />
+                        <label for="points-@point">@point</label>
+                    </span>
+                }
+            </span>
+        </div>
+    }
+    <h5 style="margin-top:12px">@offers.Length offres</h5>
     <table class="table">
         <thead>
             <tr style="white-space:nowrap">
@@ -59,13 +83,24 @@ else
     private OfferDisplay[]? offers;
     private RestaurantDb? restaurant;
     private UpdateDb? update;
+
     private bool asc;
+
+    private bool filter;
+
+    private Debouncer debouncer = new();
+    private string name = "";
+
+    private List<int> allPoints = [];
+    private List<int>? points;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadOffers();
         restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
         update = await context.Updates.SingleAsync();
+        allPoints = offers!.Select(o => o.Points).Distinct().OrderBy(a => a).ToList();
+        points = allPoints.Select(a => a).ToList();
     }
 
     private async Task ToggleSort()
@@ -74,14 +109,48 @@ else
         await LoadOffers();
     }
 
+    private async Task OnNameChange(ChangeEventArgs args)
+    {
+        name = args.Value != null ? (string)args.Value : "";
+        await debouncer.DebounceAsync(300, (ct) => LoadOffers());
+    }
+
+    private async Task OnPointsChange(int point, bool value)
+    {
+        if (point == 0)
+        {
+            if (value)
+            {
+                points = allPoints.Select(a => a).ToList();
+            }
+            else
+            {
+                points = [];
+            }
+        }
+        else if (points!.Contains(point))
+        {
+            points.Remove(point);
+        }
+        else
+        {
+            points.Add(point);
+        }
+
+        await LoadOffers();
+    }
+
     private async Task LoadOffers()
     {
         var query = context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).ThenInclude(prd => prd.Categories).Include(off => off.Promotion).ThenInclude(prm => prm.Menus).ThenInclude(men => men.Categories)
+            .Where(off =>
+                (off.Promotion.Menus.Any(m => m.Name.ToLower().Contains(name.ToLower())) || off.Promotion.Products.Any(m => m.Name.ToLower().Contains(name.ToLower())))
+                && (points == null || points.Contains(off.Points)))
             .AsAsyncEnumerable()
-            .SelectMany(off =>
-                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
-                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
-                .ToAsyncEnumerable());
+                .SelectMany(off =>
+                    off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
+                    .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
+                    .ToAsyncEnumerable());
 
         offers = await (asc switch
         {

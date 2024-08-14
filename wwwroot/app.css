@@ -58,3 +58,11 @@ h1:focus {
         color: #1b6ec2;
         text-decoration: underline;
     }
+
+.filters > span, .filters > label {
+    margin-right: 6px;
+}
+
+.filters input + label {
+    cursor: pointer;
+}
