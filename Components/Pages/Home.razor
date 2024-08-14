@@ -20,23 +20,38 @@ else
         <em style="font-size:0.8em">Dernières mises à jour : catalogue le @ToLocalTime(update.Catalogue) et offres le @ToLocalTime(update.Offers)</em>
     </p>
     <h5 class="toggle" @onclick="() => filter = !filter">@(filter ? "⬆️" : "⬇️") <span>Filtres</span></h5>
-    @if (filter && points != null)
+    @if (filter)
     {
         <div class="filters">
-            <label for="name">Nom</label>
+            <label style="font-style:italic" for="name">Nom</label>
             <input id="name" type="search" @oninput="OnNameChange" />
             <br />
-            <span>Couronnes</span>
+            <span style="font-style:italic">Couronnes</span>
             <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
                 <span>
-                    <input type="checkbox" id="points-all" checked="@(points.Count == allPoints.Count)" @oninput="args => OnPointsChange(0, (bool)args.Value!)" />
+                    <input type="checkbox" id="points-all" checked="@(points == null || points.Count == allPoints.Count)" @oninput="args => OnPointsChange(0, (bool)args.Value!)" />
                     <label for="points-all">Tout</label>
                 </span>
                 @foreach (var point in allPoints)
                 {
                     <span>
-                        <input type="checkbox" id="points-@point" checked="@points.Contains(point)" @oninput="args => OnPointsChange(point, (bool)args.Value!)" />
+                        <input type="checkbox" id="points-@point" checked="@(points == null || points.Contains(point))" @oninput="args => OnPointsChange(point, (bool)args.Value!)" />
                         <label for="points-@point">@point</label>
+                    </span>
+                }
+            </span>
+            <br />
+            <span style="font-style:italic">Catégories</span>
+            <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
+                <span>
+                    <input type="checkbox" id="categories-all" checked="@(categories == null || categories.Count == allCategories.Count)" @oninput="args => OnCategorieChange(null, (bool)args.Value!)" />
+                    <label for="categories-all">Tout</label>
+                </span>
+                @foreach (var categorie in allCategories)
+                {
+                    <span>
+                        <input type="checkbox" id="categories-@categorie.Id" checked="@(categories == null || categories.Contains(categorie))" @oninput="args => OnCategorieChange(categorie, (bool)args.Value!)" />
+                        <label for="categories-@categorie.Id">@categorie.Name</label>
                     </span>
                 }
             </span>
@@ -94,13 +109,17 @@ else
     private List<int> allPoints = [];
     private List<int>? points;
 
+    private List<CategorieDb> allCategories = [];
+    private List<CategorieDb>? categories;
+
     protected override async Task OnInitializedAsync()
     {
         await LoadOffers();
         restaurant = await context.Products.Include(r => r.Restaurant).Take(1).Select(r => r.Restaurant).SingleAsync();
         update = await context.Updates.SingleAsync();
+
         allPoints = offers!.Select(o => o.Points).Distinct().OrderBy(a => a).ToList();
-        points = allPoints.Select(a => a).ToList();
+        allCategories = offers!.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
     }
 
     private async Task ToggleSort()
@@ -121,20 +140,63 @@ else
         {
             if (value)
             {
-                points = allPoints.Select(a => a).ToList();
+                points = null;
             }
             else
             {
                 points = [];
             }
         }
-        else if (points!.Contains(point))
+        else if (points == null)
+        {
+            points = allPoints.Where(p => p != point).ToList();
+        }
+        else if (points.Contains(point))
         {
             points.Remove(point);
         }
         else
         {
+            points ??= [];
             points.Add(point);
+            if (points.Count == allPoints.Count)
+            {
+                points = null;
+            }
+        }
+
+        await LoadOffers();
+    }
+
+    private async Task OnCategorieChange(CategorieDb? categorie, bool value)
+    {
+        if (categorie == null)
+        {
+            if (value)
+            {
+                categories = null;
+            }
+            else
+            {
+                categories = [];
+            }
+        }
+        else if (categories == null)
+        {
+            categories = allCategories.Where(p => p != categorie).ToList();
+        }
+        else if (categories?.Contains(categorie) ?? false)
+        {
+            categories.Remove(categorie);
+        }
+        else
+        {
+            categories ??= [];
+            categories.Add(categorie);
+            if (categories.Count == allCategories.Count)
+            {
+                categories = null;
+            }
         }
 
         await LoadOffers();
@@ -143,14 +205,23 @@ else
     private async Task LoadOffers()
     {
         var query = context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).ThenInclude(prd => prd.Categories).Include(off => off.Promotion).ThenInclude(prm => prm.Menus).ThenInclude(men => men.Categories)
-            .Where(off =>
-                (off.Promotion.Menus.Any(m => m.Name.ToLower().Contains(name.ToLower())) || off.Promotion.Products.Any(m => m.Name.ToLower().Contains(name.ToLower())))
-                && (points == null || points.Contains(off.Points)))
+            .Where(off => points == null || points.Contains(off.Points))
             .AsAsyncEnumerable()
-                .SelectMany(off =>
-                    off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
-                    .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
-                    .ToAsyncEnumerable());
+            .SelectMany(off =>
+                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
+                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
+                .ToAsyncEnumerable());
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            query = query.Where(off => off.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        var catFilter = categories?.Select(c => c.Id).ToList();
+        if (catFilter != null)
+        {
+            query = query.Where(m => m.Categories.Any(c => catFilter.Contains(c.Id)));
+        }
 
         offers = await (asc switch
         {
