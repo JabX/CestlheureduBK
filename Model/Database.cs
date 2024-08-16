@@ -54,6 +54,8 @@ public record MenuDb
     [Column(TypeName = "decimal(4, 2)")]
     public decimal? PriceXL { get; set; }
 
+    public int Count { get; set; } = 1;
+
     public IList<CategorieDb> Categories { get; set; } = [];
 
     public IList<PromotionDb>? Promotions { get; set; } = [];
@@ -88,6 +90,8 @@ public record ProductDb
 
     [Column(TypeName = "decimal(4, 2)")]
     public required decimal Price { get; set; }
+
+    public int Count { get; set; } = 1;
 
     public IList<CategorieDb> Categories { get; set; } = [];
 

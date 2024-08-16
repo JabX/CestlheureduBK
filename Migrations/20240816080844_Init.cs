@@ -65,6 +65,7 @@ namespace CestlheureduBK.Migrations
                     Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
                     PriceL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
                     PriceXL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
                     Available = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -86,6 +87,7 @@ namespace CestlheureduBK.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Image = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
                     Available = table.Column<bool>(type: "INTEGER", nullable: false)
                 },

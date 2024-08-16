@@ -75,7 +75,7 @@ else
                         <span style="display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;">
                             <img src="@offer.Image" width="100" />
                             <span style="display:inline-flex;flex-direction:column">
-                                <span>@offer.Name</span>
+                                <span>@(offer.Type == "Menu" ? "Menu " : "")@offer.Name</span>
                                 <span style="font-size:0.8em;display:inline-flex;column-gap:6px;flex-wrap:wrap">
                                     @foreach (var categorie in offer.Categories ?? [])
                                     {
@@ -85,8 +85,24 @@ else
                             </span>
                         </span>
                     </td>
-                    <td style="white-space:nowrap">@offer.Price.ToString("0.00 €")</td>
-                    <td style="white-space:nowrap">@offer.Points</td>
+                    <td style="white-space:nowrap">
+                        <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
+                            <span>@offer.Price.ToString("0.00 €")</span>
+                            @if (offer.Count > 1)
+                            {
+                                <span style="font-size:0.7em;font-style:italic">(@((offer.Price / offer.Count).ToString("0.00 €")) / u)</span>
+                            }
+                        </span>
+                    </td>
+                    <td style="white-space:nowrap">
+                        <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
+                            <span>@offer.Points</span>
+                            @if (offer.Count > 1)
+                            {
+                                <span style="font-size:0.7em;font-style:italic">(@(decimal.Round(Convert.ToDecimal(offer.Points) / offer.Count, 2)) / u)</span>
+                            }
+                        </span>
+                    </td>
                     <td style="white-space:nowrap">@offer.PointValue.ToString("0.000 €")</td>
                 </tr>
             }
@@ -208,8 +224,8 @@ else
             .Where(off => points == null || points.Contains(off.Points))
             .AsAsyncEnumerable()
             .SelectMany(off =>
-                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
-                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
+                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Count, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
+                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Count, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
                 .ToAsyncEnumerable());
 
         if (!string.IsNullOrEmpty(name))
@@ -244,7 +260,7 @@ else
             .ToString("dd/MM/yyyy à HH:mm");
     }
 
-    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, CategorieDb[] Categories)
+    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, int Count, CategorieDb[] Categories)
     {
         public decimal PointValue => Price / Points;
     }

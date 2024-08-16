@@ -3,6 +3,7 @@
 @using CestlheureduBK.Model
 @using System.Net.Http.Headers
 @using Microsoft.EntityFrameworkCore
+@using System.Text.RegularExpressions
 @rendermode InteractiveServer
 @inject BKDbContext context;
 
@@ -173,23 +174,38 @@
             var categories = catalogue.Categories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image })
                 .Concat(catalogue.SubCategories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image, SubCategory = true }))
                 .ToList();
+
+            var countRegex = new Regex(@"\((\d+)\)");
+
             var products = catalogue.Products.Select(prd => new ProductDb
                 {
                     Id = prd.Id,
-                    Name = prd.Name.Replace("Lousiane", "Louisiane").Replace("(6) King Nuggets", "King Nuggets® (6)"),
+                    Name = prd.Name
+                        .Replace("®", "")
+                        .Replace("Lousiane", "Louisiane")
+                        .Replace("(6) King Nuggets", "King Nuggets (6)"),
                     Image = prd.Image,
                     Price = prd.Price,
+                    Count = int.TryParse(countRegex.Match(prd.Name).Groups.Values.LastOrDefault()?.Value, out var c) ? c : 1,
                     Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
                     Restaurant = restaurant
                 }).ToList();
             var menus = catalogue.Menus.Select(men => new MenuDb
                 {
                     Id = men.Id,
-                    Name = men.Name.Replace("Steakhouse Louisiane", "Louisiane Steakhouse"),
+                    Name = men.Name
+                        .Replace("®", "")
+                        .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
+                        .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
+                        .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
+                        .Trim()
+                        .Trim('-')
+                        .Trim(),
                     Image = men.Image,
                     Price = men.Price,
                     PriceL = men.PriceL,
                     PriceXL = men.PriceXL,
+                    Count = int.TryParse(countRegex.Match(men.Name).Groups.Values.LastOrDefault()?.Value, out var c) ? c : 1,
                     Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
                     Restaurant = restaurant
                 }).ToList();
@@ -207,12 +223,12 @@
 
             foreach (var menu in menus.Where(men => men.Image == null))
             {
-                menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(FixMenuName(menu.Name), StringComparison.InvariantCultureIgnoreCase) && men.Image != null)?.Image;
+                menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase) && men.Image != null)?.Image;
             }
 
             foreach (var menu in menus)
             {
-                menu.Categories = menu.Categories.Concat(menus.Where(prd => prd.Name.StartsWith(FixMenuName(menu.Name), StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
+                menu.Categories = menu.Categories.Concat(menus.Where(prd => prd.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
             }
 
             await context.Database.ExecuteSqlRawAsync(@"
@@ -320,15 +336,5 @@
         }
 
         return client;
-    }
-
-    private string FixMenuName(string name)
-    {
-        return name
-            .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
-            .Trim()
-            .Trim('-')
-            .Trim();
     }
 }

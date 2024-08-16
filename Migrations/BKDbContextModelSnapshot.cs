@@ -75,6 +75,9 @@ namespace CestlheureduBK.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
@@ -129,6 +132,9 @@ namespace CestlheureduBK.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Available")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Image")

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CestlheureduBK.Migrations
 {
     [DbContext(typeof(BKDbContext))]
-    [Migration("20240812115454_Init")]
+    [Migration("20240816080844_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -78,6 +78,9 @@ namespace CestlheureduBK.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
@@ -132,6 +135,9 @@ namespace CestlheureduBK.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Available")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Image")
