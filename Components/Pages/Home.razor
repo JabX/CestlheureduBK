@@ -61,10 +61,10 @@ else
     <table class="table">
         <thead>
             <tr style="white-space:nowrap">
-                <th>Produit</th>
-                <th>Prix €</th>
-                <th>Prix 👑</th>
-                <th class="toggle" @onclick=ToggleSort>@(asc ? "⬆️" : "⬇️") <span>Valeur</span> 👑</th>
+                <th class="toggle" @onclick="@(() => ToggleSort("name"))">@(sortBy == "name" ? asc ? "⬆️" : "⬇️" : "") <span>Produit</span> 👑</th>
+                <th class="toggle" @onclick="@(() => ToggleSort("price"))">@(sortBy == "price" ? asc ? "⬆️" : "⬇️" : "") <span>Prix</span> €</th>
+                <th class="toggle" @onclick="@(() => ToggleSort("points"))">@(sortBy == "points" ? asc ? "⬆️" : "⬇️" : "") <span>Prix</span> 👑</th>
+                <th class="toggle" @onclick="@(() => ToggleSort("value"))">@(sortBy == "value" ? asc ? "⬆️" : "⬇️" : "") <span>Valeur</span> 👑</th>
             </tr>
         </thead>
         <tbody>
@@ -103,7 +103,7 @@ else
                             }
                         </span>
                     </td>
-                    <td style="white-space:nowrap">@offer.PointValue.ToString("0.000 €")</td>
+                    <td style="white-space:nowrap">@offer.Value.ToString("0.000 €")</td>
                 </tr>
             }
         </tbody>
@@ -115,6 +115,7 @@ else
     private RestaurantDb? restaurant;
     private UpdateDb? update;
 
+    private string sortBy = "value";
     private bool asc;
 
     private bool filter;
@@ -138,9 +139,18 @@ else
         allCategories = offers!.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
     }
 
-    private async Task ToggleSort()
+    private async Task ToggleSort(string field)
     {
-        asc = !asc;
+        if (field != sortBy)
+        {
+            asc = field != "value";
+        }
+        else
+        {
+            asc = !asc;
+        }
+
+        sortBy = field;
         await LoadOffers();
     }
 
@@ -239,13 +249,18 @@ else
             query = query.Where(m => m.Categories.Any(c => catFilter.Contains(c.Id)));
         }
 
-        offers = await (asc switch
+        offers = await ((sortBy, asc) switch
         {
-            false => query.OrderByDescending(off => off.PointValue),
-            true => query.OrderBy(off => off.PointValue)
+            ("name", false) => query.OrderByDescending(off => off.Name).ThenByDescending(off => off.Type),
+            ("name", true) => query.OrderBy(off => off.Name).ThenByDescending(off => off.Type),
+            ("price", false) => query.OrderByDescending(off => off.Price).ThenBy(off => off.Points),
+            ("price", true) => query.OrderBy(off => off.Price).ThenBy(off => off.Points),
+            ("points", false) => query.OrderByDescending(off => off.Points).ThenByDescending(off => off.Price),
+            ("points", true) => query.OrderBy(off => off.Points).ThenBy(off => off.Price),
+            ("value", false) => query.OrderByDescending(off => off.Value).ThenBy(off => off.Points),
+            ("value", true) => query.OrderBy(off => off.Value).ThenBy(off => off.Points),
+            _ => throw new InvalidOperationException()
         })
-            .ThenBy(off => off.Points)
-            .ThenBy(off => off.Name)
             .ToArrayAsync();
     }
 
@@ -262,6 +277,6 @@ else
 
     private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, int Count, CategorieDb[] Categories)
     {
-        public decimal PointValue => Price / Points;
+        public decimal Value => Price / Points;
     }
 }
