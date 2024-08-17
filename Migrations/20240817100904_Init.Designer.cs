@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CestlheureduBK.Migrations
 {
     [DbContext(typeof(BKDbContext))]
-    [Migration("20240816080844_Init")]
+    [Migration("20240817100904_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -78,9 +78,6 @@ namespace CestlheureduBK.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Count")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
@@ -135,9 +132,6 @@ namespace CestlheureduBK.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Available")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Image")
@@ -205,6 +199,53 @@ namespace CestlheureduBK.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.SnackAmountDb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MenuDbId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductDbId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SnackId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuDbId");
+
+                    b.HasIndex("ProductDbId");
+
+                    b.HasIndex("SnackId");
+
+                    b.ToTable("SnackAmounts");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.SnackDb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Snacks");
                 });
 
             modelBuilder.Entity("CestlheureduBK.Model.UpdateDb", b =>
@@ -323,6 +364,25 @@ namespace CestlheureduBK.Migrations
                     b.Navigation("Restaurant");
                 });
 
+            modelBuilder.Entity("CestlheureduBK.Model.SnackAmountDb", b =>
+                {
+                    b.HasOne("CestlheureduBK.Model.MenuDb", null)
+                        .WithMany("Snacks")
+                        .HasForeignKey("MenuDbId");
+
+                    b.HasOne("CestlheureduBK.Model.ProductDb", null)
+                        .WithMany("Snacks")
+                        .HasForeignKey("ProductDbId");
+
+                    b.HasOne("CestlheureduBK.Model.SnackDb", "Snack")
+                        .WithMany()
+                        .HasForeignKey("SnackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Snack");
+                });
+
             modelBuilder.Entity("MenuDbPromotionDb", b =>
                 {
                     b.HasOne("CestlheureduBK.Model.MenuDb", null)
@@ -351,6 +411,16 @@ namespace CestlheureduBK.Migrations
                         .HasForeignKey("PromotionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.MenuDb", b =>
+                {
+                    b.Navigation("Snacks");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.ProductDb", b =>
+                {
+                    b.Navigation("Snacks");
                 });
 #pragma warning restore 612, 618
         }

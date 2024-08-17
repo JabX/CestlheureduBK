@@ -88,18 +88,18 @@ else
                     <td style="white-space:nowrap">
                         <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
                             <span>@offer.Price.ToString("0.00 €")</span>
-                            @if (offer.Count > 1)
+                            @if (offer.Snacks.Any())
                             {
-                                <span style="font-size:0.7em;font-style:italic">(@((offer.Price / offer.Count).ToString("0.00 €")) / u)</span>
+                                <span style="font-size:0.7em;font-style:italic">(@((offer.Price / offer.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", offer.Snacks.First().Snack.Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                             }
                         </span>
                     </td>
                     <td style="white-space:nowrap">
                         <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
                             <span>@offer.Points</span>
-                            @if (offer.Count > 1)
+                            @if (offer.Snacks.Any())
                             {
-                                <span style="font-size:0.7em;font-style:italic">(@(decimal.Round(Convert.ToDecimal(offer.Points) / offer.Count, 2)) / u)</span>
+                                <span style="font-size:0.7em;font-style:italic">(@(decimal.Round(Convert.ToDecimal(offer.Points) / offer.Snacks.Sum(s => s.Amount), 2)) / @(string.Join("", offer.Snacks.First().Snack.Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                             }
                         </span>
                     </td>
@@ -230,12 +230,13 @@ else
 
     private async Task LoadOffers()
     {
-        var query = context.Offers.Include(off => off.Promotion).ThenInclude(prm => prm.Products).ThenInclude(prd => prd.Categories).Include(off => off.Promotion).ThenInclude(prm => prm.Menus).ThenInclude(men => men.Categories)
+        var query = context.Offers
+            .AsSingleQuery()
             .Where(off => points == null || points.Contains(off.Points))
             .AsAsyncEnumerable()
             .SelectMany(off =>
-                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Count, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
-                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Count, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
+                off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Snacks, prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray()))
+                .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Snacks, men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).ToArray())))
                 .ToAsyncEnumerable());
 
         if (!string.IsNullOrEmpty(name))
@@ -275,7 +276,7 @@ else
             .ToString("dd/MM/yyyy à HH:mm");
     }
 
-    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, int Count, CategorieDb[] Categories)
+    private record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, IList<SnackAmountDb> Snacks, CategorieDb[] Categories)
     {
         public decimal Value => Price / Points;
     }

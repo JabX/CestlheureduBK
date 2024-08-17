@@ -41,6 +41,20 @@ namespace CestlheureduBK.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Snacks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Available = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Snacks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Update",
                 columns: table => new
                 {
@@ -65,7 +79,6 @@ namespace CestlheureduBK.Migrations
                     Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
                     PriceL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
                     PriceXL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
-                    Count = table.Column<int>(type: "INTEGER", nullable: false),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
                     Available = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -87,7 +100,6 @@ namespace CestlheureduBK.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Image = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
-                    Count = table.Column<int>(type: "INTEGER", nullable: false),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
                     Available = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -164,6 +176,38 @@ namespace CestlheureduBK.Migrations
                         name: "FK_CategorieDbProductDb_Products_ProductsId",
                         column: x => x.ProductsId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SnackAmounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SnackId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    MenuDbId = table.Column<string>(type: "TEXT", nullable: true),
+                    ProductDbId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SnackAmounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SnackAmounts_Menus_MenuDbId",
+                        column: x => x.MenuDbId,
+                        principalTable: "Menus",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SnackAmounts_Products_ProductDbId",
+                        column: x => x.ProductDbId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SnackAmounts_Snacks_SnackId",
+                        column: x => x.SnackId,
+                        principalTable: "Snacks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -274,6 +318,21 @@ namespace CestlheureduBK.Migrations
                 name: "IX_Promotions_RestaurantId",
                 table: "Promotions",
                 column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SnackAmounts_MenuDbId",
+                table: "SnackAmounts",
+                column: "MenuDbId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SnackAmounts_ProductDbId",
+                table: "SnackAmounts",
+                column: "ProductDbId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SnackAmounts_SnackId",
+                table: "SnackAmounts",
+                column: "SnackId");
         }
 
         /// <inheritdoc />
@@ -295,10 +354,16 @@ namespace CestlheureduBK.Migrations
                 name: "ProductDbPromotionDb");
 
             migrationBuilder.DropTable(
+                name: "SnackAmounts");
+
+            migrationBuilder.DropTable(
                 name: "Update");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Promotions");
 
             migrationBuilder.DropTable(
                 name: "Menus");
@@ -307,7 +372,7 @@ namespace CestlheureduBK.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Promotions");
+                name: "Snacks");
 
             migrationBuilder.DropTable(
                 name: "Restaurants");
