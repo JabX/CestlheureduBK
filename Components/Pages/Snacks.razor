@@ -32,7 +32,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in snack.Products.DistinctBy(p => p.Name))
+                @foreach (var product in snack.Products)
                 {
                     <tr style="vertical-align:middle">
                         <td>
@@ -85,16 +85,46 @@ else
 
     private async Task LoadSnacks()
     {
-        snacks = await context.Products.Where(p => p.Snacks.Any(s => s.Snack.Available))
-            .AsAsyncEnumerable()
-            .SelectMany(p => p.Snacks.Select(s => new { SnackName = s.Snack.Name, s.Amount, ProductName = p.Name, Image = p.Image, p.Price, Ratio = Convert.ToDecimal(s.Amount) / p.Snacks.Sum(y => y.Amount) }).ToAsyncEnumerable())
-            .GroupBy(s => s.SnackName)
-            .SelectAwait(async s =>
+        var allProducts = await context.Products.Where(p => p.Snacks.Any(s => s.Snack.Available))
+            .ToListAsync();
+
+        snacks = allProducts
+            .SelectMany(p => p.Snacks.Select(s =>
             {
-                var products = s.Select(t => new SnackProductDisplay(t.ProductName, t.Image, t.Amount, t.Price, t.Ratio));
+                var ratio = 1m;
+
+                if (p.Snacks.Count > 1)
+                {
+                    var prices = p.Snacks.Select(s2 =>
+                    {
+                        var bestProduct = allProducts
+                            .Where(p2 => p2.Snacks.Count == 1 && p2.Snacks.Single().Snack.Name == s2.Snack.Name && p2.Snacks.Single().Amount < p.Snacks.Sum(s3 => s3.Amount))
+                            .OrderByDescending(p2 => p2.Snacks.Single().Amount)
+                            .First();
+
+                        return new { Name = s2.Snack.Name, Price = bestProduct.Price / bestProduct.Snacks.Single().Amount };
+                    }).ToDictionary(s2 => s2.Name, s2 => s2.Price);
+
+                    ratio = s.Amount * prices[s.Snack.Name] / p.Snacks.Sum(s2 => s2.Amount * prices[s2.Snack.Name]);
+                }
+
+                return new
+                {
+                    SnackName = s.Snack.Name,
+                    s.Amount,
+                    ProductName = p.Name,
+                    Image = p.Image,
+                    p.Price,
+                    Ratio = ratio
+                };
+            }))
+            .GroupBy(s => s.SnackName)
+            .Select(s =>
+            {
+                var products = s.DistinctBy(p => p.ProductName.ToLower().Replace("&", "+")).Select(t => new SnackProductDisplay(t.ProductName, t.Image, t.Amount, t.Price, t.Ratio));
                 return new SnackDisplay(
                     s.Key,
-                    await ((sortBy, asc) switch
+                    ((sortBy, asc) switch
                     {
                         ("amount", false) => products.OrderByDescending(off => off.Amount).ThenByDescending(off => off.Price),
                         ("amount", true) => products.OrderBy(off => off.Amount).ThenBy(off => off.Price),
@@ -103,9 +133,9 @@ else
                         ("value", false) => products.OrderByDescending(off => off.Value).ThenBy(off => off.Amount),
                         ("value", true) => products.OrderBy(off => off.Value).ThenBy(off => off.Amount),
                         _ => throw new InvalidOperationException()
-                    }).ToArrayAsync());
+                    }).ToArray());
             })
-         .ToArrayAsync();
+                    .ToArray();
     }
 
     private string ToLocalTime(DateTime? date)
