@@ -175,7 +175,8 @@
                 .Concat(catalogue.SubCategories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image, SubCategory = true }))
                 .ToList();
 
-            var countRegex = new Regex(@"(.+)\((\d+)\)");
+            var snackRegex = new Regex(@"(.+)\((\d+)\)");
+            var kingboxRegex = new Regex(@"kingbox (\d+) ([a-z ]+)([ +&]*(\d+) ([a-z ]+))?", RegexOptions.IgnoreCase);
 
             var products = catalogue.Products.Select(prd => new ProductDb
                 {
@@ -210,8 +211,8 @@
                 }).ToList();
 
             var snacks = products
-                .Where(p => countRegex.IsMatch(p.Name))
-                .Select(p => new SnackDb { Name = countRegex.Match(p.Name).Groups[1].Value.Trim() })
+                .Where(p => snackRegex.IsMatch(p.Name))
+                .Select(p => new SnackDb { Name = snackRegex.Match(p.Name).Groups[1].Value.Trim() })
                 .DistinctBy(p => p.Name)
                 .ToList();
 
@@ -224,7 +225,7 @@
             {
                 product.Categories = product.Categories.Concat(products.Where(prd => prd.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
 
-                var match = countRegex.Match(product.Name);
+                var match = snackRegex.Match(product.Name);
                 if (match.Success)
                 {
                     product.Snacks.Add(new()
@@ -232,6 +233,27 @@
                         Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
                         Amount = int.Parse(match.Groups[2].Value)
                     });
+                } 
+                else
+                {
+                    var match2 = kingboxRegex.Match(product.Name);
+                    if (match2.Success)
+                    {
+                        product.Snacks.Add(new()
+                        {
+                            Snack = snacks.Single(s => s.Name == match2.Groups[2].Value.Trim()),
+                            Amount = int.Parse(match2.Groups[1].Value.Trim())
+                        });
+
+                        if (match2.Groups[3].Success)
+                        {
+                            product.Snacks.Add(new()
+                            {
+                                Snack = snacks.Single(s => s.Name == match2.Groups[5].Value.Trim()),
+                                Amount = int.Parse(match2.Groups[4].Value.Trim())
+                            });
+                        }
+                    }
                 }
             }
 
@@ -244,7 +266,7 @@
             {
                 menu.Categories = menu.Categories.Concat(menus.Where(prd => prd.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
 
-                var match = countRegex.Match(menu.Name);
+                var match = snackRegex.Match(menu.Name);
                 if (match.Success)
                 {
                     var n = menu.Name;

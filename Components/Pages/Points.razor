@@ -61,7 +61,7 @@ else
     <table class="table">
         <thead>
             <tr style="white-space:nowrap">
-                <th class="toggle" @onclick="@(() => ToggleSort("name"))">@(sortBy == "name" ? asc ? "⬆️" : "⬇️" : "") <span>Produit</span> 👑</th>
+                <th class="toggle" @onclick="@(() => ToggleSort("name"))">@(sortBy == "name" ? asc ? "⬆️" : "⬇️" : "") <span>Produit</span></th>
                 <th class="toggle" @onclick="@(() => ToggleSort("price"))">@(sortBy == "price" ? asc ? "⬆️" : "⬇️" : "") <span>Prix</span> €</th>
                 <th class="toggle" @onclick="@(() => ToggleSort("points"))">@(sortBy == "points" ? asc ? "⬆️" : "⬇️" : "") <span>Prix</span> 👑</th>
                 <th class="toggle" @onclick="@(() => ToggleSort("value"))">@(sortBy == "value" ? asc ? "⬆️" : "⬇️" : "") <span>Valeur</span> 👑</th>
