@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace CestlheureduBK.Model;
 
@@ -22,10 +21,16 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
 
     public DbSet<SnackAmountDb> SnackAmounts { get; set; }
 
+    public DbSet<StepDb> Steps { get; set; }
+
     public DbSet<UpdateDb> Updates { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<StepDb>().HasMany(p => p.Products).WithMany().UsingEntity("StepProducts");
+        modelBuilder.Entity<StepDb>().HasMany(p => p.ProductsL).WithMany().UsingEntity("StepProductsL");
+        modelBuilder.Entity<StepDb>().HasMany(p => p.ProductsXL).WithMany().UsingEntity("StepProductsXL");
+
         modelBuilder.Entity<OfferDb>().Navigation(o => o.Promotion).AutoInclude();
         modelBuilder.Entity<PromotionDb>().Navigation(o => o.Menus).AutoInclude();
         modelBuilder.Entity<PromotionDb>().Navigation(o => o.Products).AutoInclude();
@@ -71,6 +76,8 @@ public record MenuDb
     [Column(TypeName = "decimal(4, 2)")]
     public decimal? PriceXL { get; set; }
 
+    public IList<StepDb> Steps { get; set; } = [];
+
     public IList<SnackAmountDb> Snacks { get; set; } = [];
 
     public IList<CategorieDb> Categories { get; set; } = [];
@@ -107,6 +114,8 @@ public record ProductDb
 
     [Column(TypeName = "decimal(4, 2)")]
     public required decimal Price { get; set; }
+
+    public decimal? Energy { get; set; }
 
     public IList<SnackAmountDb> Snacks { get; set; } = [];
 
@@ -167,6 +176,22 @@ public record SnackAmountDb
     public required SnackDb Snack { get; set; }
 
     public required int Amount { get; set; }
+}
+
+[Table("Steps")]
+public record StepDb
+{
+    public int Id { get; set; }
+
+    public IList<ProductDb> Products { get; set; } = [];
+
+    public IList<ProductDb> ProductsL { get; set; } = [];
+
+    public IList<ProductDb> ProductsXL { get; set; } = [];
+
+    public ProductDb? DefaultProduct { get; set; }
+
+    public required int Type { get; set; }
 }
 
 [Table("Update")]
