@@ -10,6 +10,7 @@ COPY . ./
 # restore as distinct layers
 RUN dotnet restore
 # build and publish a release
+WORKDIR /src/CestlheureduBK
 RUN dotnet publish -c Release -o /app
 
 # final stage/image

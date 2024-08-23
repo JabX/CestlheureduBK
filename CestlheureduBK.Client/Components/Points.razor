@@ -1,0 +1,229 @@
+﻿@inject IDataService dataService
+@rendermode InteractiveWebAssembly
+
+<PageTitle>C'est l'heure du BK ! - Rentabilité des couronnes</PageTitle>
+
+<h1>Rentabilité des couronnes</h1>
+
+<p>
+    Restaurant : <strong>@Restaurant.Name</strong> (@Restaurant.Departement)<br />
+    <em style="font-size:0.8em">Dernières mises à jour : catalogue le @ToLocalTime(Update.Catalogue) et offres le @ToLocalTime(Update.Offers)</em>
+</p>
+<h5 class="toggle" @onclick="() => filter = !filter">@(filter ? "⬆️" : "⬇️") <span>Filtres</span></h5>
+@if (filter)
+{
+    <div class="filters">
+        <label style="font-style:italic" for="name">Nom</label>
+        <input id="name" value="@criteria.Name" type="search" @oninput="OnNameChange" />
+        <br />
+        <span style="font-style:italic">Couronnes</span>
+        <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
+            <span>
+                <input type="checkbox" id="points-all" checked="@(criteria.Points == null || criteria.Points.Count == allPoints.Count)" @oninput="args => OnPointsChange(0, (bool)args.Value!)" />
+                <label for="points-all">Tout</label>
+            </span>
+            @foreach (var point in allPoints)
+            {
+                <span>
+                    <input type="checkbox" id="points-@point" checked="@(criteria.Points == null || criteria.Points.Contains(point))" @oninput="args => OnPointsChange(point, (bool)args.Value!)" />
+                    <label for="points-@point">@point</label>
+                </span>
+            }
+        </span>
+        <br />
+        <span style="font-style:italic">Catégories</span>
+        <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
+            <span>
+                <input type="checkbox" id="categories-all" checked="@(criteria.Categories == null || criteria.Categories.Count == allCategories.Count)" @oninput="args => OnCategorieChange(null, (bool)args.Value!)" />
+                <label for="categories-all">Tout</label>
+            </span>
+            @foreach (var categorie in allCategories)
+            {
+                <span>
+                    <input type="checkbox" id="categories-@categorie.Id" checked="@(criteria.Categories == null || criteria.Categories .Contains(categorie))" @oninput="args => OnCategorieChange(categorie, (bool)args.Value!)" />
+                    <label for="categories-@categorie.Id">@categorie.Name</label>
+                </span>
+            }
+        </span>
+    </div>
+}
+<h5 style="margin-top:12px">@Data.Length offres</h5>
+<table class="table">
+    <thead>
+        <tr style="white-space:nowrap">
+            <th class="toggle" @onclick="@(() => ToggleSort("name"))">@(criteria.SortBy == "name" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Produit</span></th>
+            <th class="toggle" @onclick="@(() => ToggleSort("price"))">@(criteria.SortBy == "price" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Prix</span> €</th>
+            <th class="toggle" @onclick="@(() => ToggleSort("points"))">@(criteria.SortBy == "points" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Prix</span> 👑</th>
+            <th class="toggle" @onclick="@(() => ToggleSort("value"))">@(criteria.SortBy == "value" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Valeur</span> 👑</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offer in Data)
+        {
+            <tr style="vertical-align:middle">
+                <td>
+                    <span style="display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;">
+                        <img src="@offer.Image" width="100" />
+                        <span style="display:inline-flex;flex-direction:column">
+                            <span>@(offer.Type == "Menu" ? "Menu " : "")@offer.Name</span>
+                            <span style="font-size:0.8em;display:inline-flex;column-gap:6px;flex-wrap:wrap">
+                                @foreach (var categorie in offer.Categories ?? [])
+                                {
+                                    <span style="@(categorie.SubCategory ? "font-style:italic" : "font-weight:600")">@categorie.Name</span>
+                                }
+                            </span>
+                        </span>
+                    </span>
+                </td>
+                <td style="white-space:nowrap">
+                    <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
+                        <span>@offer.Price.ToString("0.00 €")</span>
+                        @if (offer.Snacks.Any())
+                        {
+                            <span style="font-size:0.7em;font-style:italic">(@((offer.Price / offer.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", offer.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        }
+                    </span>
+                </td>
+                <td style="white-space:nowrap">
+                    <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
+                        <span>@offer.Points</span>
+                        @if (offer.Snacks.Any())
+                        {
+                            <span style="font-size:0.7em;font-style:italic">(@(decimal.Round(Convert.ToDecimal(offer.Points) / offer.Snacks.Sum(s => s.Amount), 2)) / @(string.Join("", offer.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        }
+                    </span>
+                </td>
+                <td style="white-space:nowrap">@offer.Value.ToString("0.000 €")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public required OfferDisplay[] Data { get; set; }
+    [Parameter]
+    public required RestaurantDisplay Restaurant { get; set; }
+    [Parameter]
+    public required UpdateDisplay Update { get; set; }
+
+    private OfferCriteria criteria = new();
+
+    private bool filter;
+
+    private Debouncer debouncer = new();
+
+    private List<int> allPoints = [];
+    private List<CategorieDisplay> allCategories = [];
+
+    protected override void OnInitialized()
+    {    
+        allPoints = Data.Select(o => o.Points).Distinct().OrderBy(a => a).ToList();
+        allCategories = Data.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
+    }
+
+    private async Task ToggleSort(string field)
+    {
+        if (field != criteria.SortBy)
+        {
+            criteria.Asc = field != "value";
+        }
+        else
+        {
+            criteria.Asc = !criteria.Asc;
+        }
+
+        criteria.SortBy = field;
+        await LoadOffers();
+    }
+
+    private async Task OnNameChange(ChangeEventArgs args)
+    {
+        criteria.Name = args.Value != null ? (string)args.Value : "";
+        await debouncer.DebounceAsync(300, (ct) => LoadOffers());
+    }
+
+    private async Task OnPointsChange(int point, bool value)
+    {
+        if (point == 0)
+        {
+            if (value)
+            {
+                criteria.Points = null;
+            }
+            else
+            {
+                criteria.Points = [];
+            }
+        }
+        else if (criteria.Points == null)
+        {
+            criteria.Points = allPoints.Where(p => p != point).ToList();
+        }
+        else if (criteria.Points.Contains(point))
+        {
+            criteria.Points.Remove(point);
+        }
+        else
+        {
+            criteria.Points ??= [];
+            criteria.Points.Add(point);
+            if (criteria.Points.Count == allPoints.Count)
+            {
+                criteria.Points = null;
+            }
+        }
+
+        await LoadOffers();
+    }
+
+    private async Task OnCategorieChange(CategorieDisplay? categorie, bool value)
+    {
+        if (categorie == null)
+        {
+            if (value)
+            {
+                criteria.Categories = null;
+            }
+            else
+            {
+                criteria.Categories = [];
+            }
+        }
+        else if (criteria.Categories == null)
+        {
+            criteria.Categories = allCategories.Where(p => p != categorie).ToList();
+        }
+        else if (criteria.Categories?.Contains(categorie) ?? false)
+        {
+            criteria.Categories.Remove(categorie);
+        }
+        else
+        {
+            criteria.Categories ??= [];
+            criteria.Categories.Add(categorie);
+            if (criteria.Categories.Count == allCategories.Count)
+            {
+                criteria.Categories = null;
+            }
+        }
+
+        await LoadOffers();
+    }
+
+    private async Task LoadOffers()
+    {
+        Data = await dataService.GetOffers(criteria);
+    }
+
+    private string ToLocalTime(DateTime? date)
+    {
+        if (date == null)
+        {
+            return string.Empty;
+        }
+
+        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
+            .ToString("dd/MM/yyyy à HH:mm");
+    }
+}

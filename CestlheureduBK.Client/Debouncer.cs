@@ -1,4 +1,4 @@
-﻿namespace CestlheureduBK;
+﻿namespace CestlheureduBK.Client;
 
 /// <summary>
 /// Debouncer helps you to debounce asynchronous actions.

@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject IDataService dataService
+
+<Points Data="@data" Restaurant="@restaurant" Update="@update" />
+
+@code {
+    private OfferDisplay[]? data;
+    private RestaurantDisplay? restaurant;
+    private UpdateDisplay? update;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await dataService.GetOffers(new());
+        restaurant = await dataService.GetRestaurant();
+        update = await dataService.GetUpdate();
+    }
+}
