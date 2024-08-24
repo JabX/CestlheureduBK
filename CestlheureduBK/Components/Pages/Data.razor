@@ -9,34 +9,39 @@
 
 <PageTitle>C'est l'heure du BK ! - Chargement des données</PageTitle>
 
-<h1>Chargement des données</h1>
+<RadzenStack AlignItems="AlignItems.Start">
+    <h1>Chargement des données</h1>
 
-<br />
-<button class="btn btn-primary" @onclick="ReloadRestaurants">Recharger les restaurants</button>
-<br />
-<br />
+    <RadzenButton Click="ReloadRestaurants" Text="Recharger les restaurants" />
 
-<label for"codeRestaurant">Restaurant</label>
-<select id="codeRestaurant" @bind="@codeRestaurant">
-    @foreach (var restaurant in restaurants)
+    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+        <RadzenLabel Text="Restaurant" Component="codeRestaurant" />
+        <RadzenDropDown @bind-Value=@codeRestaurant
+                        Data=@restaurants
+                        Name="codeRestaurant"
+                        TextProperty="@nameof(RestaurantDisplay.FullName)"
+                        ValueProperty="@nameof(RestaurantDisplay.Id)"
+                        Style="width:350px" />
+        <RadzenButton Click="ReloadCatalogue" Text="Recharger le catalogue" />
+    </RadzenStack>
+
+    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+        <RadzenLabel Text="Access Token pour l'API BK" Component="accessToken" />
+        <RadzenTextBox @bind-Value=@accessToken Name="accessToken" Style="width:239px" />
+        <RadzenButton Click="ReloadOffers" Text="Recharger les offres" />
+    </RadzenStack>
+
+    <RadzenButton Click="ResetDb" Text="Tout recharger" />
+
+    @if (loading)
     {
-        <option value="@restaurant.Id">@restaurant.Departement - @restaurant.Name</option>
+        <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
     }
-</select>
-<button class="btn btn-primary" @onclick="ReloadCatalogue">Recharger le catalogue</button>
-<br />
-<br />
-<label for"accessToken">Access Token pour l'API BK</label>
-<input id="accessToken" @bind="@accessToken" />
-<button class="btn btn-primary" @onclick="ReloadOffers">Recharger les offres</button>
-<br />
-<br />
-<button class="btn btn-primary" @onclick="ResetDb">Tout recharger</button>
-<p class="@ClassName">@message</p>
-@if (loading)
-{
-    <p>Chargement...</p>
-}
+
+    <RadzenText class="@ClassName" Text="@message" />
+</RadzenStack>
+
+
 
 @code {
     string codeRestaurant = "K0157";
@@ -45,9 +50,9 @@
     string? message;
     bool error;
 
-    RestaurantDb[] restaurants = [];
+    RestaurantDisplay[] restaurants = [];
 
-    string ClassName => error ? "alert-danger" : "";
+    string ClassName => error ? "error" : "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,6 +62,7 @@
                 .Where(r => r.Opened)
                 .OrderBy(r => r.Departement)
                 .ThenBy(r => r.Name)
+                .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement))
                 .ToArrayAsync();
         }
         catch
@@ -70,6 +76,7 @@
         try
         {
             message = null;
+            error = false;
             loading = true;
 
             var client = GetClient(true);
@@ -87,7 +94,6 @@
             await ReloadCatalogue();
             await ReloadOffers();
 
-            error = false;
             message = "Base reconstruite avec succès !";
         }
         catch (Exception e)
@@ -108,6 +114,7 @@
         try
         {
             message = null;
+            error = false;
             loading = true;
             var storeLocator = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/public/store-locator");
             storeLocator.EnsureSuccessStatusCode();
@@ -149,7 +156,6 @@
 
             await OnInitializedAsync();
 
-            error = false;
             message = "Restaurants rechargés avec succès !";
         }
         catch (Exception e)
@@ -170,6 +176,7 @@
         try
         {
             message = null;
+            error = false;
             loading = true;
 
             var result = await client.GetAsync($"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json");
@@ -186,44 +193,44 @@
             var kingboxRegex = new Regex(@"kingbox (\d+) ([a-z ]+)([ +&]*(\d+) ([a-z ]+))?", RegexOptions.IgnoreCase);
 
             var products = catalogue.Products.Select(prd => new ProductDb
-            {
-                Id = prd.Id,
-                Name = prd.Name
-                    .Replace("®", "")
-                    .Replace("Lousiane", "Louisiane")
-                    .Replace("(6) King Nuggets", "King Nuggets (6)"),
-                Image = prd.Image,
-                Price = prd.Price,
-                Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
-                Restaurant = restaurant
-            }).ToList();
-            var menus = catalogue.Menus.Select(men => new MenuDb
-            {
-                Id = men.Id,
-                Name = men.Name
-                    .Replace("®", "")
-                    .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
-                    .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
-                    .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
-                    .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
-                    .Trim()
-                    .Trim('-')
-                    .Trim(),
-                Image = men.Image,
-                Price = men.Price,
-                PriceL = men.PriceL,
-                PriceXL = men.PriceXL,
-                Steps = men.Steps.Select(stp => new StepDb
                 {
-                    Products = products.Where(prd => stp.ProductIds.Contains(prd.Id)).ToList(),
-                    ProductsL = stp.ProductLIds != null ? products.Where(prd => stp.ProductLIds.Contains(prd.Id)).ToList() : [],
-                    ProductsXL = stp.ProductXLIds != null ? products.Where(prd => stp.ProductXLIds.Contains(prd.Id)).ToList() : [],
-                    DefaultProduct = products.SingleOrDefault(prd => prd.Id == stp.DefaultId),
-                    Type = stp.StepType
-                }).ToList(),
-                Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
-                Restaurant = restaurant
-            }).ToList();
+                    Id = prd.Id,
+                    Name = prd.Name
+                                    .Replace("®", "")
+                                    .Replace("Lousiane", "Louisiane")
+                                    .Replace("(6) King Nuggets", "King Nuggets (6)"),
+                    Image = prd.Image,
+                    Price = prd.Price,
+                    Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    Restaurant = restaurant
+                }).ToList();
+            var menus = catalogue.Menus.Select(men => new MenuDb
+                {
+                    Id = men.Id,
+                    Name = men.Name
+                                    .Replace("®", "")
+                                    .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
+                                    .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
+                                    .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
+                                    .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
+                                    .Trim()
+                                    .Trim('-')
+                                    .Trim(),
+                    Image = men.Image,
+                    Price = men.Price,
+                    PriceL = men.PriceL,
+                    PriceXL = men.PriceXL,
+                    Steps = men.Steps.Select(stp => new StepDb
+                    {
+                        Products = products.Where(prd => stp.ProductIds.Contains(prd.Id)).ToList(),
+                        ProductsL = stp.ProductLIds != null ? products.Where(prd => stp.ProductLIds.Contains(prd.Id)).ToList() : [],
+                        ProductsXL = stp.ProductXLIds != null ? products.Where(prd => stp.ProductXLIds.Contains(prd.Id)).ToList() : [],
+                        DefaultProduct = products.SingleOrDefault(prd => prd.Id == stp.DefaultId),
+                        Type = stp.StepType
+                    }).ToList(),
+                    Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    Restaurant = restaurant
+                }).ToList();
 
             var snacks = products
                 .Where(p => snackRegex.IsMatch(p.Name))
@@ -243,10 +250,10 @@
                 if (productsDb.TryGetValue(product.Id, out var productDb))
                 {
                     product.Energy = productDb.Energy;
-                } 
+                }
                 else
                 {
-                    var productResult = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{catalogue.Products.Single(prd=>prd.Id == product.Id).RouteId}");
+                    var productResult = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{catalogue.Products.Single(prd => prd.Id == product.Id).RouteId}");
                     if (productResult.IsSuccessStatusCode)
                     {
                         var productDetail = (await productResult.Content.ReadFromJsonAsync<ProductResult>())!;
@@ -264,10 +271,10 @@
                 if (match.Success)
                 {
                     product.Snacks.Add(new()
-                    {
-                        Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
-                        Amount = int.Parse(match.Groups[2].Value)
-                    });
+                        {
+                            Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
+                            Amount = int.Parse(match.Groups[2].Value)
+                        });
                 }
                 else
                 {
@@ -275,18 +282,18 @@
                     if (match2.Success)
                     {
                         product.Snacks.Add(new()
-                        {
-                            Snack = snacks.Single(s => s.Name == match2.Groups[2].Value.Trim()),
-                            Amount = int.Parse(match2.Groups[1].Value.Trim())
-                        });
+                            {
+                                Snack = snacks.Single(s => s.Name == match2.Groups[2].Value.Trim()),
+                                Amount = int.Parse(match2.Groups[1].Value.Trim())
+                            });
 
                         if (match2.Groups[3].Success)
                         {
                             product.Snacks.Add(new()
-                            {
-                                Snack = snacks.Single(s => s.Name == match2.Groups[5].Value.Trim()),
-                                Amount = int.Parse(match2.Groups[4].Value.Trim())
-                            });
+                                {
+                                    Snack = snacks.Single(s => s.Name == match2.Groups[5].Value.Trim()),
+                                    Amount = int.Parse(match2.Groups[4].Value.Trim())
+                                });
                         }
                     }
                 }
@@ -306,10 +313,10 @@
                 {
                     var n = menu.Name;
                     menu.Snacks.Add(new()
-                    {
-                        Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
-                        Amount = int.Parse(match.Groups[2].Value)
-                    });
+                        {
+                            Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
+                            Amount = int.Parse(match.Groups[2].Value)
+                        });
                 }
             }
 
@@ -366,7 +373,6 @@
 
             await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Catalogue, DateTime.UtcNow));
 
-            error = false;
             message = "Catalogue rechargé avec succès !";
         }
         catch (Exception e)
@@ -387,6 +393,7 @@
         try
         {
             message = null;
+            error = false;
             loading = true;
 
             var result = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
@@ -410,7 +417,6 @@
 
             await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Offers, DateTime.UtcNow));
 
-            error = false;
             message = "Offres rechargées avec succès !";
         }
         catch (Exception e)

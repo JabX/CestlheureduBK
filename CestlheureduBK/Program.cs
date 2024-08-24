@@ -5,6 +5,7 @@ using CestlheureduBK.Components;
 using CestlheureduBK.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddScoped<IDataService, BackDataService>()
     .AddLocalization()
+    .AddRadzenComponents()
     .AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
@@ -20,7 +22,6 @@ Directory.CreateDirectory("./data");
 builder.Services.AddDbContext<BKDbContext>(e => e
     .UseSqlite("Data Source=./data/bk.db")
     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-
 
 var app = builder.Build();
 

@@ -1,103 +1,142 @@
 ﻿@inject IDataService dataService
 @rendermode InteractiveWebAssembly
 
-<PageTitle>C'est l'heure du BK ! - Rentabilité des couronnes</PageTitle>
-
 <h1>Rentabilité des couronnes</h1>
 
 <p>
     Restaurant : <strong>@Restaurant.Name</strong> (@Restaurant.Departement)<br />
-    <em style="font-size:0.8em">Dernières mises à jour : catalogue le @ToLocalTime(Update.Catalogue) et offres le @ToLocalTime(Update.Offers)</em>
+    <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Update.Catalogue) et offres le @ToLocalTime(Update.Offers)</span>
 </p>
-<h5 class="toggle" @onclick="() => filter = !filter">@(filter ? "⬆️" : "⬇️") <span>Filtres</span></h5>
-@if (filter)
-{
-    <div class="filters">
-        <label style="font-style:italic" for="name">Nom</label>
-        <input id="name" value="@criteria.Name" type="search" @oninput="OnNameChange" />
-        <br />
-        <span style="font-style:italic">Couronnes</span>
-        <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
-            <span>
-                <input type="checkbox" id="points-all" checked="@(criteria.Points == null || criteria.Points.Count == allPoints.Count)" @oninput="args => OnPointsChange(0, (bool)args.Value!)" />
-                <label for="points-all">Tout</label>
-            </span>
-            @foreach (var point in allPoints)
-            {
-                <span>
-                    <input type="checkbox" id="points-@point" checked="@(criteria.Points == null || criteria.Points.Contains(point))" @oninput="args => OnPointsChange(point, (bool)args.Value!)" />
-                    <label for="points-@point">@point</label>
-                </span>
-            }
-        </span>
-        <br />
-        <span style="font-style:italic">Catégories</span>
-        <span style="display:inline-flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;margin-top:6px">
-            <span>
-                <input type="checkbox" id="categories-all" checked="@(criteria.Categories == null || criteria.Categories.Count == allCategories.Count)" @oninput="args => OnCategorieChange(null, (bool)args.Value!)" />
-                <label for="categories-all">Tout</label>
-            </span>
-            @foreach (var categorie in allCategories)
-            {
-                <span>
-                    <input type="checkbox" id="categories-@categorie.Id" checked="@(criteria.Categories == null || criteria.Categories .Contains(categorie))" @oninput="args => OnCategorieChange(categorie, (bool)args.Value!)" />
-                    <label for="categories-@categorie.Id">@categorie.Name</label>
-                </span>
-            }
-        </span>
-    </div>
-}
-<h5 style="margin-top:12px">@Data.Length offres</h5>
-<table class="table">
-    <thead>
-        <tr style="white-space:nowrap">
-            <th class="toggle" @onclick="@(() => ToggleSort("name"))">@(criteria.SortBy == "name" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Produit</span></th>
-            <th class="toggle" @onclick="@(() => ToggleSort("price"))">@(criteria.SortBy == "price" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Prix</span> €</th>
-            <th class="toggle" @onclick="@(() => ToggleSort("points"))">@(criteria.SortBy == "points" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Prix</span> 👑</th>
-            <th class="toggle" @onclick="@(() => ToggleSort("value"))">@(criteria.SortBy == "value" ? criteria.Asc ? "⬆️" : "⬇️" : "") <span>Valeur</span> 👑</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var offer in Data)
-        {
-            <tr style="vertical-align:middle">
-                <td>
-                    <span style="display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;">
-                        <img src="@offer.Image" width="100" />
-                        <span style="display:inline-flex;flex-direction:column">
-                            <span>@(offer.Type == "Menu" ? "Menu " : "")@offer.Name</span>
-                            <span style="font-size:0.8em;display:inline-flex;column-gap:6px;flex-wrap:wrap">
-                                @foreach (var categorie in offer.Categories ?? [])
-                                {
-                                    <span style="@(categorie.SubCategory ? "font-style:italic" : "font-weight:600")">@categorie.Name</span>
-                                }
-                            </span>
-                        </span>
-                    </span>
-                </td>
-                <td style="white-space:nowrap">
-                    <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
-                        <span>@offer.Price.ToString("0.00 €")</span>
-                        @if (offer.Snacks.Any())
+
+<RadzenPanel Text="Filtres" AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
+    <RadzenCard Variant="Variant.Flat">
+        <RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+                <RadzenLabel Text="Nom" Component="name" />
+                <RadzenTextBox Value="@criteria.Name" Name="name" @oninput="OnNameChange" />
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+                <RadzenLabel Text="Couronnes" Component="couronnes" />
+                <RadzenCheckBoxList AllowSelectAll="true"
+                                    SelectAllText="Tous"
+                                    Name="couronnes"
+                                    Value=@(criteria.Points ?? allPoints)
+                                    TValue="int"
+                                    Change="OnPointsChange">
+                    <Items>
+                        @foreach (var point in allPoints)
                         {
-                            <span style="font-size:0.7em;font-style:italic">(@((offer.Price / offer.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", offer.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                            <RadzenCheckBoxListItem Text="@point.ToString()" Value="point" />
                         }
-                    </span>
-                </td>
-                <td style="white-space:nowrap">
-                    <span style="display:inline-flex;flex-direction:column;align-items:flex-start">
-                        <span>@offer.Points</span>
-                        @if (offer.Snacks.Any())
+                    </Items>
+                </RadzenCheckBoxList>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+                <RadzenLabel Text="Catégories" Component="categories" />
+                <RadzenCheckBoxList AllowSelectAll="true"
+                                    SelectAllText="Toutes"
+                                    Name="categories"
+                                    Value=@(criteria.Categories ?? allCategories)
+                                    TValue="CategorieDisplay"
+                                    Change="OnCategorieChange">
+                    <Items>
+                        @foreach (var categorie in allCategories)
                         {
-                            <span style="font-size:0.7em;font-style:italic">(@(decimal.Round(Convert.ToDecimal(offer.Points) / offer.Snacks.Sum(s => s.Amount), 2)) / @(string.Join("", offer.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                            <RadzenCheckBoxListItem Text="@categorie.Name" Value="categorie" />
                         }
-                    </span>
-                </td>
-                <td style="white-space:nowrap">@offer.Value.ToString("0.000 €")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    </Items>
+                </RadzenCheckBoxList>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+</RadzenPanel>
+<br />
+
+<RadzenText Text="@($"{Data.Length} offres")" TextStyle="TextStyle.DisplayH6" />
+
+<RadzenDataGrid Data="@Data" IsLoading="loading">
+    <Columns>
+        <RadzenDataGridColumn>
+            <HeaderTemplate>
+                <span class="header" @onclick="@(() => ToggleSort("product"))">
+                    <span>Produit</span>
+                    @if (criteria.SortBy == "product")
+                    {
+                        <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                    }
+                </span>
+            </HeaderTemplate>
+            <Template Context="data">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                    <img class="image" src="@data.Image" />
+                    <RadzenStack Gap="0">
+                        <span>@(data.Type == "Menu" ? "Menu " : "")@data.Name</span>
+                        <RadzenStack Orientation="Orientation.Horizontal" Style="font-size:0.8em;column-gap:6px" Wrap="FlexWrap.Wrap">
+                            @foreach (var categorie in data.Categories ?? [])
+                            {
+                                <span style="@(categorie.SubCategory ? "font-style:italic" : "font-weight:600")">@categorie.Name</span>
+                            }
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenStack>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="Amount" Width="85px">
+            <HeaderTemplate>
+                <span class="header" @onclick="@(() => ToggleSort("price"))">
+                    <span>Prix €</span>
+                    @if (criteria.SortBy == "price")
+                    {
+                        <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                    }
+                </span>
+            </HeaderTemplate>
+            <Template Context="data">
+                <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                    <span>@data.Price.ToString("0.00 €")</span>
+                    @if (data.Snacks.Any())
+                    {
+                        <span class="detail">(@((data.Price / data.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                    }
+                </RadzenStack>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Width="85px">
+            <HeaderTemplate>
+                <span class="header" @onclick="@(() => ToggleSort("points"))">
+                    <span>Prix 👑</span>
+                    @if (criteria.SortBy == "points")
+                    {
+                        <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                    }
+                </span>
+            </HeaderTemplate>
+            <Template Context="data">
+                <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                    <span>@data.Price.ToString("0.00 €")</span>
+                    @if (data.Snacks.Any())
+                    {
+                        <span class="detail">(@((data.Price / data.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                    }
+                </RadzenStack>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Width="115px">
+            <HeaderTemplate>
+                <span class="header" @onclick="@(() => ToggleSort("value"))">
+                    <span>Valeur 👑</span>
+                    @if (criteria.SortBy == "value")
+                    {
+                        <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                    }
+                </span>
+            </HeaderTemplate>
+            <Template Context="data">
+                @data.Value.ToString("0.000 €")
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
 
 @code {
     [Parameter]
@@ -110,6 +149,7 @@
     private OfferCriteria criteria = new();
 
     private bool filter;
+    private bool loading;
 
     private Debouncer debouncer = new();
 
@@ -117,7 +157,7 @@
     private List<CategorieDisplay> allCategories = [];
 
     protected override void OnInitialized()
-    {    
+    {
         allPoints = Data.Select(o => o.Points).Distinct().OrderBy(a => a).ToList();
         allCategories = Data.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
     }
@@ -143,77 +183,29 @@
         await debouncer.DebounceAsync(300, (ct) => LoadOffers());
     }
 
-    private async Task OnPointsChange(int point, bool value)
+    private async Task OnPointsChange(IEnumerable<int>? points)
     {
-        if (point == 0)
-        {
-            if (value)
-            {
-                criteria.Points = null;
-            }
-            else
-            {
-                criteria.Points = [];
-            }
-        }
-        else if (criteria.Points == null)
-        {
-            criteria.Points = allPoints.Where(p => p != point).ToList();
-        }
-        else if (criteria.Points.Contains(point))
-        {
-            criteria.Points.Remove(point);
-        }
-        else
-        {
-            criteria.Points ??= [];
-            criteria.Points.Add(point);
-            if (criteria.Points.Count == allPoints.Count)
-            {
-                criteria.Points = null;
-            }
-        }
-
+        criteria.Points = points?.Count() == allPoints.Count ? null : (points ?? []).ToList();
         await LoadOffers();
     }
 
-    private async Task OnCategorieChange(CategorieDisplay? categorie, bool value)
+    private async Task OnCategorieChange(IEnumerable<CategorieDisplay>? categories)
     {
-        if (categorie == null)
-        {
-            if (value)
-            {
-                criteria.Categories = null;
-            }
-            else
-            {
-                criteria.Categories = [];
-            }
-        }
-        else if (criteria.Categories == null)
-        {
-            criteria.Categories = allCategories.Where(p => p != categorie).ToList();
-        }
-        else if (criteria.Categories?.Contains(categorie) ?? false)
-        {
-            criteria.Categories.Remove(categorie);
-        }
-        else
-        {
-            criteria.Categories ??= [];
-            criteria.Categories.Add(categorie);
-            if (criteria.Categories.Count == allCategories.Count)
-            {
-                criteria.Categories = null;
-            }
-        }
-
+        criteria.Categories = categories?.Count() == allCategories.Count ? null : (categories ?? []).ToList();
         await LoadOffers();
     }
 
     private async Task LoadOffers()
     {
-        Data = await dataService.GetOffers(criteria);
+        try
+        {
+            loading = true;
+            Data = await dataService.GetOffers(criteria);
+        }
+        finally
+        {
+            loading = false;
+        }
     }
 
     private string ToLocalTime(DateTime? date)

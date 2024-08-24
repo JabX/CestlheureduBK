@@ -28,5 +28,8 @@ public record SnackProductDisplay(string Name, string? Image, int Amount, decima
 
 public record SnackDisplay(string Name, SnackProductDisplay[] Products);
 
-public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement);
+public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement)
+{
+    public string FullName => $"{Departement} - {Name}";
+}
 public record UpdateDisplay(DateTime? Catalogue, DateTime? Offers);

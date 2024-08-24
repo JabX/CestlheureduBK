@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="0">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="width:100%">
+                <RadzenText Text="C'est l'heure du BK !" TextStyle="TextStyle.H5" />
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenLink Icon="open_in_new" Text="GitHub" Target="_blank" Path="https://www.github.com/JabX/CestlheureduBK" />
+                    <ThemeSwitcher />
+                </RadzenStack>
+            </RadzenStack>
+            <RadzenPanelMenu>
+                <RadzenPanelMenuItem Path="/" Text="Couronnes" Icon="star" />
+                <RadzenPanelMenuItem Path="/snacks" Text="Snacks" Icon="fastfood" />
+                <RadzenPanelMenuItem Path="/data" Text="Données" Icon="database" />
+            </RadzenPanelMenu>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenBody>
+        @Body
+    </RadzenBody>
+</RadzenLayout>

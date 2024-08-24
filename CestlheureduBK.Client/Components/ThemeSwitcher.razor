@@ -1,0 +1,30 @@
+﻿@using Blazored.LocalStorage
+@inject ThemeService themeService;
+@inject IServiceProvider serviceProvider;
+
+@rendermode InteractiveWebAssembly
+
+<RadzenAppearanceToggle />
+
+@code {
+    ILocalStorageService? localStorage;
+    protected override async Task OnInitializedAsync()
+    {
+        localStorage = serviceProvider.GetService<ILocalStorageService>();
+        if (localStorage != null)
+        {
+            var theme = await localStorage.GetItemAsync<string>("theme");
+            if (theme != null)
+            {
+                themeService.SetTheme(theme, true);
+            }
+
+            themeService.ThemeChanged += OnThemeChange;
+        }
+    }
+
+    private void OnThemeChange()
+    {
+        localStorage?.SetItemAsync("theme", themeService.Theme);
+    }
+}

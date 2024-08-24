@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CestlheureduBK", "Cestlheur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CestlheureduBK.Client", "CestlheureduBK.Client\CestlheureduBK.Client.csproj", "{25D55CD5-3303-400E-B566-089EBF494F79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CestlheureduBK.Common", "CestlheureduBK.Common\CestlheureduBK.Common.csproj", "{1D4AF890-81D7-4B7C-9BC9-826DD7DCE861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CestlheureduBK.Common", "CestlheureduBK.Common\CestlheureduBK.Common.csproj", "{1D4AF890-81D7-4B7C-9BC9-826DD7DCE861}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
