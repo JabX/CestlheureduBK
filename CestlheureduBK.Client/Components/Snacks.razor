@@ -21,7 +21,7 @@
                     </RadzenStack>
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="Amount" Width="60px">
+            <RadzenDataGridColumn Property="Amount" HeaderCssClass="col-1">
                 <HeaderTemplate>
                     <span class="header" @onclick="@(() => ToggleSort("amount"))">
                         <span>Qté</span>
@@ -32,7 +32,7 @@
                     </span>
                 </HeaderTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Width="95px">
+            <RadzenDataGridColumn HeaderCssClass="col-4">
                 <HeaderTemplate>
                     <span class="header" @onclick="@(() => ToggleSort("price"))">
                         <span>Prix</span>
@@ -52,7 +52,7 @@
                     </RadzenStack>
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Width="85px">
+            <RadzenDataGridColumn HeaderCssClass="col-2">
                 <HeaderTemplate>
                     <span class="header" @onclick="@(() => ToggleSort("value"))">
                         <span>Unité</span>

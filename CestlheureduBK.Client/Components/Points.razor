@@ -57,9 +57,9 @@
     <Columns>
         <RadzenDataGridColumn>
             <HeaderTemplate>
-                <span class="header" @onclick="@(() => ToggleSort("product"))">
+                <span class="header" @onclick="@(() => ToggleSort("name"))">
                     <span>Produit</span>
-                    @if (criteria.SortBy == "product")
+                    @if (criteria.SortBy == "name")
                     {
                         <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                     }
@@ -80,7 +80,7 @@
                 </RadzenStack>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="Amount" Width="85px">
+        <RadzenDataGridColumn HeaderCssClass="col-3">
             <HeaderTemplate>
                 <span class="header" @onclick="@(() => ToggleSort("price"))">
                     <span>Prix €</span>
@@ -100,7 +100,7 @@
                 </RadzenStack>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Width="85px">
+        <RadzenDataGridColumn HeaderCssClass="col-2">
             <HeaderTemplate>
                 <span class="header" @onclick="@(() => ToggleSort("points"))">
                     <span>Prix 👑</span>
@@ -120,7 +120,7 @@
                 </RadzenStack>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Width="115px">
+        <RadzenDataGridColumn HeaderCssClass="col-3">
             <HeaderTemplate>
                 <span class="header" @onclick="@(() => ToggleSort("value"))">
                     <span>Valeur 👑</span>
