@@ -3,9 +3,10 @@
 public record CategorieDisplay(string Id, string Name, bool SubCategory);
 public record SnackAmountDisplay(string Name, int Amount);
 
-public record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, IEnumerable<SnackAmountDisplay> Snacks, IEnumerable<CategorieDisplay> Categories)
+public record OfferDisplay(string Type, string Name, string? Image, int Points, decimal Price, decimal Energy, IEnumerable<SnackAmountDisplay> Snacks, IEnumerable<CategorieDisplay> Categories)
 {
-    public decimal Value => Price / Points;
+    public decimal EnergyValue => Energy / Points;
+    public decimal PriceValue => Price / Points;
 }
 
 public record SnackProductDisplay(string Name, string? Image, int Amount, decimal Price, decimal Ratio)

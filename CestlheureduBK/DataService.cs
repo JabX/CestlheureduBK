@@ -9,13 +9,31 @@ public class DataService(BKDbContext context)
     public async Task<OfferDisplay[]> GetOffers()
     {
         return await context.Offers
-             .AsSingleQuery()
-             .AsAsyncEnumerable()
-             .SelectMany(off =>
-                 off.Promotion.Products.Where(p => p.Available).Select(prd => new OfferDisplay("Produit", prd.Name, prd.Image, off.Points, prd.Price, prd.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)), prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
-                 .Concat(off.Promotion.Menus.Where(p => p.Available).Select(men => new OfferDisplay("Menu", men.Name, men.Image, off.Points, men.Price, men.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)), men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory)))))
-             .ToAsyncEnumerable())
-             .ToArrayAsync();
+            .AsSingleQuery()
+            .AsAsyncEnumerable()
+            .SelectMany(off =>
+                 off.Promotion.Products.Where(p => p.Available)
+                     .Select(prd => new OfferDisplay(
+                         "Produit",
+                         prd.Name,
+                         prd.Image,
+                         off.Points,
+                         prd.Price,
+                         prd.Energy ?? 0,
+                         prd.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                         prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                .Concat(off.Promotion.Menus.Where(p => p.Available)
+                    .Select(men => new OfferDisplay(
+                        "Menu", 
+                        men.Name, 
+                        men.Image,
+                        off.Points,
+                        men.Price,
+                        men.Steps.Sum(s => s.DefaultProduct?.Energy ?? 0),
+                        men.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)), 
+                        men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory)))))
+            .ToAsyncEnumerable())
+            .ToArrayAsync();
     }
 
     public async Task<RestaurantDisplay> GetRestaurant()

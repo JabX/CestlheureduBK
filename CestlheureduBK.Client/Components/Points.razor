@@ -51,6 +51,14 @@
 </RadzenPanel>
 <br />
 
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+    <RadzenLabel Text="Optimiser pour" Component="costBy" />
+    <span style="cursor:pointer" @onclick=@(() => criteria.CostBy = "price")>Prix</span>
+    <RadzenSwitch Name="costBy" Value="@(criteria.CostBy == "energy")" Change="@(() => criteria.CostBy = criteria.CostBy == "energy" ? "price" : "energy")" />
+    <span style="cursor:pointer" @onclick=@(() => criteria.CostBy = "energy")>Calories</span>
+</RadzenStack>
+<br />
+
 <RadzenText Text="@($"{Offers.Length} offres")" TextStyle="TextStyle.DisplayH6" />
 
 <RadzenDataGrid Data="Offers">
@@ -82,9 +90,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn HeaderCssClass="col-3">
             <HeaderTemplate>
-                <span class="header" @onclick="@(() => ToggleSort("price"))">
-                    <span>Prix €</span>
-                    @if (criteria.SortBy == "price")
+                <span class="header" @onclick="@(() => ToggleSort("cost"))">
+                    <span>@(criteria.CostBy == "price" ? "Prix €" : "Calories")</span>
+                    @if (criteria.SortBy == "cost")
                     {
                         <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                     }
@@ -92,10 +100,10 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@data.Price.ToString("0.00 €")</span>
+                    <span>@(criteria.CostBy == "price" ? data.Price.ToString("0.00 €") : data.Energy.ToString("0 kcal"))</span>
                     @if (data.Snacks.Any())
                     {
-                        <span class="detail">(@((data.Price / data.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        <span class="detail">(@(((criteria.CostBy == "price" ? data.Price : data.Energy) / data.Snacks.Sum(s => s.Amount)).ToString(criteria.CostBy == "price" ? "0.00 €" : "0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
                 </RadzenStack>
             </Template>
@@ -131,7 +139,7 @@
                 </span>
             </HeaderTemplate>
             <Template Context="data">
-                @data.Value.ToString("0.000 €")
+                @(criteria.CostBy == "price" ? data.PriceValue.ToString("0.000 €") : data.EnergyValue.ToString("0.0 kcal"))
             </Template>
         </RadzenDataGridColumn>
     </Columns>
@@ -175,12 +183,12 @@
             {
                 ("name", false) => query.OrderByDescending(off => off.Name).ThenByDescending(off => off.Type),
                 ("name", true) => query.OrderBy(off => off.Name).ThenByDescending(off => off.Type),
-                ("price", false) => query.OrderByDescending(off => off.Price).ThenBy(off => off.Points),
-                ("price", true) => query.OrderBy(off => off.Price).ThenBy(off => off.Points),
-                ("points", false) => query.OrderByDescending(off => off.Points).ThenByDescending(off => off.Price),
-                ("points", true) => query.OrderBy(off => off.Points).ThenBy(off => off.Price),
-                ("value", false) => query.OrderByDescending(off => off.Value).ThenBy(off => off.Points),
-                ("value", true) => query.OrderBy(off => off.Value).ThenBy(off => off.Points),
+                ("cost", false) => query.OrderByDescending(off => criteria.CostBy == "price" ? off.Price : off.Energy).ThenBy(off => off.Points),
+                ("cost", true) => query.OrderBy(off => criteria.CostBy == "price" ? off.Price : off.Energy).ThenBy(off => off.Points),
+                ("points", false) => query.OrderByDescending(off => off.Points).ThenByDescending(off => criteria.CostBy == "price" ? off.Price : off.Energy),
+                ("points", true) => query.OrderBy(off => off.Points).ThenBy(off => criteria.CostBy == "price" ? off.Price : off.Energy),
+                ("value", false) => query.OrderByDescending(off => criteria.CostBy == "price" ? off.PriceValue : off.EnergyValue).ThenBy(off => off.Points),
+                ("value", true) => query.OrderBy(off => criteria.CostBy == "price" ? off.PriceValue : off.EnergyValue).ThenBy(off => off.Points),
                 _ => throw new InvalidOperationException()
             })
                 .ToArray();
@@ -235,6 +243,8 @@
 
     private record OfferCriteria
     {
+        public string CostBy { get; set; } = "price";
+
         public string SortBy { get; set; } = "value";
 
         public bool Asc { get; set; }

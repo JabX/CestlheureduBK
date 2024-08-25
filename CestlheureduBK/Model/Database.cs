@@ -36,6 +36,8 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
         modelBuilder.Entity<PromotionDb>().Navigation(o => o.Products).AutoInclude();
         modelBuilder.Entity<MenuDb>().Navigation(o => o.Categories).AutoInclude();
         modelBuilder.Entity<MenuDb>().Navigation(o => o.Snacks).AutoInclude();
+        modelBuilder.Entity<MenuDb>().Navigation(o => o.Steps).AutoInclude();
+        modelBuilder.Entity<StepDb>().Navigation(o => o.DefaultProduct).AutoInclude();
         modelBuilder.Entity<ProductDb>().Navigation(o => o.Categories).AutoInclude();
         modelBuilder.Entity<ProductDb>().Navigation(o => o.Snacks).AutoInclude();
         modelBuilder.Entity<SnackAmountDb>().Navigation(o => o.Snack).AutoInclude();

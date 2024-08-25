@@ -253,6 +253,12 @@
                 }
                 else
                 {
+                    if (product.Name == "King Fusion Ready")
+                    {
+                        product.Energy = 283.2m;
+                        continue;
+                    }
+
                     var productResult = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{catalogue.Products.Single(prd => prd.Id == product.Id).RouteId}");
                     if (productResult.IsSuccessStatusCode)
                     {
