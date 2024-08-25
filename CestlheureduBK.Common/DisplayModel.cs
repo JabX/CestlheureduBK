@@ -1,18 +1,5 @@
 ﻿namespace CestlheureduBK.Common;
 
-public record OfferCriteria
-{
-    public string SortBy { get; set; } = "value";
-
-    public bool Asc { get; set; }
-
-    public string Name { get; set; } = "";
-
-    public List<int>? Points { get; set; }
-
-    public List<CategorieDisplay>? Categories { get; set; }
-}
-
 public record CategorieDisplay(string Id, string Name, bool SubCategory);
 public record SnackAmountDisplay(string Name, int Amount);
 

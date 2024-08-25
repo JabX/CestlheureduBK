@@ -1,9 +1,7 @@
 using CestlheureduBK;
 using CestlheureduBK.Client.Components;
-using CestlheureduBK.Common;
 using CestlheureduBK.Components;
 using CestlheureduBK.Model;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
 
@@ -11,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-    .AddScoped<IDataService, BackDataService>()
+    .AddScoped<DataService>()
     .AddLocalization()
     .AddRadzenComponents()
     .AddRazorComponents()
@@ -38,11 +36,6 @@ else
 app.UseRequestLocalization("fr-FR");
 app.UseStaticFiles();
 app.UseAntiforgery();
-
-app.MapPost("/api/offers", ([FromServices] IDataService dataService, [FromBody] OfferCriteria criteria) => dataService.GetOffers(criteria));
-app.MapGet("/api/restaurant", ([FromServices] IDataService dataService) => dataService.GetRestaurant());
-app.MapGet("/api/snacks", ([FromServices] IDataService dataService, string sortBy = "value", bool asc = false) => dataService.GetSnacks(sortBy, asc));
-app.MapGet("/api/update", ([FromServices] IDataService dataService) => dataService.GetUpdate());
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

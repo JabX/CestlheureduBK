@@ -1,4 +1,4 @@
-﻿@using Blazored.LocalStorage
+﻿@using Majorsoft.Blazor.Extensions.BrowserStorage
 @inject ThemeService themeService;
 @inject IServiceProvider serviceProvider;
 
@@ -7,24 +7,19 @@
 <RadzenAppearanceToggle />
 
 @code {
-    ILocalStorageService? localStorage;
-    protected override async Task OnInitializedAsync()
-    {
-        localStorage = serviceProvider.GetService<ILocalStorageService>();
-        if (localStorage != null)
-        {
-            var theme = await localStorage.GetItemAsync<string>("theme");
-            if (theme != null)
-            {
-                themeService.SetTheme(theme, true);
-            }
+    ICookieStoreService? cookieStorage;
 
+    protected override void OnInitialized()
+    {
+        cookieStorage = serviceProvider.GetService<ICookieStoreService>();
+        if (cookieStorage != null)
+        {
             themeService.ThemeChanged += OnThemeChange;
         }
     }
 
     private void OnThemeChange()
     {
-        localStorage?.SetItemAsync("theme", themeService.Theme);
+        cookieStorage?.SetAsync(new() { Name = "theme", Value = themeService.Theme });
     }
 }

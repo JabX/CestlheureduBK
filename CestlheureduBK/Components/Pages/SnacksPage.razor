@@ -1,5 +1,5 @@
 ﻿@page "/snacks"
-@inject IDataService dataService
+@inject DataService dataService
 
 <PageTitle>C'est l'heure du BK ! - Rentabilité des snacks</PageTitle>
 
@@ -12,7 +12,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        data = await dataService.GetSnacks("value", true);
+        data = await dataService.GetSnacks();
         restaurant = await dataService.GetRestaurant();       
         update = await dataService.GetUpdate(); 
     }

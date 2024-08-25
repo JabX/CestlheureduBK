@@ -1,5 +1,4 @@
-﻿@inject IDataService dataService
-@rendermode InteractiveWebAssembly
+﻿@rendermode InteractiveWebAssembly
 
 <h1>Rentabilité des couronnes</h1>
 
@@ -52,9 +51,9 @@
 </RadzenPanel>
 <br />
 
-<RadzenText Text="@($"{Data.Length} offres")" TextStyle="TextStyle.DisplayH6" />
+<RadzenText Text="@($"{Offers.Length} offres")" TextStyle="TextStyle.DisplayH6" />
 
-<RadzenDataGrid Data="@Data" IsLoading="loading">
+<RadzenDataGrid Data="Offers">
     <Columns>
         <RadzenDataGridColumn>
             <HeaderTemplate>
@@ -113,10 +112,10 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@data.Price.ToString("0.00 €")</span>
+                    <span>@data.Points</span>
                     @if (data.Snacks.Any())
                     {
-                        <span class="detail">(@((data.Price / data.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        <span class="detail">(@(decimal.Round((Convert.ToDecimal(data.Points) / data.Snacks.Sum(s => s.Amount)), 2)) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
                 </RadzenStack>
             </Template>
@@ -141,20 +140,52 @@
 @code {
     [Parameter]
     public required OfferDisplay[] Data { get; set; }
+
     [Parameter]
     public required RestaurantDisplay Restaurant { get; set; }
+
     [Parameter]
     public required UpdateDisplay Update { get; set; }
 
     private OfferCriteria criteria = new();
 
     private bool filter;
-    private bool loading;
-
-    private Debouncer debouncer = new();
 
     private List<int> allPoints = [];
     private List<CategorieDisplay> allCategories = [];
+
+    private OfferDisplay[] Offers
+    {
+        get
+        {
+            var query = Data.Where(off => criteria.Points == null || criteria.Points.Contains(off.Points));
+
+            if (!string.IsNullOrEmpty(criteria.Name))
+            {
+                query = query.Where(off => off.Name.Contains(criteria.Name, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            var catFilter = criteria.Categories?.Select(c => c.Id).ToList();
+            if (catFilter != null)
+            {
+                query = query.Where(m => m.Categories.Any(c => catFilter.Contains(c.Id)));
+            }
+
+            return ((criteria.SortBy, criteria.Asc) switch
+            {
+                ("name", false) => query.OrderByDescending(off => off.Name).ThenByDescending(off => off.Type),
+                ("name", true) => query.OrderBy(off => off.Name).ThenByDescending(off => off.Type),
+                ("price", false) => query.OrderByDescending(off => off.Price).ThenBy(off => off.Points),
+                ("price", true) => query.OrderBy(off => off.Price).ThenBy(off => off.Points),
+                ("points", false) => query.OrderByDescending(off => off.Points).ThenByDescending(off => off.Price),
+                ("points", true) => query.OrderBy(off => off.Points).ThenBy(off => off.Price),
+                ("value", false) => query.OrderByDescending(off => off.Value).ThenBy(off => off.Points),
+                ("value", true) => query.OrderBy(off => off.Value).ThenBy(off => off.Points),
+                _ => throw new InvalidOperationException()
+            })
+                .ToArray();
+        }
+    }
 
     protected override void OnInitialized()
     {
@@ -162,7 +193,7 @@
         allCategories = Data.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
     }
 
-    private async Task ToggleSort(string field)
+    private void ToggleSort(string field)
     {
         if (field != criteria.SortBy)
         {
@@ -174,38 +205,21 @@
         }
 
         criteria.SortBy = field;
-        await LoadOffers();
     }
 
-    private async Task OnNameChange(ChangeEventArgs args)
+    private void OnNameChange(ChangeEventArgs args)
     {
         criteria.Name = args.Value != null ? (string)args.Value : "";
-        await debouncer.DebounceAsync(300, (ct) => LoadOffers());
     }
 
-    private async Task OnPointsChange(IEnumerable<int>? points)
+    private void OnPointsChange(IEnumerable<int>? points)
     {
         criteria.Points = points?.Count() == allPoints.Count ? null : (points ?? []).ToList();
-        await LoadOffers();
     }
 
-    private async Task OnCategorieChange(IEnumerable<CategorieDisplay>? categories)
+    private void OnCategorieChange(IEnumerable<CategorieDisplay>? categories)
     {
         criteria.Categories = categories?.Count() == allCategories.Count ? null : (categories ?? []).ToList();
-        await LoadOffers();
-    }
-
-    private async Task LoadOffers()
-    {
-        try
-        {
-            loading = true;
-            Data = await dataService.GetOffers(criteria);
-        }
-        finally
-        {
-            loading = false;
-        }
     }
 
     private string ToLocalTime(DateTime? date)
@@ -217,5 +231,18 @@
 
         return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
             .ToString("dd/MM/yyyy à HH:mm");
+    }
+
+    private record OfferCriteria
+    {
+        public string SortBy { get; set; } = "value";
+
+        public bool Asc { get; set; }
+
+        public string Name { get; set; } = "";
+
+        public List<int>? Points { get; set; }
+
+        public List<CategorieDisplay>? Categories { get; set; }
     }
 }

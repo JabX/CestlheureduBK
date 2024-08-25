@@ -51,14 +51,17 @@
         margin: 0;
     }
 
-    .rz-header .rz-link {
-        padding: 12px 18px;
+    .rz-header .rz-link .rzi {
+        margin: 0 6px;
+        font-size: 20px;
     }
 
-        .rz-header .rz-link .rzi {
-            margin: 0 6px;
-            font-size: 20px;
-        }
+    .rz-header .rz-button-md.rz-button-icon-only {
+        min-width: 2.25rem;
+        border-radius: 50%;
+        height: 2.25rem;
+        margin-right: 12px;
+    }
 
 h1 {
     margin: 0;
@@ -73,8 +76,9 @@ h1 {
 .rz-panel-titlebar {
     flex-direction: row-reverse;
     justify-content: left;
-    font-size: 1.3rem;
+    align-items: center;
     gap: 6px;
+    font-size: 1.2rem;
 }
 
     .rz-panel-titlebar .rzi {

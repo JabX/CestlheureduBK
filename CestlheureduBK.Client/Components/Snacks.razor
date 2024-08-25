@@ -1,5 +1,4 @@
-﻿@inject IDataService dataService
-@rendermode InteractiveWebAssembly
+﻿@rendermode InteractiveWebAssembly
 
 <h1>Rentabilité des snacks</h1>
 
@@ -7,12 +6,12 @@
     Restaurant : <strong>@Restaurant.Name</strong> (@Restaurant.Departement)<br />
     <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Update.Catalogue) et offres le @ToLocalTime(Update.Offers)</span>
 </p>
-@foreach (var snack in Data)
+@foreach (var snack in MainData)
 {
     <br />
     <RadzenText Text="@snack.Name" TextStyle="TextStyle.DisplayH6" />
 
-    <RadzenDataGrid Data="@snack.Products" IsLoading="loading">
+    <RadzenDataGrid Data="@snack.Products">
         <Columns>
             <RadzenDataGridColumn Title="Produit">
                 <Template Context="data">
@@ -81,29 +80,33 @@
     [Parameter]
     public required UpdateDisplay Update { get; set; }
 
-    private bool loading;
-
     private string sortBy = "value";
     private bool asc = true;
 
-    private async Task ToggleSort(string field)
+    private SnackDisplay[] MainData
+    {
+        get
+        {
+            return Data.Select(d => d with
+                {
+                    Products = ((sortBy, asc) switch
+                    {
+                        ("amount", false) => d.Products.OrderByDescending(off => off.Amount).ThenByDescending(off => off.Price),
+                        ("amount", true) => d.Products.OrderBy(off => off.Amount).ThenBy(off => off.Price),
+                        ("price", false) => d.Products.OrderByDescending(off => off.Price).ThenBy(off => off.Value),
+                        ("price", true) => d.Products.OrderBy(off => off.Price).ThenBy(off => off.Value),
+                        ("value", false) => d.Products.OrderByDescending(off => off.Value).ThenBy(off => off.Amount),
+                        ("value", true) => d.Products.OrderBy(off => off.Value).ThenBy(off => off.Amount),
+                        _ => throw new InvalidOperationException()
+                    }).ToArray()
+                }).ToArray();
+        }
+    }
+
+    private void ToggleSort(string field)
     {
         asc = !asc;
         sortBy = field;
-        await LoadSnacks();
-    }
-
-    private async Task LoadSnacks()
-    {
-        try
-        {
-            loading = true;
-            Data = await dataService.GetSnacks(sortBy, asc);
-        }
-        finally
-        {
-            loading = false;
-        }
     }
 
     private string ToLocalTime(DateTime? date)

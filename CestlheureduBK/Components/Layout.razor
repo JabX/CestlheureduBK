@@ -1,11 +1,12 @@
 ﻿@inherits LayoutComponentBase
+@inject ThemeService themeService;
 
 <RadzenLayout>
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="0">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="width:100%">
                 <RadzenText Text="C'est l'heure du BK !" TextStyle="TextStyle.H5" />
-                <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="18px">
                     <RadzenLink Icon="open_in_new" Text="GitHub" Target="_blank" Path="https://www.github.com/JabX/CestlheureduBK" />
                     <ThemeSwitcher />
                 </RadzenStack>
@@ -21,3 +22,16 @@
         @Body
     </RadzenBody>
 </RadzenLayout>
+
+@code {
+    [CascadingParameter]
+    HttpContext? HttpContext { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (HttpContext != null && HttpContext.Request.Cookies.TryGetValue("theme", out var cookie) && cookie != null)
+        {
+            themeService.SetTheme(cookie);
+        }
+    }
+}

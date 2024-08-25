@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject IDataService dataService
+@inject DataService dataService
 
 <PageTitle>C'est l'heure du BK ! - Rentabilité des couronnes</PageTitle>
 
@@ -12,7 +12,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        data = await dataService.GetOffers(new());
+        data = await dataService.GetOffers();
         restaurant = await dataService.GetRestaurant();
         update = await dataService.GetUpdate();
     }
