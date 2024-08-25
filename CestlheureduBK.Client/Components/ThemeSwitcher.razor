@@ -20,6 +20,6 @@
 
     private void OnThemeChange()
     {
-        cookieStorage?.SetAsync(new() { Name = "theme", Value = themeService.Theme });
+        cookieStorage?.SetAsync(new() { Name = "theme", Value = themeService.Theme, Expires = double.MaxValue });
     }
 }
