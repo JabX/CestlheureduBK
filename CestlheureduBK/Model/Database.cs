@@ -65,18 +65,20 @@ public record MenuDb
 {
     public required string Id { get; set; }
 
+    public required bool Active { get; set; }
+
     public required string Name { get; set; }
 
     public string? Image { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
-    public required decimal Price { get; set; }
+    public required double Price { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
-    public decimal? PriceL { get; set; }
+    public double? PriceL { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
-    public decimal? PriceXL { get; set; }
+    public double? PriceXL { get; set; }
 
     public IList<StepDb> Steps { get; set; } = [];
 
@@ -88,7 +90,7 @@ public record MenuDb
 
     public required RestaurantDb Restaurant { get; set; }
 
-    public bool Available { get; set; } = true;
+    public bool AvailableInCatalogue { get; set; }
 }
 
 
@@ -109,15 +111,18 @@ public record ProductDb
 {
     public required string Id { get; set; }
 
+    public required bool Active { get; set; }
+
     public required string Name { get; set; }
 
     public string? Image { get; set; }
 
 
     [Column(TypeName = "decimal(4, 2)")]
-    public required decimal Price { get; set; }
+    public required double Price { get; set; }
 
-    public decimal? Energy { get; set; }
+    [Column(TypeName = "decimal(7, 2)")]
+    public double? Energy { get; set; }
 
     public IList<SnackAmountDb> Snacks { get; set; } = [];
 
@@ -127,13 +132,15 @@ public record ProductDb
 
     public required RestaurantDb Restaurant { get; set; }
 
-    public bool Available { get; set; } = true;
+    public bool AvailableInCatalogue { get; set; }
 }
 
 [Table("Promotions")]
 public record PromotionDb
 {
     public required string Id { get; set; }
+
+    public bool Active { get; set; } = true;
 
     public required string Name { get; set; }
 
@@ -142,8 +149,6 @@ public record PromotionDb
     public IList<ProductDb> Products { get; set; } = [];
 
     public required RestaurantDb Restaurant { get; set; }
-
-    public bool Available { get; set; } = true;
 }
 
 [Table("Restaurants")]
@@ -165,9 +170,9 @@ public record SnackDb
 {
     public int Id { get; set; }
 
-    public required string Name { get; set; }
+    public bool Active { get; set; } = true;
 
-    public bool Available { get; set; } = true;
+    public required string Name { get; set; }
 }
 
 [Table("SnackAmounts")]

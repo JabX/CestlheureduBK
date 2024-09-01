@@ -83,8 +83,12 @@ h1 {
     font-size: 1.2rem;
 }
 
-    .rz-panel-titlebar .rzi {
+    .rz-panel-titlebar .rzi, .rz-panel-titlebar span {
         cursor: pointer;
+    }
+
+    .rz-panel-titlebar button {
+        margin: -6px 10px;
     }
 
 .header {
@@ -99,16 +103,16 @@ h1 {
         font-size: 18px;
     }
 
-    th:first-of-type .header i {
-        position: relative;
-        left: 2px;
-        top: 4px;
-    }
+th:first-of-type .header i {
+    position: relative;
+    left: 2px;
+    top: 4px;
+}
 
-    .header:hover {
-        color: var(--rz-primary);
-        text-decoration: underline;
-    }
+.header:hover {
+    color: var(--rz-primary);
+    text-decoration: underline;
+}
 
 :root {
     --col-1: 80px;

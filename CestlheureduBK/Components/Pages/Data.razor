@@ -181,7 +181,7 @@
 
             var result = await client.GetAsync($"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json");
             result.EnsureSuccessStatusCode();
-            var catalogue = (await result.Content.ReadFromJsonAsync<Catalogue>())!;
+            var catalogue = (await result.Content.ReadFromJsonAsync<Model.Catalogue>())!;
 
             var restaurant = await context.Restaurants.AsTracking().SingleAsync(r => r.Id == codeRestaurant);
 
@@ -195,10 +195,11 @@
             var products = catalogue.Products.Select(prd => new ProductDb
                 {
                     Id = prd.Id,
+                    Active = prd.Active,
                     Name = prd.Name
-                                    .Replace("®", "")
-                                    .Replace("Lousiane", "Louisiane")
-                                    .Replace("(6) King Nuggets", "King Nuggets (6)"),
+                        .Replace("®", "")
+                        .Replace("Lousiane", "Louisiane")
+                        .Replace("(6) King Nuggets", "King Nuggets (6)"),
                     Image = prd.Image,
                     Price = prd.Price,
                     Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
@@ -207,15 +208,16 @@
             var menus = catalogue.Menus.Select(men => new MenuDb
                 {
                     Id = men.Id,
+                    Active = men.Active,
                     Name = men.Name
-                                    .Replace("®", "")
-                                    .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
-                                    .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
-                                    .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
-                                    .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
-                                    .Trim()
-                                    .Trim('-')
-                                    .Trim(),
+                        .Replace("®", "")
+                        .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
+                        .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
+                        .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
+                        .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
+                        .Trim()
+                        .Trim('-')
+                        .Trim(),
                     Image = men.Image,
                     Price = men.Price,
                     PriceL = men.PriceL,
@@ -255,7 +257,7 @@
                 {
                     if (product.Name == "King Fusion Ready")
                     {
-                        product.Energy = 283.2m;
+                        product.Energy = 283.2d;
                         continue;
                     }
 
@@ -266,11 +268,12 @@
                         var energy = productDetail.Product.Nutrition.SingleOrDefault(n => n.Item == "product.nutritional.energy")?.Portion;
                         if (!string.IsNullOrEmpty(energy))
                         {
-                            product.Energy = decimal.Parse(energy, CultureInfo.InvariantCulture);
+                            product.Energy = double.Parse(energy, CultureInfo.InvariantCulture);
                         }
                     }
                 }
 
+                product.AvailableInCatalogue = product.Categories.Any();
                 product.Categories = product.Categories.Concat(products.Where(prd => prd.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
 
                 var match = snackRegex.Match(product.Name);
@@ -312,6 +315,7 @@
 
             foreach (var menu in menus)
             {
+                menu.AvailableInCatalogue = menu.Categories.Any();
                 menu.Categories = menu.Categories.Concat(menus.Where(prd => prd.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
 
                 var match = snackRegex.Match(menu.Name);
@@ -326,7 +330,14 @@
                 }
             }
 
-            var promotions = catalogue.Promotions.Select(prm => new PromotionDb { Id = prm.Id, Name = prm.Name, Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(), Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList(), Restaurant = restaurant }).ToList();
+            var promotions = catalogue.Promotions.Select(prm => new PromotionDb
+                {
+                    Id = prm.Id,
+                    Name = prm.Name,
+                    Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(),
+                    Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList(),
+                    Restaurant = restaurant
+                }).ToList();
 
             await context.Database.ExecuteSqlRawAsync(@"
                 delete from StepProducts;
@@ -366,16 +377,16 @@
 
             await context.Snacks
                 .Where(r => !snacks.Select(re => re.Id).Contains(r.Id))
-                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
             await context.Products.IgnoreAutoIncludes()
                 .Where(r => !products.Select(re => re.Id).Contains(r.Id))
-                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
             await context.Menus.IgnoreAutoIncludes()
                 .Where(r => !menus.Select(re => re.Id).Contains(r.Id))
-                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
             await context.Promotions.IgnoreAutoIncludes()
                 .Where(r => !promotions.Select(re => re.Id).Contains(r.Id))
-                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Available, false));
+                .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
 
             await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Catalogue, DateTime.UtcNow));
 

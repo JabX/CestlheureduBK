@@ -1,6 +1,6 @@
 ﻿@rendermode InteractiveWebAssembly
 
-<h1>Rentabilité des couronnes</h1>
+<h1>La Carte</h1>
 
 <p>
     Restaurant : <strong>@Restaurant.Name</strong> (@Restaurant.Departement)<br />
@@ -9,7 +9,7 @@
 
 <RadzenPanel AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
     <HeaderTemplate>
-        @if (criteria != new OfferCriteria())
+        @if (criteria != new CatalogueCriteria())
         {
             <RadzenButton Text="Réinitialiser" Variant="Variant.Outlined" Icon="replay" Click="@(() => criteria = new())" />
         }
@@ -21,22 +21,6 @@
                 <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
                     <RadzenLabel Text="Nom" Component="name" />
                     <RadzenTextBox Value="@criteria.Name" Name="name" @oninput="OnNameChange" />
-                </RadzenStack>
-                <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
-                    <RadzenLabel Text="Couronnes" Component="couronnes" />
-                    <RadzenCheckBoxList AllowSelectAll="true"
-                                        SelectAllText="Tous"
-                                        Name="couronnes"
-                                        Value=@(criteria.Points ?? allPoints)
-                                        TValue="int"
-                                        Change="OnPointsChange">
-                        <Items>
-                            @foreach (var point in allPoints)
-                            {
-                                <RadzenCheckBoxListItem Text="@point.ToString()" Value="point" />
-                            }
-                        </Items>
-                    </RadzenCheckBoxList>
                 </RadzenStack>
                 <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
                     <RadzenLabel Text="Catégories" Component="categories" />
@@ -60,17 +44,9 @@
 </RadzenPanel>
 <br />
 
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-    <RadzenLabel Text="Optimiser pour" Component="costBy" />
-    <span style="cursor:pointer" @onclick=@(() => criteria.CostBy = "price")>Prix</span>
-    <RadzenSwitch Name="costBy" Value="@(criteria.CostBy == "energy")" Change="@(() => criteria.CostBy = criteria.CostBy == "energy" ? "price" : "energy")" />
-    <span style="cursor:pointer" @onclick=@(() => criteria.CostBy = "energy")>Calories</span>
-</RadzenStack>
-<br />
+<RadzenText Text="@($"{Products.Length} produits")" TextStyle="TextStyle.DisplayH6" />
 
-<RadzenText Text="@($"{Offers.Length} offres")" TextStyle="TextStyle.DisplayH6" />
-
-<RadzenDataGrid Data="Offers">
+<RadzenDataGrid Data="Products">
     <Columns>
         <RadzenDataGridColumn>
             <HeaderTemplate>
@@ -99,9 +75,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn HeaderCssClass="col-3">
             <HeaderTemplate>
-                <span class="header" @onclick="@(() => ToggleSort("cost"))">
-                    <span>@(criteria.CostBy == "price" ? "Prix €" : "Calories")</span>
-                    @if (criteria.SortBy == "cost")
+                <span class="header" @onclick="@(() => ToggleSort("energy"))">
+                    <span>Calories</span>
+                    @if (criteria.SortBy == "energy")
                     {
                         <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                     }
@@ -109,19 +85,19 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@(criteria.CostBy == "price" ? data.Price.ToString("0.00 €") : data.Energy.ToString("0 kcal"))</span>
-                    @if (data.Snacks.Any())
+                    <span>@(data.Energy.ToString("0 kcal"))</span>
+                    @if (data.Snacks.Any() && data.Type == "Product")
                     {
-                        <span class="detail">(@(((criteria.CostBy == "price" ? data.Price : data.Energy) / data.Snacks.Sum(s => s.Amount)).ToString(criteria.CostBy == "price" ? "0.00 €" : "0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        <span class="detail">(@((data.Energy / data.Snacks.Sum(s => s.Amount)).ToString("0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
                 </RadzenStack>
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn HeaderCssClass="col-2">
             <HeaderTemplate>
-                <span class="header" @onclick="@(() => ToggleSort("points"))">
-                    <span>Prix 👑</span>
-                    @if (criteria.SortBy == "points")
+                <span class="header" @onclick="@(() => ToggleSort("price"))">
+                    <span>Prix</span>
+                    @if (criteria.SortBy == "price")
                     {
                         <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                     }
@@ -129,10 +105,10 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@data.Points</span>
-                    @if (data.Snacks.Any())
+                    <span>@data.Price.ToString("0.00 €")</span>
+                    @if (data.Snacks.Any() && data.Type == "Product")
                     {
-                        <span class="detail">(@(double.Round((Convert.ToDouble(data.Points) / data.Snacks.Sum(s => s.Amount)), 2)) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        <span class="detail">(@(double.Round((data.Price / data.Snacks.Sum(s => s.Amount)), 2)) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
                 </RadzenStack>
             </Template>
@@ -140,7 +116,7 @@
         <RadzenDataGridColumn HeaderCssClass="col-3">
             <HeaderTemplate>
                 <span class="header" @onclick="@(() => ToggleSort("value"))">
-                    <span>Valeur 👑</span>
+                    <span>Valeur</span>
                     @if (criteria.SortBy == "value")
                     {
                         <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
@@ -148,7 +124,7 @@
                 </span>
             </HeaderTemplate>
             <Template Context="data">
-                @(criteria.CostBy == "price" ? data.PriceValue.ToString("0.000 €") : data.EnergyValue.ToString("0.0 kcal"))
+                @(data.EnergyValue.ToString("0.0 kcal"))
             </Template>
         </RadzenDataGridColumn>
     </Columns>
@@ -156,7 +132,7 @@
 
 @code {
     [Parameter]
-    public required OfferDisplay[] Data { get; set; }
+    public required CatalogueDisplay[] Data { get; set; }
 
     [Parameter]
     public required RestaurantDisplay Restaurant { get; set; }
@@ -164,18 +140,17 @@
     [Parameter]
     public required UpdateDisplay Update { get; set; }
 
-    private OfferCriteria criteria = new();
+    private CatalogueCriteria criteria = new();
 
     private bool filter;
 
-    private List<int> allPoints = [];
     private List<CategorieDisplay> allCategories = [];
 
-    private OfferDisplay[] Offers
+    private CatalogueDisplay[] Products
     {
         get
         {
-            var query = Data.Where(off => criteria.Points == null || criteria.Points.Contains(off.Points));
+            var query = Data.AsEnumerable();
 
             if (!string.IsNullOrEmpty(criteria.Name))
             {
@@ -192,12 +167,12 @@
             {
                 ("name", false) => query.OrderByDescending(off => off.Name).ThenByDescending(off => off.Type),
                 ("name", true) => query.OrderBy(off => off.Name).ThenByDescending(off => off.Type),
-                ("cost", false) => query.OrderByDescending(off => criteria.CostBy == "price" ? off.Price : off.Energy).ThenBy(off => off.Points),
-                ("cost", true) => query.OrderBy(off => criteria.CostBy == "price" ? off.Price : off.Energy).ThenBy(off => off.Points),
-                ("points", false) => query.OrderByDescending(off => off.Points).ThenByDescending(off => criteria.CostBy == "price" ? off.Price : off.Energy),
-                ("points", true) => query.OrderBy(off => off.Points).ThenBy(off => criteria.CostBy == "price" ? off.Price : off.Energy),
-                ("value", false) => query.OrderByDescending(off => criteria.CostBy == "price" ? off.PriceValue : off.EnergyValue).ThenBy(off => off.Points),
-                ("value", true) => query.OrderBy(off => criteria.CostBy == "price" ? off.PriceValue : off.EnergyValue).ThenBy(off => off.Points),
+                ("energy", false) => query.OrderByDescending(off => off.Energy).ThenBy(off => off.Price),
+                ("energy", true) => query.OrderBy(off => off.Energy).ThenBy(off => off.Price),
+                ("price", false) => query.OrderByDescending(off => off.Price).ThenByDescending(off => off.Energy),
+                ("price", true) => query.OrderBy(off => off.Price).ThenBy(off => off.Energy),
+                ("value", false) => query.OrderByDescending(off => off.EnergyValue).ThenBy(off => off.Price),
+                ("value", true) => query.OrderBy(off => off.EnergyValue).ThenBy(off => off.Price),
                 _ => throw new InvalidOperationException()
             })
                 .ToArray();
@@ -206,7 +181,6 @@
 
     protected override void OnInitialized()
     {
-        allPoints = Data.Select(o => o.Points).Distinct().OrderBy(a => a).ToList();
         allCategories = Data.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
     }
 
@@ -229,11 +203,6 @@
         criteria.Name = args.Value != null ? (string)args.Value : "";
     }
 
-    private void OnPointsChange(IEnumerable<int>? points)
-    {
-        criteria.Points = points?.Count() == allPoints.Count ? null : (points ?? []).ToList();
-    }
-
     private void OnCategorieChange(IEnumerable<CategorieDisplay>? categories)
     {
         criteria.Categories = categories?.Count() == allCategories.Count ? null : (categories ?? []).ToList();
@@ -250,17 +219,13 @@
             .ToString("dd/MM/yyyy à HH:mm");
     }
 
-    private record OfferCriteria
+    private record CatalogueCriteria
     {
-        public string CostBy { get; set; } = "price";
-
         public string SortBy { get; set; } = "value";
 
         public bool Asc { get; set; }
 
         public string Name { get; set; } = "";
-
-        public List<int>? Points { get; set; }
 
         public List<CategorieDisplay>? Categories { get; set; }
     }

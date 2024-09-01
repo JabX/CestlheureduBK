@@ -72,7 +72,10 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Available")
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AvailableInCatalogue")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Image")
@@ -82,13 +85,13 @@ namespace CestlheureduBK.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Price")
+                    b.Property<double>("Price")
                         .HasColumnType("decimal(4, 2)");
 
-                    b.Property<decimal?>("PriceL")
+                    b.Property<double?>("PriceL")
                         .HasColumnType("decimal(4, 2)");
 
-                    b.Property<decimal?>("PriceXL")
+                    b.Property<double?>("PriceXL")
                         .HasColumnType("decimal(4, 2)");
 
                     b.Property<string>("RestaurantId")
@@ -128,11 +131,14 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Available")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("Energy")
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("AvailableInCatalogue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("Energy")
+                        .HasColumnType("decimal(7, 2)");
 
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
@@ -141,7 +147,7 @@ namespace CestlheureduBK.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Price")
+                    b.Property<double>("Price")
                         .HasColumnType("decimal(4, 2)");
 
                     b.Property<string>("RestaurantId")
@@ -159,7 +165,7 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Available")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -236,7 +242,7 @@ namespace CestlheureduBK.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Available")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")

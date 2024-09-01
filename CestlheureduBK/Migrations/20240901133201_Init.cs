@@ -46,8 +46,8 @@ namespace CestlheureduBK.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Available = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,13 +74,14 @@ namespace CestlheureduBK.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Image = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
-                    PriceL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
-                    PriceXL = table.Column<decimal>(type: "decimal(4, 2)", nullable: true),
+                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false),
+                    PriceL = table.Column<double>(type: "decimal(4, 2)", nullable: true),
+                    PriceXL = table.Column<double>(type: "decimal(4, 2)", nullable: true),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
-                    Available = table.Column<bool>(type: "INTEGER", nullable: false)
+                    AvailableInCatalogue = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,12 +98,13 @@ namespace CestlheureduBK.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Image = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(4, 2)", nullable: false),
-                    Energy = table.Column<decimal>(type: "TEXT", nullable: true),
+                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false),
+                    Energy = table.Column<double>(type: "decimal(7, 2)", nullable: true),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
-                    Available = table.Column<bool>(type: "INTEGER", nullable: false)
+                    AvailableInCatalogue = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,9 +121,9 @@ namespace CestlheureduBK.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
-                    Available = table.Column<bool>(type: "INTEGER", nullable: false)
+                    RestaurantId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
