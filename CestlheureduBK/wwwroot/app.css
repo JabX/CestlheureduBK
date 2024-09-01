@@ -176,3 +176,9 @@ th, .rz-column-title, .rz-column-title-content {
 .rz-checkbox {
     margin: 0.75rem 0;
 }
+
+.distance {
+    font-style: italic;
+    font-size: 0.8em;
+    margin-top: -12px;
+}

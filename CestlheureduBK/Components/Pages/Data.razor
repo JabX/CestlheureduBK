@@ -4,8 +4,10 @@
 @using Microsoft.EntityFrameworkCore
 @using System.Text.RegularExpressions
 @using System.Globalization
+@using GeoCoordinate.NetStandard2;
 @rendermode InteractiveServer
 @inject BKDbContext context;
+@inject IGeolocationService geoService;
 
 <PageTitle>C'est l'heure du BK ! - Chargement des données</PageTitle>
 
@@ -14,16 +16,23 @@
 
     <RadzenButton Click="ReloadRestaurants" Text="Recharger les restaurants" />
 
-    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
-        <RadzenLabel Text="Restaurant" Component="codeRestaurant" />
-        <RadzenDropDown @bind-Value=@codeRestaurant
-                        Data=@restaurants
-                        Name="codeRestaurant"
-                        TextProperty="@nameof(RestaurantDisplay.FullName)"
-                        ValueProperty="@nameof(RestaurantDisplay.Id)"
-                        Style="width:350px" />
-        <RadzenButton Click="ReloadCatalogue" Text="Recharger le catalogue" />
+    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
+        <RadzenLabel Text="Restaurant" Component="codeRestaurant" Style="line-height:40px" />
+        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
+            <RadzenDropDown @bind-Value=@codeRestaurant
+                            Data=@restaurants
+                            Name="codeRestaurant"
+                            TextProperty="@nameof(RestaurantDisplay.FullName)"
+                            ValueProperty="@nameof(RestaurantDisplay.Id)"
+                            Style="width:350px" />
+            @if (Distance != null)
+            {
+                <span class="distance">à @Distance km</span>
+            }
+        </RadzenStack>
+        <RadzenButton Click="ReloadCatalogue" Text="Recharger le catalogue" Style="margin: 2px 0" />
     </RadzenStack>
+
 
     <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
         <RadzenLabel Text="Access Token pour l'API BK" Component="accessToken" />
@@ -44,7 +53,9 @@
 
 
 @code {
-    string codeRestaurant = "K0157";
+    string? codeRestaurant;
+    GeoCoordinate? geoPosition;
+
     bool loading;
     string? accessToken;
     string? message;
@@ -54,6 +65,20 @@
 
     string ClassName => error ? "error" : "";
 
+    double? Distance
+    {
+        get
+        {
+            var restaurant = restaurants.SingleOrDefault(r => r.Id == codeRestaurant);
+            if (restaurant != null && geoPosition != null)
+            {
+                return double.Round(new GeoCoordinate(restaurant.Lat, restaurant.Lng).GetDistanceTo(geoPosition) / 1000, 1);
+            }
+
+            return null;
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -62,12 +87,27 @@
                 .Where(r => r.Opened)
                 .OrderBy(r => r.Departement)
                 .ThenBy(r => r.Name)
-                .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement))
+                .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng))
                 .ToArrayAsync();
+
+            await geoService.GetCurrentPositionAsync(this, "OnCurrentPositionChange");
         }
         catch
         {
 
+        }
+    }
+
+    [JSInvokable]
+
+    public void OnCurrentPositionChange(GeolocationPosition position)
+    {
+        geoPosition = new GeoCoordinate(position.Coords.Latitude, position.Coords.Longitude);
+        var closestRestaurant = restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
+        if (closestRestaurant != null)
+        {
+            codeRestaurant = closestRestaurant.Id;
+            StateHasChanged();
         }
     }
 
@@ -138,6 +178,8 @@
                             AddressFull = restaurantData.AddressFull,
                             Id = restaurantData.Id,
                             Name = restaurantData.Name,
+                            Lat = restaurantData.Lat,
+                            Lng = restaurantData.Lng,
                             Departement = restaurantData.AddressFull.Split(" - ").Last().Trim()[..2]
                         };
                 }

@@ -70,7 +70,7 @@ public class DataService(BKDbContext context)
 
     public async Task<RestaurantDisplay> GetRestaurant()
     {
-        return await context.Products.Include(r => r.Restaurant).Take(1).Select(r => new RestaurantDisplay(r.Restaurant.Id, r.Restaurant.Name, r.Restaurant.AddressFull, r.Restaurant.Departement)).SingleAsync();
+        return await context.Products.Include(r => r.Restaurant).Take(1).Select(r => new RestaurantDisplay(r.Restaurant.Id, r.Restaurant.Name, r.Restaurant.AddressFull, r.Restaurant.Departement, r.Restaurant.Lat, r.Restaurant.Lng)).SingleAsync();
     }
 
     public async Task<SnackDisplay[]> GetSnacks()

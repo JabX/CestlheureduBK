@@ -160,6 +160,10 @@ public class RestaurantDb
 
     public required string AddressFull { get; set; }
 
+    public required double Lat { get; set; }
+
+    public required double Lng { get; set; }
+
     public required string Departement { get; set; }
 
     public bool Opened { get; set; } = true;

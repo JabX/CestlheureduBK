@@ -32,6 +32,8 @@ namespace CestlheureduBK.Migrations
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     AddressFull = table.Column<string>(type: "TEXT", nullable: false),
+                    Lat = table.Column<double>(type: "REAL", nullable: false),
+                    Lng = table.Column<double>(type: "REAL", nullable: false),
                     Departement = table.Column<string>(type: "TEXT", nullable: false),
                     Opened = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
