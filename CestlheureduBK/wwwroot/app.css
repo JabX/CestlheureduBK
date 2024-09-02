@@ -115,7 +115,7 @@ th:first-of-type .header i {
 }
 
 :root {
-    --col-1: 80px;
+    --col-1: 100px;
     --col-2: 140px;
     --col-3: 150px;
     --col-4: 180px;
@@ -123,7 +123,7 @@ th:first-of-type .header i {
 
 @media (max-width: 750px) {
     :root {
-        --col-1: 40px;
+        --col-1: 50px;
         --col-2: 70px;
         --col-3: 75px;
         --col-4: 90px;

@@ -8,7 +8,7 @@ public class DataService(BKDbContext context)
 {
     public async Task<CatalogueDisplay[]> GetCatalogue()
     {
-        var lol = (await context.Products
+        return (await context.Products
             .AsSingleQuery()
             .Where(prd => prd.Active && prd.AvailableInCatalogue && prd.Price > 0)
             .Select(prd => new CatalogueDisplay(
@@ -33,8 +33,6 @@ public class DataService(BKDbContext context)
                 men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
             .ToArrayAsync())
         .ToArray();
-
-        return lol;
     }
 
     public async Task<OfferDisplay[]> GetOffers()
@@ -115,6 +113,57 @@ public class DataService(BKDbContext context)
                 return new SnackDisplay(s.Key, products.ToArray());
             })
                 .ToArray();
+    }
+
+    public async Task<BurgerMystereListDisplay[]> GetBurgerMystere2024()
+    {
+        var meatProbs = new Dictionary<string, double>
+        {
+            ["702"] = 0.14,
+            ["463"] = 0.10,
+            ["2"] = 0.12,
+            ["49"] = 0.12,
+            ["447"] = 0.11,
+            ["953"] = 0.07,
+            ["46"] = 0.10,
+            ["802"] = 0.07,
+            ["691"] = 0.05,
+            ["411"] = 0.05,
+            ["17"] = 0.04,
+            ["15"] = 0.03
+        };
+
+        var meat = await context.Products
+            .AsSingleQuery()
+            .Where(prd => meatProbs.Keys.Contains(prd.Id))
+            .Select(prd => new BurgerMystereDisplay(
+                prd.Name,
+                prd.Image,
+                prd.Price,
+                prd.Energy ?? 0,
+                meatProbs[prd.Id]))
+            .ToArrayAsync();
+
+        var veggieProbs = new Dictionary<string, double>
+        {
+            ["544"] = 0.26,
+            ["664"] = 0.26,
+            ["666"] = 0.24,
+            ["801"] = 0.24
+        };
+
+        var veggie = await context.Products
+            .AsSingleQuery()
+            .Where(prd => veggieProbs.Keys.Contains(prd.Id))
+            .Select(prd => new BurgerMystereDisplay(
+                prd.Name,
+                prd.Image,
+                prd.Price,
+                prd.Energy ?? 0,
+                veggieProbs[prd.Id]))
+            .ToArrayAsync();
+
+        return [new("Burger Mystère", meat), new("Veggie Mystère", veggie)];
     }
 
     public async Task<UpdateDisplay> GetUpdate()

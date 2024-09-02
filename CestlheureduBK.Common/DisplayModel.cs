@@ -21,6 +21,13 @@ public record SnackProductDisplay(string Name, string? Image, int Amount, double
 
 public record SnackDisplay(string Name, SnackProductDisplay[] Products);
 
+public record BurgerMystereDisplay(string Name, string? Image, double Price, double Energy, double Chance)
+{
+    public double Value => Price / 2.9;
+}
+
+public record BurgerMystereListDisplay(string Name, BurgerMystereDisplay[] Burgers);
+
 public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement, double Lat, double Lng)
 {
     public string FullName => $"{Departement} - {Name}";

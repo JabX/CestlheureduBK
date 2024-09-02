@@ -1,0 +1,131 @@
+﻿@rendermode InteractiveWebAssembly
+
+<h1>Burger Mystère 2024</h1>
+
+<p>
+    Restaurant : <strong>@Restaurant.Name</strong> (@Restaurant.Departement)<br />
+    <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Update.Catalogue) et offres le @ToLocalTime(Update.Offers)</span>
+</p>
+@foreach (var snack in MainData)
+{
+    <br />
+    <RadzenText Text="@snack.Name" TextStyle="TextStyle.DisplayH6" />
+    <span style="font-size:0.9em;font-style:italic">Prix : 2.90 € / Espérance : @snack.Burgers.Sum(b => b.Chance * b.Price).ToString("0.00 €") et @snack.Burgers.Sum(b => b.Chance * b.Energy).ToString("0 kcal")</span>
+    <br />
+    <br />
+
+    <RadzenDataGrid Data="@snack.Burgers">
+        <Columns>
+            <RadzenDataGridColumn Title="Produit">
+                <Template Context="data">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                        <img src="@data.Image" class="image" />
+                        <span>@data.Name</span>
+                    </RadzenStack>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn HeaderCssClass="col-1">
+                <HeaderTemplate>
+                    <span class="header" @onclick="@(() => ToggleSort("chance"))">
+                        <span>%</span>
+                        @if (sortBy == "chance")
+                        {
+                            <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                        }
+                    </span>
+                </HeaderTemplate>
+                <Template Context="data">
+                    <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                        <span>@data.Chance.ToString("0 %")</span>
+                    </RadzenStack>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn HeaderCssClass="col-2">
+                <HeaderTemplate>
+                    <span class="header" @onclick="@(() => ToggleSort("price"))">
+                        <span>Prix</span>
+                        @if (sortBy == "price")
+                        {
+                            <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                        }
+                    </span>
+                </HeaderTemplate>
+                <Template Context="data">
+                    <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                        <span>@data.Price.ToString("0.00 €")</span>
+                        <span class="detail">(x @data.Value.ToString("0.00"))</span>
+                    </RadzenStack>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn HeaderCssClass="col-4">
+                <HeaderTemplate>
+                    <span class="header" @onclick="@(() => ToggleSort("energy"))">
+                        <span>Calories</span>
+                        @if (sortBy == "energy")
+                        {
+                            <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                        }
+                    </span>
+                </HeaderTemplate>
+                <Template Context="data">
+                    <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                        <span>@data.Energy.ToString("0 kcal")</span>
+                    </RadzenStack>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+    [Parameter]
+    public required BurgerMystereListDisplay[] Data { get; set; }
+
+    [Parameter]
+    public required RestaurantDisplay Restaurant { get; set; }
+
+    [Parameter]
+    public required UpdateDisplay Update { get; set; }
+
+    private string sortBy = "chance";
+    private bool asc = false;
+
+    private BurgerMystereListDisplay[] MainData
+    {
+        get
+        {
+            return Data.Select(d => d with
+                {
+                    Burgers = ((sortBy, asc) switch
+                    {
+                        ("name", false) => d.Burgers.OrderByDescending(off => off.Name).ThenByDescending(off => off.Price),
+                        ("name", true) => d.Burgers.OrderBy(off => off.Name).ThenBy(off => off.Price),
+                        ("chance", false) => d.Burgers.OrderByDescending(off => off.Chance).ThenByDescending(off => off.Price),
+                        ("chance", true) => d.Burgers.OrderBy(off => off.Chance).ThenByDescending(off => off.Price),
+                        ("energy", false) => d.Burgers.OrderByDescending(off => off.Energy).ThenByDescending(off => off.Price),
+                        ("energy", true) => d.Burgers.OrderBy(off => off.Energy).ThenBy(off => off.Price),
+                        ("price", false) => d.Burgers.OrderByDescending(off => off.Price).ThenBy(off => off.Energy),
+                        ("price", true) => d.Burgers.OrderBy(off => off.Price).ThenBy(off => off.Energy),
+                        _ => throw new InvalidOperationException()
+                    }).ToArray()
+                }).ToArray();
+        }
+    }
+
+    private void ToggleSort(string field)
+    {
+        asc = !asc;
+        sortBy = field;
+    }
+
+    private string ToLocalTime(DateTime? date)
+    {
+        if (date == null)
+        {
+            return string.Empty;
+        }
+
+        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
+            .ToString("dd/MM/yyyy à HH:mm");
+    }
+}
