@@ -28,8 +28,7 @@ public record BurgerMystereDisplay(string Name, string? Image, double Price, dou
 
 public record BurgerMystereListDisplay(string Name, BurgerMystereDisplay[] Burgers);
 
-public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement, double Lat, double Lng)
+public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement, double Lat, double Lng, DateTime? CatalogueUpdate)
 {
     public string FullName => $"{Departement} - {Name}";
 }
-public record UpdateDisplay(DateTime? Catalogue, DateTime? Offers);

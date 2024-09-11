@@ -1,19 +1,15 @@
 ﻿@page "/carte"
 @inject DataService dataService
 
-<PageTitle>C'est l'heure du BK ! - La carte</PageTitle>
-
-<Catalogue Data="@data" Restaurant="@restaurant" Update="@update" />
+<Header Title="La Carte" />
+<Catalogue Data="@data" />
 
 @code {
     private CatalogueDisplay[]? data;
-    private RestaurantDisplay? restaurant;
-    private UpdateDisplay? update;
 
     protected override async Task OnInitializedAsync()
     {
-        data = await dataService.GetCatalogue();
-        restaurant = await dataService.GetRestaurant();       
-        update = await dataService.GetUpdate(); 
+        var restaurant = await dataService.GetRestaurant();       
+        data = await dataService.GetCatalogue(restaurant.Id);
     }
 }

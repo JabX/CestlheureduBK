@@ -9,11 +9,17 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
 
     public DbSet<MenuDb> Menus { get; set; }
 
+    public DbSet<MenuRestaurantDb> MenusRestaurants { get; set; }
+
     public DbSet<OfferDb> Offers { get; set; }
 
     public DbSet<ProductDb> Products { get; set; }
 
+    public DbSet<ProductRestaurantDb> ProductsRestaurants { get; set; }
+
     public DbSet<PromotionDb> Promotions { get; set; }
+
+    public DbSet<PromotionRestaurantDb> PromotionsRestaurants { get; set; }
 
     public DbSet<RestaurantDb> Restaurants { get; set; }
 
@@ -27,20 +33,13 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<MenuRestaurantDb>().HasKey(m => new { m.MenuId, m.RestaurantId });
+        modelBuilder.Entity<ProductRestaurantDb>().HasKey(m => new { m.ProductId, m.RestaurantId });
+        modelBuilder.Entity<PromotionRestaurantDb>().HasKey(m => new { m.PromotionId, m.RestaurantId });
+
         modelBuilder.Entity<StepDb>().HasMany(p => p.Products).WithMany().UsingEntity("StepProducts");
         modelBuilder.Entity<StepDb>().HasMany(p => p.ProductsL).WithMany().UsingEntity("StepProductsL");
         modelBuilder.Entity<StepDb>().HasMany(p => p.ProductsXL).WithMany().UsingEntity("StepProductsXL");
-
-        modelBuilder.Entity<OfferDb>().Navigation(o => o.Promotion).AutoInclude();
-        modelBuilder.Entity<PromotionDb>().Navigation(o => o.Menus).AutoInclude();
-        modelBuilder.Entity<PromotionDb>().Navigation(o => o.Products).AutoInclude();
-        modelBuilder.Entity<MenuDb>().Navigation(o => o.Categories).AutoInclude();
-        modelBuilder.Entity<MenuDb>().Navigation(o => o.Snacks).AutoInclude();
-        modelBuilder.Entity<MenuDb>().Navigation(o => o.Steps).AutoInclude();
-        modelBuilder.Entity<StepDb>().Navigation(o => o.DefaultProduct).AutoInclude();
-        modelBuilder.Entity<ProductDb>().Navigation(o => o.Categories).AutoInclude();
-        modelBuilder.Entity<ProductDb>().Navigation(o => o.Snacks).AutoInclude();
-        modelBuilder.Entity<SnackAmountDb>().Navigation(o => o.Snack).AutoInclude();
     }
 }
 
@@ -65,20 +64,9 @@ public record MenuDb
 {
     public required string Id { get; set; }
 
-    public required bool Active { get; set; }
-
     public required string Name { get; set; }
 
     public string? Image { get; set; }
-
-    [Column(TypeName = "decimal(4, 2)")]
-    public required double Price { get; set; }
-
-    [Column(TypeName = "decimal(4, 2)")]
-    public double? PriceL { get; set; }
-
-    [Column(TypeName = "decimal(4, 2)")]
-    public double? PriceXL { get; set; }
 
     public IList<StepDb> Steps { get; set; } = [];
 
@@ -88,9 +76,28 @@ public record MenuDb
 
     public IList<PromotionDb>? Promotions { get; set; } = [];
 
+    public bool AvailableInCatalogue { get; set; }
+}
+
+[Table("MenusRestaurants")]
+public record MenuRestaurantDb
+{
+    public required string MenuId { get; set; }
+    public required MenuDb Menu { get; set; }
+
+    public required string RestaurantId { get; set; }
     public required RestaurantDb Restaurant { get; set; }
 
-    public bool AvailableInCatalogue { get; set; }
+    public required bool Active { get; set; }
+
+    [Column(TypeName = "decimal(4, 2)")]
+    public required double Price { get; set; }
+
+    [Column(TypeName = "decimal(4, 2)")]
+    public double? PriceL { get; set; }
+
+    [Column(TypeName = "decimal(4, 2)")]
+    public double? PriceXL { get; set; }
 }
 
 
@@ -111,15 +118,9 @@ public record ProductDb
 {
     public required string Id { get; set; }
 
-    public required bool Active { get; set; }
-
     public required string Name { get; set; }
 
     public string? Image { get; set; }
-
-
-    [Column(TypeName = "decimal(4, 2)")]
-    public required double Price { get; set; }
 
     [Column(TypeName = "decimal(7, 2)")]
     public double? Energy { get; set; }
@@ -130,9 +131,22 @@ public record ProductDb
 
     public IList<PromotionDb> Promotions { get; set; } = [];
 
+    public bool AvailableInCatalogue { get; set; }
+}
+
+[Table("ProductsRestaurants")]
+public record ProductRestaurantDb
+{
+    public required string ProductId { get; set; }
+    public required ProductDb Product { get; set; }
+
+    public required string RestaurantId { get; set; }
     public required RestaurantDb Restaurant { get; set; }
 
-    public bool AvailableInCatalogue { get; set; }
+    public required bool Active { get; set; }
+
+    [Column(TypeName = "decimal(4, 2)")]
+    public required double Price { get; set; }
 }
 
 [Table("Promotions")]
@@ -140,15 +154,23 @@ public record PromotionDb
 {
     public required string Id { get; set; }
 
-    public bool Active { get; set; } = true;
-
     public required string Name { get; set; }
 
     public IList<MenuDb> Menus { get; set; } = [];
 
     public IList<ProductDb> Products { get; set; } = [];
+}
 
+[Table("PromotionsRestaurants")]
+public record PromotionRestaurantDb
+{
+    public required string PromotionId { get; set; }
+    public required PromotionDb Promotion { get; set; }
+
+    public required string RestaurantId { get; set; }
     public required RestaurantDb Restaurant { get; set; }
+
+    public bool Active { get; set; } = true;
 }
 
 [Table("Restaurants")]
@@ -167,6 +189,8 @@ public class RestaurantDb
     public required string Departement { get; set; }
 
     public bool Opened { get; set; } = true;
+
+    public DateTime? CatalogueUpdate { get; set; }
 }
 
 [Table("Snacks")]
@@ -211,8 +235,6 @@ public record UpdateDb
     public int Id { get; set; }
 
     public DateTime? Restaurants { get; set; }
-
-    public DateTime? Catalogue { get; set; }
 
     public DateTime? Offers { get; set; }
 }

@@ -1,12 +1,5 @@
 ﻿@rendermode InteractiveWebAssembly
 
-<h1>Rentabilité des couronnes</h1>
-
-<p>
-    Restaurant : <strong>@Restaurant.Name</strong> (@Restaurant.Departement)<br />
-    <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Update.Catalogue) et offres le @ToLocalTime(Update.Offers)</span>
-</p>
-
 <RadzenPanel AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
     <HeaderTemplate>
         @if (criteria != new OfferCriteria())
@@ -158,12 +151,6 @@
     [Parameter]
     public required OfferDisplay[] Data { get; set; }
 
-    [Parameter]
-    public required RestaurantDisplay Restaurant { get; set; }
-
-    [Parameter]
-    public required UpdateDisplay Update { get; set; }
-
     private OfferCriteria criteria = new();
 
     private bool filter;
@@ -237,17 +224,6 @@
     private void OnCategorieChange(IEnumerable<CategorieDisplay>? categories)
     {
         criteria.Categories = categories?.Count() == allCategories.Count ? null : (categories ?? []).ToList();
-    }
-
-    private string ToLocalTime(DateTime? date)
-    {
-        if (date == null)
-        {
-            return string.Empty;
-        }
-
-        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
-            .ToString("dd/MM/yyyy à HH:mm");
     }
 
     private record OfferCriteria

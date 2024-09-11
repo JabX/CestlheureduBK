@@ -26,6 +26,47 @@ namespace CestlheureduBK.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
+                    AvailableInCatalogue = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
+                    Energy = table.Column<double>(type: "decimal(7, 2)", nullable: true),
+                    AvailableInCatalogue = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Promotions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Restaurants",
                 columns: table => new
                 {
@@ -35,7 +76,8 @@ namespace CestlheureduBK.Migrations
                     Lat = table.Column<double>(type: "REAL", nullable: false),
                     Lng = table.Column<double>(type: "REAL", nullable: false),
                     Departement = table.Column<string>(type: "TEXT", nullable: false),
-                    Opened = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Opened = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CatalogueUpdate = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,78 +105,11 @@ namespace CestlheureduBK.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Restaurants = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Catalogue = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Offers = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Update", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Menus",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Image = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false),
-                    PriceL = table.Column<double>(type: "decimal(4, 2)", nullable: true),
-                    PriceXL = table.Column<double>(type: "decimal(4, 2)", nullable: true),
-                    RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
-                    AvailableInCatalogue = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Menus", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Menus_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Image = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false),
-                    Energy = table.Column<double>(type: "decimal(7, 2)", nullable: true),
-                    RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
-                    AvailableInCatalogue = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Promotions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    RestaurantId = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Promotions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Promotions_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -181,38 +156,6 @@ namespace CestlheureduBK.Migrations
                         name: "FK_CategorieDbProductDb_Products_ProductsId",
                         column: x => x.ProductsId,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SnackAmounts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SnackId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
-                    MenuDbId = table.Column<string>(type: "TEXT", nullable: true),
-                    ProductDbId = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SnackAmounts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SnackAmounts_Menus_MenuDbId",
-                        column: x => x.MenuDbId,
-                        principalTable: "Menus",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_SnackAmounts_Products_ProductDbId",
-                        column: x => x.ProductDbId,
-                        principalTable: "Products",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_SnackAmounts_Snacks_SnackId",
-                        column: x => x.SnackId,
-                        principalTable: "Snacks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -310,6 +253,117 @@ namespace CestlheureduBK.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MenusRestaurants",
+                columns: table => new
+                {
+                    MenuId = table.Column<string>(type: "TEXT", nullable: false),
+                    RestaurantId = table.Column<string>(type: "TEXT", nullable: false),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false),
+                    PriceL = table.Column<double>(type: "decimal(4, 2)", nullable: true),
+                    PriceXL = table.Column<double>(type: "decimal(4, 2)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenusRestaurants", x => new { x.MenuId, x.RestaurantId });
+                    table.ForeignKey(
+                        name: "FK_MenusRestaurants_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MenusRestaurants_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductsRestaurants",
+                columns: table => new
+                {
+                    ProductId = table.Column<string>(type: "TEXT", nullable: false),
+                    RestaurantId = table.Column<string>(type: "TEXT", nullable: false),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductsRestaurants", x => new { x.ProductId, x.RestaurantId });
+                    table.ForeignKey(
+                        name: "FK_ProductsRestaurants_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductsRestaurants_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PromotionsRestaurants",
+                columns: table => new
+                {
+                    PromotionId = table.Column<string>(type: "TEXT", nullable: false),
+                    RestaurantId = table.Column<string>(type: "TEXT", nullable: false),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PromotionsRestaurants", x => new { x.PromotionId, x.RestaurantId });
+                    table.ForeignKey(
+                        name: "FK_PromotionsRestaurants_Promotions_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PromotionsRestaurants_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SnackAmounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SnackId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    MenuDbId = table.Column<string>(type: "TEXT", nullable: true),
+                    ProductDbId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SnackAmounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SnackAmounts_Menus_MenuDbId",
+                        column: x => x.MenuDbId,
+                        principalTable: "Menus",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SnackAmounts_Products_ProductDbId",
+                        column: x => x.ProductDbId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SnackAmounts_Snacks_SnackId",
+                        column: x => x.SnackId,
+                        principalTable: "Snacks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StepProducts",
                 columns: table => new
                 {
@@ -397,8 +451,8 @@ namespace CestlheureduBK.Migrations
                 column: "PromotionsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Menus_RestaurantId",
-                table: "Menus",
+                name: "IX_MenusRestaurants_RestaurantId",
+                table: "MenusRestaurants",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
@@ -412,13 +466,13 @@ namespace CestlheureduBK.Migrations
                 column: "PromotionsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_RestaurantId",
-                table: "Products",
+                name: "IX_ProductsRestaurants_RestaurantId",
+                table: "ProductsRestaurants",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Promotions_RestaurantId",
-                table: "Promotions",
+                name: "IX_PromotionsRestaurants_RestaurantId",
+                table: "PromotionsRestaurants",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
@@ -475,10 +529,19 @@ namespace CestlheureduBK.Migrations
                 name: "MenuDbPromotionDb");
 
             migrationBuilder.DropTable(
+                name: "MenusRestaurants");
+
+            migrationBuilder.DropTable(
                 name: "Offers");
 
             migrationBuilder.DropTable(
                 name: "ProductDbPromotionDb");
+
+            migrationBuilder.DropTable(
+                name: "ProductsRestaurants");
+
+            migrationBuilder.DropTable(
+                name: "PromotionsRestaurants");
 
             migrationBuilder.DropTable(
                 name: "SnackAmounts");
@@ -502,6 +565,9 @@ namespace CestlheureduBK.Migrations
                 name: "Promotions");
 
             migrationBuilder.DropTable(
+                name: "Restaurants");
+
+            migrationBuilder.DropTable(
                 name: "Snacks");
 
             migrationBuilder.DropTable(
@@ -512,9 +578,6 @@ namespace CestlheureduBK.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "Restaurants");
         }
     }
 }

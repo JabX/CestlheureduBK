@@ -72,9 +72,6 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("AvailableInCatalogue")
                         .HasColumnType("INTEGER");
 
@@ -85,6 +82,22 @@ namespace CestlheureduBK.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.MenuRestaurantDb", b =>
+                {
+                    b.Property<string>("MenuId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RestaurantId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("Price")
                         .HasColumnType("decimal(4, 2)");
 
@@ -94,14 +107,11 @@ namespace CestlheureduBK.Migrations
                     b.Property<double?>("PriceXL")
                         .HasColumnType("decimal(4, 2)");
 
-                    b.Property<string>("RestaurantId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
+                    b.HasKey("MenuId", "RestaurantId");
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Menus");
+                    b.ToTable("MenusRestaurants");
                 });
 
             modelBuilder.Entity("CestlheureduBK.Model.OfferDb", b =>
@@ -131,9 +141,6 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("AvailableInCatalogue")
                         .HasColumnType("INTEGER");
 
@@ -147,17 +154,30 @@ namespace CestlheureduBK.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("decimal(4, 2)");
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.ProductRestaurantDb", b =>
+                {
+                    b.Property<string>("ProductId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RestaurantId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("decimal(4, 2)");
+
+                    b.HasKey("ProductId", "RestaurantId");
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Products");
+                    b.ToTable("ProductsRestaurants");
                 });
 
             modelBuilder.Entity("CestlheureduBK.Model.PromotionDb", b =>
@@ -165,21 +185,31 @@ namespace CestlheureduBK.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotions");
+                });
+
+            modelBuilder.Entity("CestlheureduBK.Model.PromotionRestaurantDb", b =>
+                {
+                    b.Property<string>("PromotionId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RestaurantId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PromotionId", "RestaurantId");
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("PromotionsRestaurants");
                 });
 
             modelBuilder.Entity("CestlheureduBK.Model.RestaurantDb", b =>
@@ -189,6 +219,9 @@ namespace CestlheureduBK.Migrations
 
                     b.Property<string>("AddressFull")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CatalogueUpdate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Departement")
@@ -289,9 +322,6 @@ namespace CestlheureduBK.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("Catalogue")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Offers")
                         .HasColumnType("TEXT");
@@ -409,11 +439,21 @@ namespace CestlheureduBK.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CestlheureduBK.Model.MenuDb", b =>
+            modelBuilder.Entity("CestlheureduBK.Model.MenuRestaurantDb", b =>
                 {
+                    b.HasOne("CestlheureduBK.Model.MenuDb", "Menu")
+                        .WithMany()
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CestlheureduBK.Model.RestaurantDb", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
 
                     b.Navigation("Restaurant");
                 });
@@ -427,20 +467,40 @@ namespace CestlheureduBK.Migrations
                     b.Navigation("Promotion");
                 });
 
-            modelBuilder.Entity("CestlheureduBK.Model.ProductDb", b =>
+            modelBuilder.Entity("CestlheureduBK.Model.ProductRestaurantDb", b =>
                 {
+                    b.HasOne("CestlheureduBK.Model.ProductDb", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CestlheureduBK.Model.RestaurantDb", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
 
                     b.Navigation("Restaurant");
                 });
 
-            modelBuilder.Entity("CestlheureduBK.Model.PromotionDb", b =>
+            modelBuilder.Entity("CestlheureduBK.Model.PromotionRestaurantDb", b =>
                 {
+                    b.HasOne("CestlheureduBK.Model.PromotionDb", "Promotion")
+                        .WithMany()
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CestlheureduBK.Model.RestaurantDb", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Promotion");
 
                     b.Navigation("Restaurant");
                 });

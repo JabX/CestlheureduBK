@@ -1,0 +1,38 @@
+﻿@inject DataService dataService
+
+<PageTitle>C'est l'heure du BK ! - @Title</PageTitle>
+
+<h1>@Title</h1>
+
+@if (restaurant != null)
+{
+    <p>
+        Restaurant : <strong>@restaurant.Name</strong> (@restaurant.Departement)<br />
+        <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(restaurant.CatalogueUpdate) et offres le @ToLocalTime(offersUpdate)</span>
+    </p>
+}
+
+@code {
+    RestaurantDisplay? restaurant;
+    DateTime? offersUpdate;
+
+    [Parameter]
+    public required string Title { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        restaurant = await dataService.GetRestaurant();
+        offersUpdate = await dataService.GetOffersUpdate();
+    }
+
+    private string ToLocalTime(DateTime? date)
+    {
+        if (date == null)
+        {
+            return string.Empty;
+        }
+
+        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
+            .ToString("dd/MM/yyyy à HH:mm");
+    }
+}

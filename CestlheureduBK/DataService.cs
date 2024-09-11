@@ -6,102 +6,123 @@ namespace CestlheureduBK;
 
 public class DataService(BKDbContext context)
 {
-    public async Task<CatalogueDisplay[]> GetCatalogue()
+    public async Task<CatalogueDisplay[]> GetCatalogue(string codeRestaurant)
     {
-        return (await context.Products
-            .AsSingleQuery()
-            .Where(prd => prd.Active && prd.AvailableInCatalogue && prd.Price > 0)
-            .Select(prd => new CatalogueDisplay(
-                "Produit",
-                prd.Name,
-                prd.Image,
-                prd.Price,
-                prd.Energy ?? 0,
-                prd.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
-            .ToArrayAsync())
-        .Concat(await context.Menus
-            .AsSingleQuery()
-            .Where(men => men.Active && men.AvailableInCatalogue && men.Price > 0)
-            .Select(men => new CatalogueDisplay(
-                "Menu",
-                men.Name,
-                men.Image,
-                men.Price,
-                men.Steps.Sum(s => s.DefaultProduct != null && s.DefaultProduct.Energy != null ? s.DefaultProduct.Energy.Value : 0),
-                men.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
-            .ToArrayAsync())
-        .ToArray();
+        return
+        [
+            .. (await context.ProductsRestaurants
+                .AsSingleQuery()
+                .Where(prd => prd.Restaurant.Id == codeRestaurant && prd.Active && prd.Product.AvailableInCatalogue && prd.Price > 0)
+                .Select(prd => new CatalogueDisplay(
+                    "Produit",
+                    prd.Product.Name,
+                    prd.Product.Image,
+                    prd.Price,
+                    prd.Product.Energy ?? 0,
+                    prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                    prd.Product.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                .ToArrayAsync()),
+            .. await context.MenusRestaurants
+                .AsSingleQuery()
+                .Where(men => men.Restaurant.Id == codeRestaurant && men.Active && men.Menu.AvailableInCatalogue && men.Price > 0)
+                .Select(men => new CatalogueDisplay(
+                    "Menu",
+                    men.Menu.Name,
+                    men.Menu.Image,
+                    men.Price,
+                    men.Menu.Steps.Sum(s => s.DefaultProduct != null && s.DefaultProduct.Energy != null ? s.DefaultProduct.Energy.Value : 0),
+                    men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                    men.Menu.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                .ToArrayAsync()
+        ];
     }
 
-    public async Task<OfferDisplay[]> GetOffers()
+    public async Task<OfferDisplay[]> GetOffers(string codeRestaurant)
     {
-        return await context.Offers
-            .Where(off => off.Promotion.Active)
-            .AsSingleQuery()
-            .AsAsyncEnumerable()
-            .SelectMany(off =>
-                 off.Promotion.Products.Where(p => p.Active)
-                     .Select(prd => new OfferDisplay(
-                         "Produit",
-                         prd.Name,
-                         prd.Image,
-                         off.Points,
-                         prd.Price,
-                         prd.Energy ?? 0,
-                         prd.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                         prd.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
-                .Concat(off.Promotion.Menus.Where(p => p.Active)
-                    .Select(men => new OfferDisplay(
-                        "Menu",
-                        men.Name,
-                        men.Image,
-                        off.Points,
-                        men.Price,
-                        men.Steps.Sum(s => s.DefaultProduct?.Energy ?? 0),
-                        men.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                        men.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory)))))
-            .ToAsyncEnumerable())
-            .ToArrayAsync();
+        return
+        [
+            .. (await context.ProductsRestaurants
+                .AsSingleQuery()
+                .Where(p =>
+                    p.Restaurant.Id == codeRestaurant
+                    && p.Active
+                    && context.Offers.Any(o =>
+                        o.Promotion.Products.Any(pp => p.Product.Id == pp.Id)
+                        && context.PromotionsRestaurants.Any(pr => pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active)))
+                .Select(prd => new OfferDisplay(
+                    "Produit",
+                    prd.Product.Name,
+                    prd.Product.Image,
+                    context.Offers.Single(o => o.Promotion.Products.Any(pp => pp.Id == prd.Product.Id)).Points,
+                    prd.Price,
+                    prd.Product.Energy ?? 0,
+                    prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                    prd.Product.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                .ToArrayAsync())
+,
+            .. await context.MenusRestaurants
+                .AsSingleQuery()
+                .Where(p =>
+                    p.Restaurant.Id == codeRestaurant
+                    && p.Active
+                    && context.Offers.Any(o =>
+                        o.Promotion.Menus.Any(pp => p.Menu.Id == pp.Id)
+                        && context.PromotionsRestaurants.Any(pr => pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active)))
+                .Select(men => new OfferDisplay(
+                    "Menu",
+                    men.Menu.Name,
+                    men.Menu.Image,
+                    context.Offers.Single(o => o.Promotion.Menus.Any(pp => pp.Id == men.Menu.Id)).Points,
+                    men.Price,
+                    men.Menu.Steps.Sum(s => s.DefaultProduct!.Energy ?? 0),
+                    men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                    men.Menu.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                .ToArrayAsync(),
+        ];
     }
 
     public async Task<RestaurantDisplay> GetRestaurant()
     {
-        return await context.Products.Include(r => r.Restaurant).Take(1).Select(r => new RestaurantDisplay(r.Restaurant.Id, r.Restaurant.Name, r.Restaurant.AddressFull, r.Restaurant.Departement, r.Restaurant.Lat, r.Restaurant.Lng)).SingleAsync();
+        var r = await context.Restaurants.OrderByDescending(r => r.CatalogueUpdate).FirstAsync(r => r.CatalogueUpdate != null);
+        return new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate);
     }
 
-    public async Task<SnackDisplay[]> GetSnacks()
+    public async Task<SnackDisplay[]> GetSnacks(string codeRestaurant)
     {
-        var allProducts = await context.Products.Where(p => p.Active && p.Snacks.Any(s => s.Snack.Active))
+        var allProducts = await context.ProductsRestaurants
+            .Include(p => p.Product)
+            .ThenInclude(p => p.Snacks)
+            .ThenInclude(p => p.Snack)
+            .AsSingleQuery()
+            .Where(p => p.Restaurant.Id == codeRestaurant && p.Active && p.Product.Snacks.Any(s => s.Snack.Active))
             .ToListAsync();
 
         return allProducts
-            .SelectMany(p => p.Snacks.Select(s =>
+            .SelectMany(p => p.Product.Snacks.Select(s =>
             {
                 var ratio = 1d;
 
-                if (p.Snacks.Count > 1)
+                if (p.Product.Snacks.Count > 1)
                 {
-                    var prices = p.Snacks.Select(s2 =>
+                    var prices = p.Product.Snacks.Select(s2 =>
                     {
                         var bestProduct = allProducts
-                            .Where(p2 => p2.Snacks.Count == 1 && p2.Snacks.Single().Snack.Name == s2.Snack.Name && p2.Snacks.Single().Amount < p.Snacks.Sum(s3 => s3.Amount))
-                            .OrderByDescending(p2 => p2.Snacks.Single().Amount)
+                            .Where(p2 => p2.Product.Snacks.Count == 1 && p2.Product.Snacks.Single().Snack.Name == s2.Snack.Name && p2.Product.Snacks.Single().Amount < p.Product.Snacks.Sum(s3 => s3.Amount))
+                            .OrderByDescending(p2 => p2.Product.Snacks.Single().Amount)
                             .First();
 
-                        return new { s2.Snack.Name, Price = bestProduct.Price / bestProduct.Snacks.Single().Amount };
+                        return new { s2.Snack.Name, Price = bestProduct.Price / bestProduct.Product.Snacks.Single().Amount };
                     }).ToDictionary(s2 => s2.Name, s2 => s2.Price);
 
-                    ratio = s.Amount * prices[s.Snack.Name] / p.Snacks.Sum(s2 => s2.Amount * prices[s2.Snack.Name]);
+                    ratio = s.Amount * prices[s.Snack.Name] / p.Product.Snacks.Sum(s2 => s2.Amount * prices[s2.Snack.Name]);
                 }
 
                 return new
                 {
                     SnackName = s.Snack.Name,
                     s.Amount,
-                    ProductName = p.Name,
-                    p.Image,
+                    ProductName = p.Product.Name,
+                    p.Product.Image,
                     p.Price,
                     Ratio = ratio
                 };
@@ -115,7 +136,7 @@ public class DataService(BKDbContext context)
                 .ToArray();
     }
 
-    public async Task<BurgerMystereListDisplay[]> GetBurgerMystere2024()
+    public async Task<BurgerMystereListDisplay[]> GetBurgerMystere2024(string codeRestaurant)
     {
         var meatProbs = new Dictionary<string, double>
         {
@@ -133,15 +154,15 @@ public class DataService(BKDbContext context)
             ["15"] = 0.03
         };
 
-        var meat = await context.Products
+        var meat = await context.ProductsRestaurants
             .AsSingleQuery()
-            .Where(prd => meatProbs.Keys.Contains(prd.Id))
+            .Where(prd => prd.Restaurant.Id == codeRestaurant && meatProbs.Keys.Contains(prd.Product.Id))
             .Select(prd => new BurgerMystereDisplay(
-                prd.Name,
-                prd.Image,
+                prd.Product.Name,
+                prd.Product.Image,
                 prd.Price,
-                prd.Energy ?? 0,
-                meatProbs[prd.Id]))
+                prd.Product.Energy ?? 0,
+                meatProbs[prd.Product.Id]))
             .ToArrayAsync();
 
         var veggieProbs = new Dictionary<string, double>
@@ -152,24 +173,23 @@ public class DataService(BKDbContext context)
             ["801"] = 0.24
         };
 
-        var veggie = await context.Products
+        var veggie = await context.ProductsRestaurants
             .AsSingleQuery()
-            .Where(prd => veggieProbs.Keys.Contains(prd.Id))
+            .Where(prd => prd.Restaurant.Id == codeRestaurant && veggieProbs.Keys.Contains(prd.Product.Id))
             .Select(prd => new BurgerMystereDisplay(
-                prd.Name,
-                prd.Image,
+                prd.Product.Name,
+                prd.Product.Image,
                 prd.Price,
-                prd.Energy ?? 0,
-                veggieProbs[prd.Id]))
+                prd.Product.Energy ?? 0,
+                veggieProbs[prd.Product.Id]))
             .ToArrayAsync();
 
         return [new("Burger Mystère", meat), new("Veggie Mystère", veggie)];
     }
 
-    public async Task<UpdateDisplay> GetUpdate()
+    public async Task<DateTime?> GetOffersUpdate()
     {
-        var update = await context.Updates.SingleAsync();
-        return new UpdateDisplay(update.Catalogue, update.Offers);
+        return (await context.Updates.SingleOrDefaultAsync())?.Offers;
     }
 }
 

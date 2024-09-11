@@ -87,7 +87,7 @@
                 .Where(r => r.Opened)
                 .OrderBy(r => r.Departement)
                 .ThenBy(r => r.Name)
-                .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng))
+                .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate))
                 .ToArrayAsync();
 
             await geoService.GetCurrentPositionAsync(this, "OnCurrentPositionChange");
@@ -234,62 +234,73 @@
             var snackRegex = new Regex(@"(.+)\((\d+)\)");
             var kingboxRegex = new Regex(@"kingbox (\d+) ([a-z ]+)([ +&]*(\d+) ([a-z ]+))?", RegexOptions.IgnoreCase);
 
-            var products = catalogue.Products.Select(prd => new ProductDb
+            var products = catalogue.Products.Select(prd => new ProductRestaurantDb
                 {
-                    Id = prd.Id,
-                    Active = prd.Active,
-                    Name = prd.Name
-                        .Replace("®", "")
-                        .Replace("Lousiane", "Louisiane")
-                        .Replace("(6) King Nuggets", "King Nuggets (6)"),
-                    Image = prd.Image,
+                    ProductId = prd.Id,
+                    Product = new()
+                    {
+                        Id = prd.Id,
+                        Name = prd.Name
+                            .Replace("®", "")
+                            .Replace("Lousiane", "Louisiane")
+                            .Replace("(6) King Nuggets", "King Nuggets (6)"),
+                        Image = prd.Image,
+                        Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? []
+                    },
+                    Active = prd.Active,                   
                     Price = prd.Price,
-                    Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    RestaurantId = restaurant.Id,
                     Restaurant = restaurant
                 }).ToList();
-            var menus = catalogue.Menus.Select(men => new MenuDb
+            var menus = catalogue.Menus.Select(men => new MenuRestaurantDb
                 {
-                    Id = men.Id,
-                    Active = men.Active,
-                    Name = men.Name
-                        .Replace("®", "")
-                        .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
-                        .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
-                        .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
-                        .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
-                        .Trim()
-                        .Trim('-')
-                        .Trim(),
-                    Image = men.Image,
+                    MenuId = men.Id,
+                    Menu = new()
+                    {
+                        Id = men.Id,
+                        Name = men.Name
+                            .Replace("®", "")
+                            .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
+                            .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
+                            .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
+                            .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
+                            .Trim()
+                            .Trim('-')
+                            .Trim(),
+                        Image = men.Image,
+                        Steps = men.Steps.Select(stp => new StepDb
+                        {
+                            Products = products.Select(p => p.Product).Where(prd => stp.ProductIds.Contains(prd.Id)).ToList(),
+                            ProductsL = stp.ProductLIds != null ? products.Select(p => p.Product).Where(prd => stp.ProductLIds.Contains(prd.Id)).ToList() : [],
+                            ProductsXL = stp.ProductXLIds != null ? products.Select(p => p.Product).Where(prd => stp.ProductXLIds.Contains(prd.Id)).ToList() : [],
+                            DefaultProduct = products.Select(p => p.Product).SingleOrDefault(prd => prd.Id == stp.DefaultId),
+                            Type = stp.StepType
+                        }).ToList(),
+                        Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    },
+                    Active = men.Active,                
                     Price = men.Price,
                     PriceL = men.PriceL,
                     PriceXL = men.PriceXL,
-                    Steps = men.Steps.Select(stp => new StepDb
-                    {
-                        Products = products.Where(prd => stp.ProductIds.Contains(prd.Id)).ToList(),
-                        ProductsL = stp.ProductLIds != null ? products.Where(prd => stp.ProductLIds.Contains(prd.Id)).ToList() : [],
-                        ProductsXL = stp.ProductXLIds != null ? products.Where(prd => stp.ProductXLIds.Contains(prd.Id)).ToList() : [],
-                        DefaultProduct = products.SingleOrDefault(prd => prd.Id == stp.DefaultId),
-                        Type = stp.StepType
-                    }).ToList(),
-                    Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
+                    RestaurantId = restaurant.Id,
                     Restaurant = restaurant
                 }).ToList();
 
             var snacks = products
+                .Select(p => p.Product)
                 .Where(p => snackRegex.IsMatch(p.Name))
                 .Select(p => new SnackDb { Name = snackRegex.Match(p.Name).Groups[1].Value.Trim() })
                 .DistinctBy(p => p.Name)
                 .ToList();
 
-            foreach (var product in products.Where(prd => prd.Image == null))
+            foreach (var product in products.Select(p => p.Product).Where(prd => prd.Image == null))
             {
-                product.Image = products.FirstOrDefault(prd => prd.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase) && prd.Image != null)?.Image;
+                product.Image = products.FirstOrDefault(prd => prd.Product.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase) && prd.Product.Image != null)?.Product.Image;
             }
 
             var productsDb = await context.Products.ToDictionaryAsync(p => p.Id);
 
-            foreach (var product in products)
+            foreach (var product in products.Select(p => p.Product))
             {
                 if (productsDb.TryGetValue(product.Id, out var productDb))
                 {
@@ -316,7 +327,7 @@
                 }
 
                 product.AvailableInCatalogue = product.Categories.Any();
-                product.Categories = product.Categories.Concat(products.Where(prd => prd.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
+                product.Categories = product.Categories.Concat(products.Where(prd => prd.Product.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Product.Categories ?? [])).ToList();
 
                 var match = snackRegex.Match(product.Name);
                 if (match.Success)
@@ -350,15 +361,15 @@
                 }
             }
 
-            foreach (var menu in menus.Where(men => men.Image == null))
+            foreach (var menu in menus.Select(m => m.Menu).Where(men => men.Image == null))
             {
-                menu.Image = menus.FirstOrDefault(men => men.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase) && men.Image != null)?.Image;
+                menu.Image = menus.FirstOrDefault(men => men.Menu.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase) && men.Menu.Image != null)?.Menu.Image;
             }
 
-            foreach (var menu in menus)
+            foreach (var menu in menus.Select(m => m.Menu))
             {
                 menu.AvailableInCatalogue = menu.Categories.Any();
-                menu.Categories = menu.Categories.Concat(menus.Where(prd => prd.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Categories ?? [])).ToList();
+                menu.Categories = menu.Categories.Concat(menus.Where(men => men.Menu.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(men => men.Menu.Categories ?? [])).ToList();
 
                 var match = snackRegex.Match(menu.Name);
                 if (match.Success)
@@ -372,12 +383,17 @@
                 }
             }
 
-            var promotions = catalogue.Promotions.Select(prm => new PromotionDb
+            var promotions = catalogue.Promotions.Select(prm => new PromotionRestaurantDb
                 {
-                    Id = prm.Id,
-                    Name = prm.Name,
-                    Products = products.Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(),
-                    Menus = menus.Where(men => prm.MenuIds.Contains(men.Id)).ToList(),
+                    PromotionId = prm.Id,
+                    Promotion = new()
+                    {
+                        Id = prm.Id,
+                        Name = prm.Name,
+                        Products = products.Select(p => p.Product).Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(),
+                        Menus = menus.Select(m => m.Menu).Where(men => prm.MenuIds.Contains(men.Id)).ToList()                        
+                    },
+                    RestaurantId = restaurant.Id,
                     Restaurant = restaurant
                 }).ToList();
 
@@ -406,31 +422,42 @@
             context.UpdateRange(snacks);
             context.AddRange(categories.Where(r => !categoriesDb.ContainsKey(r.Id)));
             context.UpdateRange(categories.Where(r => categoriesDb.ContainsKey(r.Id)));
-            context.AddRange(products.Where(r => !productsDb.ContainsKey(r.Id)));
-            context.UpdateRange(products.Where(r => productsDb.ContainsKey(r.Id)));
-            context.AddRange(menus.Where(r => !menusDb.ContainsKey(r.Id)));
-            context.UpdateRange(menus.Where(r => menusDb.ContainsKey(r.Id)));
-            context.AddRange(promotions.Where(r => !promotionsDb.ContainsKey(r.Id)));
-            context.UpdateRange(promotions.Where(r => promotionsDb.ContainsKey(r.Id)));
+            context.AddRange(menus.Select(p => p.Menu).Where(r => !menusDb.ContainsKey(r.Id)));
+            context.UpdateRange(menus.Select(p => p.Menu).Where(r => menusDb.ContainsKey(r.Id)));
+            context.AddRange(products.Select(p => p.Product).Where(r => !productsDb.ContainsKey(r.Id)));
+            context.UpdateRange(products.Select(p => p.Product).Where(r => productsDb.ContainsKey(r.Id)));
+            context.AddRange(promotions.Select(p => p.Promotion).Where(r => !promotionsDb.ContainsKey(r.Id)));
+            context.UpdateRange(promotions.Select(p => p.Promotion).Where(r => promotionsDb.ContainsKey(r.Id)));
+
+            var menusRestaurantsDb = await context.MenusRestaurants.Where(m => m.Restaurant.Id == codeRestaurant).ToDictionaryAsync(p => (p.MenuId, p.RestaurantId));
+            var productsRestaurantsDb = await context.ProductsRestaurants.Where(m => m.Restaurant.Id == codeRestaurant).ToDictionaryAsync(p => (p.ProductId, p.RestaurantId));
+            var promotionsRestaurantsDb = await context.PromotionsRestaurants.Where(m => m.Restaurant.Id == codeRestaurant).ToDictionaryAsync(p => (p.PromotionId, p.RestaurantId));
+
+            context.AddRange(menus.Where(r => !menusRestaurantsDb.ContainsKey((r.Menu.Id, r.Restaurant.Id))));
+            context.UpdateRange(menus.Where(r => menusRestaurantsDb.ContainsKey((r.Menu.Id, r.Restaurant.Id))));
+            context.AddRange(products.Where(r => !productsRestaurantsDb.ContainsKey((r.Product.Id, r.Restaurant.Id))));
+            context.UpdateRange(products.Where(r => productsRestaurantsDb.ContainsKey((r.Product.Id, r.Restaurant.Id))));
+            context.AddRange(promotions.Where(r => !promotionsRestaurantsDb.ContainsKey((r.Promotion.Id, r.Restaurant.Id))));
+            context.UpdateRange(promotions.Where(r => promotionsRestaurantsDb.ContainsKey((r.Promotion.Id, r.Restaurant.Id))));
 
             await context.SaveChangesAsync();
             context.ChangeTracker.Clear();
 
-
             await context.Snacks
                 .Where(r => !snacks.Select(re => re.Id).Contains(r.Id))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
-            await context.Products.IgnoreAutoIncludes()
-                .Where(r => !products.Select(re => re.Id).Contains(r.Id))
+            await context.ProductsRestaurants
+                .Where(r => r.Restaurant.Id == codeRestaurant && !products.Select(re => re.Product.Id).Contains(r.ProductId))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
-            await context.Menus.IgnoreAutoIncludes()
-                .Where(r => !menus.Select(re => re.Id).Contains(r.Id))
+            await context.MenusRestaurants
+                .Where(r => r.Restaurant.Id == codeRestaurant && !menus.Select(re => re.Menu.Id).Contains(r.MenuId))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
-            await context.Promotions.IgnoreAutoIncludes()
-                .Where(r => !promotions.Select(re => re.Id).Contains(r.Id))
+            await context.PromotionsRestaurants
+                .Where(r => r.Restaurant.Id == codeRestaurant && !promotions.Select(re => re.Promotion.Id).Contains(r.PromotionId))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
 
-            await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Catalogue, DateTime.UtcNow));
+            await context.Restaurants.Where(r => r.Id == codeRestaurant)
+                .ExecuteUpdateAsync(u => u.SetProperty(v => v.CatalogueUpdate, DateTime.UtcNow));
 
             message = "Catalogue rechargé avec succès !";
         }
@@ -469,7 +496,7 @@
                     Promotion = promotions[off.PromotionId]
                 })).ToList();
 
-            await context.Offers.IgnoreAutoIncludes().ExecuteDeleteAsync();
+            await context.Offers.ExecuteDeleteAsync();
             context.AddRange(offers);
             await context.SaveChangesAsync();
             context.ChangeTracker.Clear();
