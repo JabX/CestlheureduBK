@@ -1,15 +1,33 @@
 ﻿@page "/"
+@page "/points"
+@page "/points/{restaurantId}"
+
 @inject DataService dataService
 
-<Header Title="Rentabilité des couronnes" />
-<Points Data="@data" />
+<PageTitle>C'est l'heure du BK ! - Rentabilité des couronnes</PageTitle>
+
+<h1>Rentabilité des couronnes</h1>
+
+<Header Restaurant=@restaurant />
+
+@if (data != null && restaurant?.CatalogueUpdate != null)
+{
+    <Points Data="@data" />
+}
 
 @code {
     private OfferDisplay[]? data;
+    private RestaurantDisplay? restaurant;
+
+    [Parameter]
+    public string? RestaurantId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var restaurant = await dataService.GetRestaurant();
-        data = await dataService.GetOffers(restaurant.Id);
+        restaurant = await dataService.GetRestaurant(RestaurantId);
+        if (restaurant != null)
+        {
+            data = await dataService.GetOffers(restaurant.Id);
+        }
     }
 }

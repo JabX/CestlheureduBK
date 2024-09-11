@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject ThemeService themeService;
+@inject NavigationManager navigationManager;
 
 <RadzenLayout>
     <RadzenHeader>
@@ -12,10 +13,10 @@
                 </RadzenStack>
             </RadzenStack>
             <RadzenPanelMenu>
-                <RadzenPanelMenuItem Path="/" Text="Couronnes" Icon="star" />
-                <RadzenPanelMenuItem Path="/mystere" Text="Burger Mystère" Icon="question_mark" />
-                <RadzenPanelMenuItem Path="/carte" Text="Carte" Icon="menu_book" />
-                <RadzenPanelMenuItem Path="/snacks" Text="Snacks" Icon="fastfood" />
+                <RadzenPanelMenuItem Path=@($"/points{RestaurantId}") Text="Couronnes" Icon="star" />
+                <RadzenPanelMenuItem Path=@($"/mystere{RestaurantId}") Text="Burger Mystère" Icon="question_mark" />
+                <RadzenPanelMenuItem Path=@($"/carte{RestaurantId}") Text="Carte" Icon="menu_book" />
+                <RadzenPanelMenuItem Path=@($"/snacks{RestaurantId}") Text="Snacks" Icon="fastfood" />
                 <RadzenPanelMenuItem Path="/data" Text="Données" Icon="database" />
             </RadzenPanelMenu>
         </RadzenStack>
@@ -28,6 +29,21 @@
 @code {
     [CascadingParameter]
     HttpContext? HttpContext { get; set; }
+
+    string RestaurantId {
+        get
+        {
+            var urlParts = navigationManager.Uri.Split('/');
+            if (urlParts.Length == 5)
+            {
+                return $"/{urlParts[4]}";
+            } 
+            else
+            {
+                return string.Empty;
+            }
+        }
+    }
 
     protected override void OnInitialized()
     {

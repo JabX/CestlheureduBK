@@ -1,28 +1,118 @@
-﻿@inject DataService dataService
+﻿@using GeoCoordinate.NetStandard2;
+@inject DataService dataService
+@inject NavigationManager navigationManager;
+@inject IGeolocationService geoService;
 
-<PageTitle>C'est l'heure du BK ! - @Title</PageTitle>
+@rendermode InteractiveServer
 
-<h1>@Title</h1>
-
-@if (restaurant != null)
+@if (Restaurant != null)
 {
     <p>
-        Restaurant : <strong>@restaurant.Name</strong> (@restaurant.Departement)<br />
-        <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(restaurant.CatalogueUpdate) et offres le @ToLocalTime(offersUpdate)</span>
+        <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
+            <RadzenLabel Text="Restaurant" Component="codeRestaurant" Style="line-height:40px" />
+            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
+                <RadzenDropDown Value=@Restaurant.Id
+                                Data=@restaurants
+                                Name="codeRestaurant"
+                                TValue="RestaurantDisplay"
+                                TextProperty="@nameof(RestaurantDisplay.FullName)"
+                                ValueProperty="@nameof(RestaurantDisplay.Id)"
+                                Style="width:350px"
+                                Change="OnRestaurantChange" />
+                @if (Distance != null)
+                {
+                    <span class="distance">à @Distance km</span>
+                } 
+                else
+                {
+                    <span class="distance">-</span>
+                }
+            </RadzenStack>
+        </RadzenStack>
+
+        @if (Restaurant.CatalogueUpdate != null)
+        {
+            <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Restaurant.CatalogueUpdate) et offres le @ToLocalTime(offersUpdate)</span>
+        }
+        else
+        {
+            <br />
+            <span>Les données pour ce restaurant n'ont pas été chargées... 🥺</span>
+        }
     </p>
+} 
+else
+{
+    <p>Le restaurant demandé n'existe pas 🥺</p>
 }
 
 @code {
-    RestaurantDisplay? restaurant;
+
+    GeoCoordinate? geoPosition;
     DateTime? offersUpdate;
+    RestaurantDisplay[] restaurants = [];
 
     [Parameter]
-    public required string Title { get; set; }
+    public RestaurantDisplay? Restaurant { get; set; }
+
+    double? Distance
+    {
+        get
+        {
+            var restaurant = restaurants.SingleOrDefault(r => r.Id == Restaurant?.Id);
+            if (restaurant != null && geoPosition != null)
+            {
+                return double.Round(new GeoCoordinate(restaurant.Lat, restaurant.Lng).GetDistanceTo(geoPosition) / 1000, 1);
+            }
+
+            return null;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        restaurant = await dataService.GetRestaurant();
         offersUpdate = await dataService.GetOffersUpdate();
+        restaurants = await dataService.GetRestaurants();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await geoService.GetCurrentPositionAsync(this, "OnCurrentPositionChange");
+        }
+    }
+
+    [JSInvokable]
+
+    public void OnCurrentPositionChange(GeolocationPosition position)
+    {
+        geoPosition = new GeoCoordinate(position.Coords.Latitude, position.Coords.Longitude);
+        StateHasChanged();
+
+        if (navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).Length < 4)
+        {
+            var closestRestaurant = restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
+            if (closestRestaurant != null)
+            {
+                OnRestaurantChange(closestRestaurant.Id);
+            }
+        }
+    }
+
+    private void OnRestaurantChange(object change)
+    {
+        var urlParts = navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var restaurantId = (string)change;
+
+        if (urlParts.Length == 4)
+        {
+            navigationManager.NavigateTo($"{urlParts[2]}/{restaurantId}");
+        }
+        else
+        {
+            navigationManager.NavigateTo($"{(urlParts.Length <= 2 ? "/points" : $"/{urlParts[2]}")}/{restaurantId}");
+        }
     }
 
     private string ToLocalTime(DateTime? date)

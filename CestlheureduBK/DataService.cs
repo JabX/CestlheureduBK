@@ -81,10 +81,28 @@ public class DataService(BKDbContext context)
         ];
     }
 
-    public async Task<RestaurantDisplay> GetRestaurant()
+    public async Task<RestaurantDisplay?> GetRestaurant(string? codeRestaurant = null)
     {
-        var r = await context.Restaurants.OrderByDescending(r => r.CatalogueUpdate).FirstAsync(r => r.CatalogueUpdate != null);
+        var r = codeRestaurant != null
+            ? await context.Restaurants.SingleOrDefaultAsync(r => r.Id == codeRestaurant)
+            : await context.Restaurants.OrderByDescending(r => r.CatalogueUpdate).FirstOrDefaultAsync(r => r.CatalogueUpdate != null);
+
+        if (r == null)
+        {
+            return null;
+        }
+
         return new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate);
+    }
+
+    public async Task<RestaurantDisplay[]> GetRestaurants()
+    {
+        return await context.Restaurants
+            .Where(r => r.Opened && r.CatalogueUpdate != null)
+            .OrderBy(r => r.Departement)
+            .ThenBy(r => r.Name)
+            .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate))
+            .ToArrayAsync();
     }
 
     public async Task<SnackDisplay[]> GetSnacks(string codeRestaurant)

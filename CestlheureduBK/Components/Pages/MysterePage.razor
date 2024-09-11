@@ -1,15 +1,32 @@
 ﻿@page "/mystere"
+@page "/mystere/{restaurantId}"
+
 @inject DataService dataService
 
-<Header Title="Burger Mystère 2024" />
-<Mystere Data="@data" />
+<PageTitle>C'est l'heure du BK ! - Burger Mystère 2024</PageTitle>
+
+<h1>Burger Mystère 2024</h1>
+
+<Header Restaurant=@restaurant />
+
+@if (data != null && restaurant?.CatalogueUpdate != null)
+{
+    <Mystere Data="@data" />
+}
 
 @code {
     private BurgerMystereListDisplay[]? data;
+    private RestaurantDisplay? restaurant;
+
+    [Parameter]
+    public string? RestaurantId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var restaurant = await dataService.GetRestaurant();
-        data = await dataService.GetBurgerMystere2024(restaurant.Id);
+        restaurant = await dataService.GetRestaurant(RestaurantId);
+        if (restaurant != null)
+        {
+            data = await dataService.GetBurgerMystere2024(restaurant.Id);
+        }
     }
 }

@@ -1,15 +1,32 @@
 ﻿@page "/snacks"
+@page "/snacks/{restaurantId}"
+
 @inject DataService dataService
 
-<Header Title="Rentabilité des snacks" />
-<Snacks Data="@data"  />
+<PageTitle>C'est l'heure du BK ! - Rentabilité des snacks</PageTitle>
+
+<h1>Rentabilité des snacks</h1>
+
+<Header Restaurant=@restaurant />
+
+@if (data != null && restaurant?.CatalogueUpdate != null)
+{
+    <Snacks Data="@data"  />
+}
 
 @code {
     private SnackDisplay[]? data;
+    private RestaurantDisplay? restaurant;
+
+    [Parameter]
+    public string? RestaurantId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var restaurant = await dataService.GetRestaurant();    
-        data = await dataService.GetSnacks(restaurant.Id);
+        restaurant = await dataService.GetRestaurant(RestaurantId); 
+        if (restaurant != null)
+        {
+            data = await dataService.GetSnacks(restaurant.Id);
+        }
     }
 }
