@@ -302,18 +302,12 @@
 
             foreach (var product in products.Select(p => p.Product))
             {
-                if (productsDb.TryGetValue(product.Id, out var productDb))
+                if (productsDb.TryGetValue(product.Id, out var productDb) && productDb.Energy != null)
                 {
                     product.Energy = productDb.Energy;
                 }
                 else
                 {
-                    if (product.Name == "King Fusion Ready")
-                    {
-                        product.Energy = 283.2d;
-                        continue;
-                    }
-
                     var productResult = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{catalogue.Products.Single(prd => prd.Id == product.Id).RouteId}");
                     if (productResult.IsSuccessStatusCode)
                     {
