@@ -14,13 +14,19 @@
 <RadzenStack AlignItems="AlignItems.Start">
     <h1>Chargement des données</h1>
 
-    <RadzenButton Click="ReloadRestaurants" Text="Recharger les restaurants" />
+    <RadzenButton Click="ReloadCatalogues" Disabled="loading" Text="Recharger le catalogue" />
+
+    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+        <RadzenLabel Text="Access Token pour l'API BK" Component="accessToken" />
+        <RadzenTextBox @bind-Value=@accessToken Name="accessToken" Style="width:303px" />
+        <RadzenButton Click="ReloadOffers" Disabled="loading" Text="Recharger les offres" />
+    </RadzenStack>
 
     <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
-        <RadzenLabel Text="Restaurant" Component="codeRestaurant" Style="line-height:40px" />
+        <RadzenLabel Text="Nouveau restaurant" Component="codeRestaurant" Style="line-height:40px" />
         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
-            <RadzenDropDown @bind-Value=@codeRestaurant
-                            Data=@restaurants
+            <RadzenDropDown @bind-Value=@newCodeRestaurant
+                            Data=@MissingRestaurants
                             Name="codeRestaurant"
                             TextProperty="@nameof(RestaurantDisplay.FullName)"
                             ValueProperty="@nameof(RestaurantDisplay.Id)"
@@ -30,17 +36,12 @@
                 <span class="distance">à @Distance km</span>
             }
         </RadzenStack>
-        <RadzenButton Click="ReloadCatalogue" Text="Recharger le catalogue" Style="margin: 2px 0" />
+        <RadzenButton Click="async () => { await ReloadCatalogue(newCodeRestaurant); await OnInitializedAsync(); }" Disabled="loading" Text="Ajouter" Style="margin: 2px 0" />
     </RadzenStack>
 
+    <RadzenButton Click="ReloadRestaurants" Disabled="loading" Variant="Variant.Text" Text="Recharger les restaurants" />
 
-    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
-        <RadzenLabel Text="Access Token pour l'API BK" Component="accessToken" />
-        <RadzenTextBox @bind-Value=@accessToken Name="accessToken" Style="width:239px" />
-        <RadzenButton Click="ReloadOffers" Text="Recharger les offres" />
-    </RadzenStack>
-
-    <RadzenButton Click="ResetDb" Text="Tout recharger" />
+    <RadzenButton Click="ResetDb" Disabled="loading" Variant="Variant.Text" Text="Tout réinitialiser" />
 
     @if (loading)
     {
@@ -53,7 +54,7 @@
 
 
 @code {
-    string? codeRestaurant;
+    string? newCodeRestaurant;
     GeoCoordinate? geoPosition;
 
     bool loading;
@@ -65,11 +66,14 @@
 
     string ClassName => error ? "error" : "";
 
+    IEnumerable<RestaurantDisplay> LoadedRestaurants => restaurants.Where(r => r.CatalogueUpdate != null);
+    IEnumerable<RestaurantDisplay> MissingRestaurants => restaurants.Where(r => r.CatalogueUpdate == null);
+
     double? Distance
     {
         get
         {
-            var restaurant = restaurants.SingleOrDefault(r => r.Id == codeRestaurant);
+            var restaurant = restaurants.SingleOrDefault(r => r.Id == newCodeRestaurant);
             if (restaurant != null && geoPosition != null)
             {
                 return double.Round(new GeoCoordinate(restaurant.Lat, restaurant.Lng).GetDistanceTo(geoPosition) / 1000, 1);
@@ -103,10 +107,10 @@
     public void OnCurrentPositionChange(GeolocationPosition position)
     {
         geoPosition = new GeoCoordinate(position.Coords.Latitude, position.Coords.Longitude);
-        var closestRestaurant = restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
+        var closestRestaurant = MissingRestaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
         if (closestRestaurant != null)
         {
-            codeRestaurant = closestRestaurant.Id;
+            newCodeRestaurant = closestRestaurant.Id;
             StateHasChanged();
         }
     }
@@ -131,7 +135,7 @@
             context.ChangeTracker.Clear();
 
             await ReloadRestaurants();
-            await ReloadCatalogue();
+            await ReloadCatalogue("K0157");
             await ReloadOffers();
 
             message = "Base reconstruite avec succès !";
@@ -180,7 +184,7 @@
                             Name = restaurantData.Name,
                             Lat = restaurantData.Lat,
                             Lng = restaurantData.Lng,
-                            Departement = restaurantData.AddressFull.Split(" - ").Last().Trim()[..2]
+                            Departement = restaurantData.AddressFull.Split("- ").Last().Trim()[..2]
                         };
                 }
             }).ToArrayAsync();
@@ -211,8 +215,13 @@
         }
     }
 
-    private async Task ReloadCatalogue()
+    private async Task ReloadCatalogue(string? codeRestaurant)
     {
+        if (codeRestaurant == null)
+        {
+            return;
+        }
+
         using var client = GetClient();
 
         try
@@ -463,6 +472,14 @@
         finally
         {
             loading = false;
+        }
+    }
+
+    private async Task ReloadCatalogues()
+    {
+        foreach (var restaurant in LoadedRestaurants)
+        {
+           await ReloadCatalogue(restaurant.Id);
         }
     }
 
