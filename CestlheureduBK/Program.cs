@@ -35,9 +35,9 @@ else
 }
 
 app.UseRequestLocalization("fr-FR");
-app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()

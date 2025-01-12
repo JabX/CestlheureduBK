@@ -90,7 +90,7 @@ else
         geoPosition = new GeoCoordinate(position.Coords.Latitude, position.Coords.Longitude);
         StateHasChanged();
 
-        if (navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).Length < 4)
+        if (navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).Length < 4 && !navigationManager.Uri.Contains("data"))
         {
             var closestRestaurant = restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
             if (closestRestaurant != null)
