@@ -154,6 +154,56 @@ public class DataService(BKDbContext context)
                 .ToArray();
     }
 
+    public async Task<BurgerMystereListDisplay[]> GetBurgerMystere032025(string codeRestaurant)
+    {
+        var meatProbs = new Dictionary<string, double>
+        {
+            ["2"] = 0.16,
+            ["1101"] = 0.16,
+            ["702"] = 0.14,
+            ["49"] = 0.12,
+            ["46"] = 0.11,
+            ["802"] = 0.11,
+            ["1110"] = 0.05,
+            ["1055"] = 0.04,
+            ["1054"] = 0.03,
+            ["213"] = 0.03,
+            ["17"] = 0.03,
+            ["15"] = 0.02
+        };
+
+        var meat = await context.ProductsRestaurants
+            .AsSingleQuery()
+            .Where(prd => prd.Restaurant.Id == codeRestaurant && meatProbs.Keys.Contains(prd.Product.Id))
+            .Select(prd => new BurgerMystereDisplay(
+                prd.Product.Name,
+                prd.Product.Image,
+                prd.Price,
+                prd.Product.Energy ?? 0,
+                meatProbs[prd.Product.Id]))
+            .ToArrayAsync();
+
+        var veggieProbs = new Dictionary<string, double>
+        {
+            ["664"] = 0.36,
+            ["666"] = 0.32,
+            ["801"] = 0.32
+        };
+
+        var veggie = await context.ProductsRestaurants
+            .AsSingleQuery()
+            .Where(prd => prd.Restaurant.Id == codeRestaurant && veggieProbs.Keys.Contains(prd.Product.Id))
+            .Select(prd => new BurgerMystereDisplay(
+                prd.Product.Name,
+                prd.Product.Image,
+                prd.Price,
+                prd.Product.Energy ?? 0,
+                veggieProbs[prd.Product.Id]))
+            .ToArrayAsync();
+
+        return [new("Burger Mystère", meat), new("Veggie Mystère", veggie)];
+    }
+
     public async Task<BurgerMystereListDisplay[]> GetBurgerMystere2024(string codeRestaurant)
     {
         var meatProbs = new Dictionary<string, double>

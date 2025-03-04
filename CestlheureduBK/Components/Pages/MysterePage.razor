@@ -3,9 +3,9 @@
 
 @inject DataService dataService
 
-<PageTitle>C'est l'heure du BK ! - Burger Mystère 2024</PageTitle>
+<PageTitle>C'est l'heure du BK ! - Burger Mystère 2025</PageTitle>
 
-<h1>Burger Mystère 2024</h1>
+<h1>Burger Mystère Mars 2025</h1>
 
 <Header Restaurant=@restaurant />
 
@@ -26,7 +26,7 @@
         restaurant = await dataService.GetRestaurant(RestaurantId);
         if (restaurant != null)
         {
-            data = await dataService.GetBurgerMystere2024(restaurant.Id);
+            data = await dataService.GetBurgerMystere032025(restaurant.Id);
         }
     }
 }
