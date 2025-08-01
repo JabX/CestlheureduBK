@@ -2,15 +2,16 @@
 @page "/mystere/{month}/{restaurantId}"
 @using CestlheureduBK.Services
 
-@inject GetDataService dataService
+@inject GetDataService getDataService
+@inject HeaderService headerService;
 
 <PageTitle>C'est l'heure du BK ! - Burger Mystère</PageTitle>
 
 <h1>Burger Mystère @Month</h1>
 
-<Header Restaurant=@restaurant />
+<Header Data=@headerData />
 
-@if (data != null && restaurant?.CatalogueUpdate != null)
+@if (data != null)
 {
     <Mystere Data="@data" />
 } 
@@ -21,20 +22,22 @@ else
 
 @code {
     private BurgerMystereListDisplay[]? data;
-    private RestaurantDisplay? restaurant;
+    private HeaderData? headerData;
 
     [Parameter]
     public required string Month { get; set; }
+
 
     [Parameter]
     public string? RestaurantId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        restaurant = await dataService.GetRestaurant(RestaurantId);
-        if (restaurant != null)
+        headerData = await headerService.InitHeader(RestaurantId);
+
+        if (headerData.Restaurant != null)
         {
-            data = await dataService.GetBurgerMystere(Month, restaurant.Id);
+            data = await getDataService.GetBurgerMystere(Month, headerData.Restaurant.Id);
         }
     }
 }

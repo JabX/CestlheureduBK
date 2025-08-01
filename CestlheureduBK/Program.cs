@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddScoped<GetDataService>()
     .AddScoped<UpdateDataService>()
+    .AddScoped<HeaderService>()
     .AddLocalization()
     .AddGeolocationServices()
     .AddRadzenComponents()

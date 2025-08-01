@@ -149,7 +149,7 @@ public class GetDataService(BKDbContext context)
     public async Task<RestaurantDisplay[]> GetRestaurants()
     {
         return await context.Restaurants
-            .Where(r => r.Opened && r.CatalogueUpdate != null)
+            .Where(r => r.Opened)
             .OrderBy(r => r.Departement)
             .ThenBy(r => r.Name)
             .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate))

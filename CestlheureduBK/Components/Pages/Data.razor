@@ -24,23 +24,6 @@
         <RadzenButton Click="ReloadOffers" Disabled="loading" Text="Recharger les offres" />
     </RadzenStack>
 
-    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
-        <RadzenLabel Text="Nouveau restaurant" Component="codeRestaurant" Style="line-height:40px" />
-        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
-            <RadzenDropDown @bind-Value=@newCodeRestaurant
-                            Data=@MissingRestaurants
-                            Name="codeRestaurant"
-                            TextProperty="@nameof(RestaurantDisplay.FullName)"
-                            ValueProperty="@nameof(RestaurantDisplay.Id)"
-                            Style="width:350px" />
-            @if (Distance != null)
-            {
-                <span class="distance">à @Distance km</span>
-            }
-        </RadzenStack>
-        <RadzenButton Click="async () => { await ReloadCatalogue(newCodeRestaurant); await OnInitializedAsync(); }" Disabled="loading" Text="Ajouter" Style="margin: 2px 0" />
-    </RadzenStack>
-
     <RadzenButton Click="ReloadRestaurants" Disabled="loading" Variant="Variant.Text" Text="Recharger les restaurants" />
 
     <RadzenButton Click="ResetDb" Disabled="loading" Variant="Variant.Text" Text="Tout réinitialiser" />

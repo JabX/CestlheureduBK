@@ -182,3 +182,9 @@ th, .rz-column-title, .rz-column-title-content {
     font-size: 0.8em;
     margin-top: -12px;
 }
+
+.rz-dropdown-panel[style] {
+    min-width: 350px !important;
+    --rz-grid-cell-padding: 0.625rem 1rem;
+    --rz-grid-header-title-padding-inline: 1rem;
+}
