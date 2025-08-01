@@ -1,22 +1,30 @@
-﻿@page "/mystere"
-@page "/mystere/{restaurantId}"
+﻿@page "/mystere/{month}"
+@page "/mystere/{month}/{restaurantId}"
+@using CestlheureduBK.Services
 
-@inject DataService dataService
+@inject GetDataService dataService
 
-<PageTitle>C'est l'heure du BK ! - Burger Mystère 2025</PageTitle>
+<PageTitle>C'est l'heure du BK ! - Burger Mystère</PageTitle>
 
-<h1>Burger Mystère Mars 2025</h1>
+<h1>Burger Mystère @Month</h1>
 
 <Header Restaurant=@restaurant />
 
 @if (data != null && restaurant?.CatalogueUpdate != null)
 {
     <Mystere Data="@data" />
+} 
+else
+{
+    <p>Pas de Burger Mystère ce mois-ci 🥺</p>
 }
 
 @code {
     private BurgerMystereListDisplay[]? data;
     private RestaurantDisplay? restaurant;
+
+    [Parameter]
+    public required string Month { get; set; }
 
     [Parameter]
     public string? RestaurantId { get; set; }
@@ -26,7 +34,7 @@
         restaurant = await dataService.GetRestaurant(RestaurantId);
         if (restaurant != null)
         {
-            data = await dataService.GetBurgerMystere032025(restaurant.Id);
+            data = await dataService.GetBurgerMystere(Month, restaurant.Id);
         }
     }
 }

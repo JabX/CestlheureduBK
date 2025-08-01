@@ -1,7 +1,8 @@
 ﻿@page "/carte"
 @page "/carte/{restaurantId}"
+@using CestlheureduBK.Services
 
-@inject DataService dataService
+@inject GetDataService getDataService
 
 <PageTitle>C'est l'heure du BK ! - La Carte</PageTitle>
 
@@ -23,10 +24,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        restaurant = await dataService.GetRestaurant(RestaurantId);
+        restaurant = await getDataService.GetRestaurant(RestaurantId);
         if (restaurant != null)
         {
-            data = await dataService.GetCatalogue(restaurant.Id);
+            data = await getDataService.GetCatalogue(restaurant.Id);
         }
     }
 }

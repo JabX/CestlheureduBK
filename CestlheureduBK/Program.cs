@@ -1,7 +1,7 @@
-using CestlheureduBK;
 using CestlheureduBK.Client.Components;
 using CestlheureduBK.Components;
 using CestlheureduBK.Model;
+using CestlheureduBK.Services;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
 
@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-    .AddScoped<DataService>()
+    .AddScoped<GetDataService>()
+    .AddScoped<UpdateDataService>()
     .AddLocalization()
     .AddGeolocationServices()
     .AddRadzenComponents()
