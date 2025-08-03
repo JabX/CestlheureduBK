@@ -8,54 +8,56 @@ public class GetDataService(BKDbContext context)
 {
     private readonly Dictionary<string, Dictionary<string, double>> _burgerMystereProbabilites = new()
     {
-        ["2024-09"] = new()
-        {
-            ["702"] = 0.14,
-            ["463"] = 0.10,
-            ["2"] = 0.12,
-            ["49"] = 0.12,
-            ["447"] = 0.11,
-            ["953"] = 0.07,
-            ["46"] = 0.10,
-            ["802"] = 0.07,
-            ["691"] = 0.05,
-            ["411"] = 0.05,
-            ["17"] = 0.04,
-            ["15"] = 0.03
-        },
         ["2025-03"] = new()
         {
-            ["2"] = 0.16,
-            ["1101"] = 0.16,
-            ["702"] = 0.14,
-            ["49"] = 0.12,
-            ["46"] = 0.11,
-            ["802"] = 0.11,
-            ["1110"] = 0.05,
-            ["1055"] = 0.04,
-            ["1054"] = 0.03,
-            ["213"] = 0.03,
-            ["17"] = 0.03,
-            ["15"] = 0.02
+            ["2"] = 0.16, // Big King
+            ["1101"] = 0.16, // Double Cheese Bacon
+            ["702"] = 0.14, // Crispy Chicken Cheese
+            ["49"] = 0.12, // Whopper
+            ["46"] = 0.11, // Steakhouse
+            ["802"] = 0.11, // Chicken Louisiane Steakhouse
+            ["1110"] = 0.05, // Double King
+            ["1055"] = 0.04, // Master Poulet Cantal
+            ["1054"] = 0.03, // Master Cantal Bacon
+            ["213"] = 0.03, // Big Fish
+            ["17"] = 0.03, // Double Whopper Cheese
+            ["15"] = 0.02 // Double Cheese Bacon XXL
+        },
+        ["2024-09"] = new()
+        {
+            ["702"] = 0.14, // Crispy Chicken Cheese
+            ["2"] = 0.12, // Big King
+            ["49"] = 0.12, // Whopper
+            ["1101"] = 0.11, // Double Cheese Bacon
+            ["463"] = 0.10, // Wrap Chicken Louisiane
+            ["46"] = 0.10, // Steakhouse
+            ["953"] = 0.07, // Chicken Spicy
+            ["802"] = 0.07, // Chicken Louisiane Steakhouse
+            ["1055"] = 0.05, // Master Poulet
+            ["1054"] = 0.05, // Master Bacon Grill
+            ["17"] = 0.04, // Double Whopper Cheese
+            ["15"] = 0.03 // Double Cheese Bacon XXL
         }
     };
 
     private readonly Dictionary<string, Dictionary<string, double>> _veggieMystereProbabilites = new()
     {
-        ["2024-09"] = new()
-        {
-            ["544"] = 0.26,
-            ["664"] = 0.26,
-            ["666"] = 0.24,
-            ["801"] = 0.24
-        },
         ["2025-03"] = new()
         {
-            ["664"] = 0.36,
-            ["666"] = 0.32,
-            ["801"] = 0.32
+            ["664"] = 0.36, // Veggie Whopper
+            ["666"] = 0.32, // Veggie Steakhouse
+            ["801"] = 0.32 // Veggie Chicken Louisiane Steakhouse
+        },
+        ["2024-09"] = new()
+        {
+            ["664"] = 0.26, // Veggie Whopper
+            ["544"] = 0.26, // Wrap Crousty Chèvre
+            ["666"] = 0.24, // Veggie Steakhouse
+            ["801"] = 0.24 // Veggie Chicken Louisiane Steakhouse
         }
     };
+
+    public IList<string> BurgerMystereMonths => _burgerMystereProbabilites.Keys.ToList();
 
     public async Task<CatalogueDisplay[]> GetCatalogue(string codeRestaurant)
     {
@@ -205,23 +207,29 @@ public class GetDataService(BKDbContext context)
                 .ToArray();
     }
 
-    public async Task<BurgerMystereListDisplay[]?> GetBurgerMystere(string month, string codeRestaurant)
+    public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(string month, string codeRestaurant)
     {
         if (!_burgerMystereProbabilites.TryGetValue(month, out var meatProbs))
         {
-            return null;
+            return [];
         }
 
         var meat = await context.ProductsRestaurants
             .AsSingleQuery()
             .Where(prd => prd.Restaurant.Id == codeRestaurant && meatProbs.Keys.Contains(prd.Product.Id))
             .Select(prd => new BurgerMystereDisplay(
+                prd.Product.Id,
                 prd.Product.Name,
                 prd.Product.Image,
                 prd.Price,
                 prd.Product.Energy ?? 0,
                 meatProbs[prd.Product.Id]))
-            .ToArrayAsync();
+            .ToListAsync();
+
+        foreach (var meatProb in meatProbs.Where(mp => !meat.Any(m => m.Id == mp.Key)))
+        {
+            meat.Add(new(meatProb.Key, "Produit retiré de la carte 🥺", null, null, null, meatProb.Value));
+        }
 
         var veggieProbs = _veggieMystereProbabilites[month];
 
@@ -229,14 +237,20 @@ public class GetDataService(BKDbContext context)
             .AsSingleQuery()
             .Where(prd => prd.Restaurant.Id == codeRestaurant && veggieProbs.Keys.Contains(prd.Product.Id))
             .Select(prd => new BurgerMystereDisplay(
+                prd.Product.Id,
                 prd.Product.Name,
                 prd.Product.Image,
                 prd.Price,
                 prd.Product.Energy ?? 0,
                 veggieProbs[prd.Product.Id]))
-            .ToArrayAsync();
+            .ToListAsync();
 
-        return [new("Burger Mystère", meat), new("Veggie Mystère", veggie)];
+        foreach (var veggieProb in veggieProbs.Where(mp => !veggie.Any(m => m.Id == mp.Key)))
+        {
+            veggie.Add(new(veggieProb.Key, "Produit retiré de la carte 🥺", null, null, null, veggieProb.Value));
+        }
+
+        return [new("Burger Mystère", 2.9, meat), new("Veggie Mystère", 2.9, veggie)];
     }
 
     public async Task<DateTime?> GetOffersUpdate()

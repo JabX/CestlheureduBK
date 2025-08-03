@@ -120,7 +120,7 @@ else
         StateHasChanged();
         geoLoading = false;
 
-        if (navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).Length < 4 && !navigationManager.Uri.Contains("admin"))
+        if (!(navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault()?.StartsWith("K") ?? false))
         {
             var closestRestaurant = Data?.Restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
             if (closestRestaurant != null)
@@ -144,17 +144,23 @@ else
     private void OnRestaurantChange(object change)
     {
         loading = true;
-        var urlParts = navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var urlParts = navigationManager.Uri[navigationManager.BaseUri.Length..].Split('/', StringSplitOptions.RemoveEmptyEntries);
         var restaurantId = (string)change;
 
-        if (urlParts.Length == 4)
+        var url = string.Empty;
+        if (urlParts.Length == 0)
         {
-            navigationManager.NavigateTo($"{urlParts[2]}/{restaurantId}");
+            url += "points";
         }
-        else
+
+        if (urlParts.LastOrDefault()?.StartsWith("K") ?? false)
         {
-            navigationManager.NavigateTo($"{(urlParts.Length <= 2 ? "/points" : $"/{urlParts[2]}")}/{restaurantId}");
+            urlParts = urlParts.SkipLast(1).ToArray();
         }
+
+        url += $"{string.Join("/", urlParts)}/{restaurantId}";
+
+        navigationManager.NavigateTo(url);
     }
 
     private string ToLocalTime(DateTime? date)

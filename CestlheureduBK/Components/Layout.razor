@@ -16,6 +16,7 @@
                 <RadzenPanelMenuItem Path=@($"/points{RestaurantId}") Text="Couronnes" Icon="star" />
                 <RadzenPanelMenuItem Path=@($"/carte{RestaurantId}") Text="Carte" Icon="menu_book" />
                 <RadzenPanelMenuItem Path=@($"/snacks{RestaurantId}") Text="Snacks" Icon="fastfood" />
+                <RadzenPanelMenuItem Path=@($"/mystere/{DateTime.UtcNow.ToString("yyyy-MM")}{RestaurantId}") Text="Burger Mystère" Icon="question_mark" />
             </RadzenPanelMenu>
         </RadzenStack>
     </RadzenHeader>
@@ -28,18 +29,17 @@
     [CascadingParameter]
     HttpContext? HttpContext { get; set; }
 
-    string RestaurantId {
+    string RestaurantId
+    {
         get
         {
-            var urlParts = navigationManager.Uri.Split('/');
-            if (urlParts.Length == 5)
+            var lastPart = navigationManager.Uri.Split('/').LastOrDefault();
+            if (lastPart?.StartsWith("K") ?? false)
             {
-                return $"/{urlParts[4]}";
-            } 
-            else
-            {
-                return string.Empty;
+                return $"/{lastPart}";
             }
+
+            return string.Empty;
         }
     }
 

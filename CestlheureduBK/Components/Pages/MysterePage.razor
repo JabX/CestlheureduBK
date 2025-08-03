@@ -6,26 +6,21 @@
 
 <PageTitle>C'est l'heure du BK ! - Burger Mystère</PageTitle>
 
-<h1>Burger Mystère @Month</h1>
+<h1>Burger Mystère</h1>
 
 <Header Data=@headerData />
 
-@if ((data?.Length ?? 0) > 0)
+@if (data != null)
 {
-    <Mystere Data="@data" />
+    <Mystere Data="@data" Month="@Month" Months="@getDataService.BurgerMystereMonths" />
 } 
-else
-{
-    <p>Pas de Burger Mystère ce mois-ci 🥺</p>
-}
 
 @code {
-    private BurgerMystereListDisplay[]? data;
+    private IList<BurgerMystereListDisplay>? data;
     private HeaderDisplay? headerData;
 
     [Parameter]
     public required string Month { get; set; }
-
 
     [Parameter]
     public string? RestaurantId { get; set; }
