@@ -265,7 +265,7 @@ public class UpdateDataService(BKDbContext context)
         }
     }
 
-    public async Task<(string Message, bool Error)> ReloadOffers(string accessToken)
+    public async Task<(string Message, bool Error)> ReloadOffers(string? accessToken)
     {
         using var client = GetClient(accessToken);
 
@@ -358,6 +358,45 @@ public class UpdateDataService(BKDbContext context)
         finally
         {
             context.ChangeTracker.Clear();
+        }
+    }
+
+    public async Task<(string Message, bool Error)> ResetDb(string? accessToken)
+    {
+        try
+        {
+            await CheckAccessToken(accessToken);
+
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
+
+            context.Updates.Add(new());
+            await context.SaveChangesAsync();
+            context.ChangeTracker.Clear();
+
+            var restaurantResult = await ReloadRestaurants();
+            if (restaurantResult.Error)
+            {
+                return restaurantResult;
+            }
+
+            var catalogueResult = await ReloadCatalogue("K0157");
+            if (catalogueResult.Error)
+            {
+                return catalogueResult;
+            }
+
+            var offersResult = await ReloadOffers(accessToken!);
+            if (offersResult.Error)
+            {
+                return offersResult;
+            }
+
+            return ("La base de données a été réinitialisée avec succès !", false);
+        }
+        catch (Exception e)
+        {
+            return ($"Une erreur est survenue lors de la reconstruction de la base : {e.Message}", true);
         }
     }
 

@@ -7,7 +7,7 @@
 @if (Data?.Restaurant != null)
 {
     <p>
-        <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
+        <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start" Style="gap:0;column-gap:var(--rz-gap)">
             <RadzenLabel Text="Restaurant" Component="codeRestaurant" Style="line-height:40px" />
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
                 <RadzenDropDownDataGrid Value=@Data.Restaurant.Id
@@ -28,28 +28,45 @@
                 {
                     <span class="distance">à @Distance km</span>
                 }
+                else if (geoLoading && !loading)
+                {
+                    <span class="distance">En attente de la position...</span>
+                }
                 else
                 {
-                    <span class="distance">-</span>
+                    <span class="distance">-</span>                    
                 }
             </RadzenStack>
             @if (loading)
             {
                 <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ShowValue="false" Style="height:40px" />
             }
-        </RadzenStack>
-
-        @if (Data.Restaurant?.CatalogueUpdate != null)
-        {
-            if (!loading)
+            else if (Data.Restaurant?.CatalogueUpdate != null)
             {
-                <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Data.Restaurant.CatalogueUpdate) et offres le @ToLocalTime(Data.OffersUpdate)</span>
+                <RadzenButton Icon="refresh" Click="ReloadCatalogue"  />
             }
-        }
-        else
+        </RadzenStack>
+        @if (!loading)
         {
-            <br />
-            <span>Les données pour ce restaurant n'ont pas été chargées... 🥺</span>
+            if (Data.Restaurant?.CatalogueUpdate != null)
+            {          
+                <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Data.Restaurant.CatalogueUpdate) et offres le @ToLocalTime(Data.OffersUpdate)</span>
+
+                if (Data.Restaurant.CatalogueUpdate.Value.AddDays(7) < DateTime.UtcNow)
+                {
+                    <br />
+                    <br />
+                    <span>🫸 Les données de ce restaurant n'ont pas été mises à jour depuis plus d'une semaine !</span>
+                }
+            }
+            else
+            {
+                <br />
+                <span>Les données pour ce restaurant n'ont pas été chargées... 🥺</span>
+                <br />
+                <br />
+                <RadzenButton Icon="refresh" ButtonStyle="ButtonStyle.Primary" Text="Je m'en occupe !" Click="ReloadCatalogue" />
+            }
         }
     </p>
 }
@@ -59,12 +76,19 @@ else
 }
 
 @code {
+    readonly HttpClient? _client;
+
+    public Header(HttpClient? client = null)
+    {
+        _client = client;
+    }
 
     GeoCoordinate? geoPosition;
     bool loading;
+    bool geoLoading = true;
 
     [Parameter]
-    public HeaderData? Data { get; set; }
+    public HeaderDisplay? Data { get; set; }
 
     double? Distance
     {
@@ -94,14 +118,26 @@ else
     {
         geoPosition = new GeoCoordinate(position.Coords.Latitude, position.Coords.Longitude);
         StateHasChanged();
+        geoLoading = false;
 
-        if (navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).Length < 4 && !navigationManager.Uri.Contains("data"))
+        if (navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).Length < 4 && !navigationManager.Uri.Contains("admin"))
         {
             var closestRestaurant = Data?.Restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
             if (closestRestaurant != null)
             {
                 OnRestaurantChange(closestRestaurant.Id);
             }
+        }
+    }
+
+    private async Task ReloadCatalogue()
+    {
+        if (Data?.Restaurant != null && _client != null)
+        {
+            loading = true;
+            var response = await _client.PutAsync($"api/update/{Data.Restaurant.Id}", null);
+            loading = false;
+            navigationManager.Refresh();
         }
     }
 

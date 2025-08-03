@@ -3,7 +3,6 @@
 @using CestlheureduBK.Services
 
 @inject GetDataService getDataService
-@inject HeaderService headerService;
 
 <PageTitle>C'est l'heure du BK ! - Burger Mystère</PageTitle>
 
@@ -11,7 +10,7 @@
 
 <Header Data=@headerData />
 
-@if (data != null)
+@if ((data?.Length ?? 0) > 0)
 {
     <Mystere Data="@data" />
 } 
@@ -22,7 +21,7 @@ else
 
 @code {
     private BurgerMystereListDisplay[]? data;
-    private HeaderData? headerData;
+    private HeaderDisplay? headerData;
 
     [Parameter]
     public required string Month { get; set; }
@@ -33,7 +32,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        headerData = await headerService.InitHeader(RestaurantId);
+        headerData = await getDataService.GetHeaderData(RestaurantId);
 
         if (headerData.Restaurant != null)
         {

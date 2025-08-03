@@ -243,5 +243,13 @@ public class GetDataService(BKDbContext context)
     {
         return (await context.Updates.SingleOrDefaultAsync())?.Offers;
     }
-}
 
+    public async Task<HeaderDisplay> GetHeaderData(string? restaurantId)
+    {
+        var offersUpdate = await GetOffersUpdate();
+        var restaurants = await GetRestaurants();
+        var restaurant = await GetRestaurant(restaurantId);
+
+        return new(restaurant, restaurants, offersUpdate);
+    }
+}

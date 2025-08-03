@@ -1,0 +1,71 @@
+﻿@page "/admin"
+@using System.Globalization
+@using System.Net
+@using System.Net.Http.Headers
+@using System.Text.RegularExpressions
+@using CestlheureduBK.Services
+@using GeoCoordinate.NetStandard2;
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject BKDbContext context;
+@inject UpdateDataService updateDataService;
+
+<PageTitle>C'est l'heure du BK ! - Chargement des données</PageTitle>
+
+<RadzenStack AlignItems="AlignItems.Start">
+    <h1>Administration</h1>
+
+    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+        <RadzenLabel Text="Access Token pour l'API BK" Component="accessToken" />
+        <RadzenTextBox @bind-Value=@accessToken Name="accessToken" Style="width:303px" />
+    </RadzenStack>
+
+    <RadzenButton Click="() => CallService(Service.Offers)" Disabled="loading" Text="Recharger les offres" />
+    <RadzenButton Click="() => CallService(Service.Restaurants)" Disabled="loading" Text="Recharger les restaurants" />
+    <RadzenButton Click="() => CallService(Service.ResetDb)" Disabled="loading" Text="Tout réinitialiser" />
+
+    @if (loading)
+    {
+        <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
+    }
+
+    <RadzenText class="@ClassName" Text="@message" />
+</RadzenStack>
+
+
+
+@code {
+    bool loading;
+    string? accessToken;
+    string? message;
+    bool error;
+
+    string ClassName => error ? "error" : "";
+
+    private async Task CallService(Service service)
+    {
+        if (service == Service.Restaurants || !string.IsNullOrEmpty(accessToken))
+        {
+            message = null;
+            error = false;
+            loading = true;
+
+            (message, error) = service switch
+            {
+                Service.Offers => await updateDataService.ReloadOffers(accessToken),
+                Service.Restaurants => await updateDataService.ReloadRestaurants(),
+                Service.ResetDb => await updateDataService.ResetDb(accessToken),
+                _ => default
+            };
+
+            loading = false;
+        }
+    }
+
+    enum Service
+    {
+        Offers,
+        Restaurants,
+        ResetDb
+    }
+}

@@ -3,7 +3,6 @@
 @using CestlheureduBK.Services
 
 @inject GetDataService getDataService
-@inject HeaderService headerService;
 
 <PageTitle>C'est l'heure du BK ! - Rentabilité des snacks</PageTitle>
 
@@ -11,21 +10,21 @@
 
 <Header Data=@headerData />
 
-@if (data != null)
+@if ((data?.Length ?? 0) > 0)
 {
     <Snacks Data="@data"  />
 }
 
 @code {
     private SnackDisplay[]? data;
-    private HeaderData? headerData;
+    private HeaderDisplay? headerData;
 
     [Parameter]
     public string? RestaurantId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        headerData = await headerService.InitHeader(RestaurantId);
+        headerData = await getDataService.GetHeaderData(RestaurantId);
 
         if (headerData.Restaurant != null)
         {

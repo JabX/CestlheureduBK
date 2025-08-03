@@ -13,6 +13,10 @@
     --rz-primary-light: rgba(187, 30, 50, 0.75);
     --rz-primary-lighter: rgba(187, 30, 50, 0.12);
     --rz-on-primary-lighter: rgb(187, 30, 50);
+    --rz-secondary: rgb(187, 30, 50);
+    --rz-secondary-light: rgba(187, 30, 50, 0.75);
+    --rz-secondary-lighter: rgba(187, 30, 50, 0.12);
+    --rz-on-secondary-lighter: rgb(187, 30, 50, 38);
     --rz-text-font-family: Flame Sans;
     --rz-body-line-height: 1.3;
     --rz-grid-cell-font-size: 1rem;

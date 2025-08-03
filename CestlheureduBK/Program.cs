@@ -2,6 +2,7 @@ using CestlheureduBK.Client.Components;
 using CestlheureduBK.Components;
 using CestlheureduBK.Model;
 using CestlheureduBK.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
 
@@ -11,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddScoped<GetDataService>()
     .AddScoped<UpdateDataService>()
-    .AddScoped<HeaderService>()
     .AddLocalization()
     .AddGeolocationServices()
     .AddRadzenComponents()
@@ -44,5 +44,11 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Snacks).Assembly);
+
+app.MapPut("api/update/{codeRestaurant}", async (string codeRestaurant, [FromServices] UpdateDataService updateDataservice) =>
+{
+    var (_, error) = await updateDataservice.ReloadCatalogue(codeRestaurant);
+    return error ? Results.BadRequest() : Results.Ok();
+});
 
 app.Run();
