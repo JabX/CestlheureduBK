@@ -38,4 +38,4 @@ public record RestaurantDisplay(string Id, string Name, string AddressFull, stri
     public string FullName => $"{Departement} - {Name}";
 }
 
-public record HeaderDisplay(RestaurantDisplay? Restaurant, RestaurantDisplay[] Restaurants, DateTime? OffersUpdate);
+public record HeaderDisplay(RestaurantDisplay? Restaurant, RestaurantDisplay[] Restaurants, DateTime? OffersUpdate, bool IsAuthenticated, RestaurantDisplay? FavoriteRestaurant);

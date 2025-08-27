@@ -1,6 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using CestlheureduBK.Services
+@inherits LayoutComponentBase
 @inject ThemeService themeService;
 @inject NavigationManager navigationManager;
+@inject UserService userService;
 
 <RadzenLayout>
     <RadzenHeader>
@@ -8,7 +10,14 @@
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="width:100%">
                 <RadzenText Text="C'est l'heure du BK !" TextStyle="TextStyle.H5" />
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="18px">
-                    <RadzenLink Icon="open_in_new" Text="GitHub" Target="_blank" Path="https://www.github.com/JabX/CestlheureduBK" />
+                    @if (userService.IsAuthenticated)
+                    {
+                        <RadzenLink title="@userService.Email" Icon="person" Text="@userService.Name" Path="./me" />
+                    }
+                    else
+                    {
+                        <RadzenLink Icon="login" Text="Login" Path="./login" />
+                    }
                     <ThemeSwitcher />
                 </RadzenStack>
             </RadzenStack>

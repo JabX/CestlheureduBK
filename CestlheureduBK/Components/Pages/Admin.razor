@@ -8,6 +8,7 @@
 @using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
 @inject BKDbContext context;
+@inject GetDataService getDataService;
 @inject UpdateDataService updateDataService;
 
 <PageTitle>C'est l'heure du BK ! - Chargement des données</PageTitle>
@@ -22,6 +23,27 @@
 
     <RadzenButton Click="() => CallService(Service.Offers)" Disabled="loading" Text="Recharger les offres" />
     <RadzenButton Click="() => CallService(Service.Restaurants)" Disabled="loading" Text="Recharger les restaurants" />
+
+    <RadzenTable>
+        <RadzenTableHeader>
+            <RadzenTableHeaderRow>
+                <RadzenTableHeaderCell>Restaurant</RadzenTableHeaderCell>
+                <RadzenTableHeaderCell Style="width:170px">Dernière MàJ</RadzenTableHeaderCell>
+                <RadzenTableHeaderCell Style="width:60px" />
+            </RadzenTableHeaderRow>
+        </RadzenTableHeader>
+        <RadzenTableBody>
+            @foreach (var restaurant in restaurants)
+            {
+                <RadzenTableRow>
+                    <RadzenTableCell>@restaurant.FullName</RadzenTableCell>
+                    <RadzenTableCell>@ToLocalTime(restaurant.CatalogueUpdate)</RadzenTableCell>
+                    <RadzenTableCell><RadzenButton Icon="refresh" Disabled="loading" Click="@(() => ReloadCatalogue(restaurant.Id))" /></RadzenTableCell>
+                </RadzenTableRow>
+            }
+        </RadzenTableBody>
+    </RadzenTable>
+
     <RadzenButton Click="() => CallService(Service.ResetDb)" Disabled="loading" Text="Tout réinitialiser" />
 
     @if (loading)
@@ -40,7 +62,16 @@
     string? message;
     bool error;
 
+    RestaurantDisplay[] restaurants = [];
+
     string ClassName => error ? "error" : "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        restaurants = (await getDataService.GetRestaurants()).Where(r => r.CatalogueUpdate != null)
+            .OrderByDescending(r => r.CatalogueUpdate)
+            .ToArray();
+    }
 
     private async Task CallService(Service service)
     {
@@ -62,10 +93,33 @@
         }
     }
 
+    private async Task ReloadCatalogue(string resturantId)
+    {
+        message = null;
+        error = false;
+        loading = true;
+
+        (message, error) = await updateDataService.ReloadCatalogue(resturantId);
+        await OnInitializedAsync();
+
+        loading = false;
+    }
+
     enum Service
     {
         Offers,
         Restaurants,
         ResetDb
+    }
+
+    private string ToLocalTime(DateTime? date)
+    {
+        if (date == null)
+        {
+            return string.Empty;
+        }
+
+        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
+            .ToString("dd/MM/yyyy à HH:mm");
     }
 }

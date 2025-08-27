@@ -34,22 +34,46 @@
                 }
                 else
                 {
-                    <span class="distance">-</span>                    
+                    <span class="distance">-</span>
                 }
             </RadzenStack>
             @if (loading)
             {
                 <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ShowValue="false" Style="height:40px" />
             }
-            else if (Data.Restaurant?.CatalogueUpdate != null)
+            else
             {
-                <RadzenButton Icon="refresh" Click="ReloadCatalogue"  />
+                if (Data.IsAuthenticated)
+                {
+                    if (Data.FavoriteRestaurant?.Id == Data.Restaurant.Id)
+                    {
+                        <RadzenIcon Icon="Favorite" title="Ce restaurant est mon restaurant préféré !" Style="margin:6px 0;" />
+                    }
+                    else
+                    {
+                        <RadzenButton Icon="heart_plus" title="Enregistrer comme restaurant préféré" Click="SetFavoriteRestaurant" />
+                    }
+                }
+
+                if (Data.Restaurant.Id == ClosestRestaurant?.Id)
+                {
+                    <RadzenIcon Icon="distance" title="Il s'agit du restaurant le plus proche de moi" Style="margin:6px 0;" />
+                }
+                else if (ClosestRestaurant != null)
+                {
+                    <RadzenButton Icon="location_searching" title="Choisir le restaurant le plus proche de moi" Click="@(() => OnRestaurantChange(ClosestRestaurant.Id))" />
+                }
+
+                if (Data.Restaurant?.CatalogueUpdate != null)
+                {
+                    <RadzenButton Icon="refresh" title="Mettre à jour le catalogue" Click="ReloadCatalogue" />
+                }
             }
         </RadzenStack>
         @if (!loading)
         {
             if (Data.Restaurant?.CatalogueUpdate != null)
-            {          
+            {
                 <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Data.Restaurant.CatalogueUpdate) et offres le @ToLocalTime(Data.OffersUpdate)</span>
 
                 if (Data.Restaurant.CatalogueUpdate.Value.AddDays(7) < DateTime.UtcNow)
@@ -90,6 +114,8 @@ else
     [Parameter]
     public HeaderDisplay? Data { get; set; }
 
+    RestaurantDisplay? ClosestRestaurant => geoPosition != null ? Data?.Restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault() : null;
+
     double? Distance
     {
         get
@@ -122,10 +148,9 @@ else
 
         if (!(navigationManager.Uri.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault()?.StartsWith("K") ?? false))
         {
-            var closestRestaurant = Data?.Restaurants.OrderBy(r => new GeoCoordinate(r.Lat, r.Lng).GetDistanceTo(geoPosition)).FirstOrDefault();
-            if (closestRestaurant != null)
+            if (ClosestRestaurant != null)
             {
-                OnRestaurantChange(closestRestaurant.Id);
+                OnRestaurantChange(ClosestRestaurant.Id);
             }
         }
     }
@@ -141,6 +166,17 @@ else
         }
     }
 
+    private async Task SetFavoriteRestaurant()
+    {
+        if (Data?.Restaurant != null && _client != null)
+        {
+            loading = true;
+            var response = await _client.PutAsync($"api/favorite/{Data.Restaurant.Id}", null);
+            loading = false;
+            navigationManager.Refresh();
+        }
+    }
+
     private void OnRestaurantChange(object change)
     {
         loading = true;
@@ -151,6 +187,10 @@ else
         if (urlParts.Length == 0)
         {
             url += "points";
+        }
+        else if (urlParts[0] == "admin" || urlParts[0] == "login" || urlParts[0] == "me")
+        {
+            return;
         }
 
         if (urlParts.LastOrDefault()?.StartsWith("K") ?? false)

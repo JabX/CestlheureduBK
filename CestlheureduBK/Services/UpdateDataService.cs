@@ -368,7 +368,7 @@ public class UpdateDataService(BKDbContext context)
             await CheckAccessToken(accessToken);
 
             await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
+            await context.Database.MigrateAsync();
 
             context.Updates.Add(new());
             await context.SaveChangesAsync();

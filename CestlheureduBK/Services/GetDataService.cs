@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CestlheureduBK.Services;
 
-public class GetDataService(BKDbContext context)
+public class GetDataService(BKDbContext context, UserService userService)
 {
     private readonly Dictionary<string, Dictionary<string, double>> _burgerMystereProbabilites = new()
     {
@@ -136,16 +136,23 @@ public class GetDataService(BKDbContext context)
 
     public async Task<RestaurantDisplay?> GetRestaurant(string? codeRestaurant = null)
     {
-        var r = codeRestaurant != null
-            ? await context.Restaurants.SingleOrDefaultAsync(r => r.Id == codeRestaurant)
-            : await context.Restaurants.OrderByDescending(r => r.CatalogueUpdate).FirstOrDefaultAsync(r => r.CatalogueUpdate != null);
+        RestaurantDisplay? r;
 
-        if (r == null)
+        if (codeRestaurant != null)
         {
-            return null;
+            r = (await context.Restaurants.SingleOrDefaultAsync(r => r.Id == codeRestaurant))?.ToDisplay();
+        }
+        else
+        {
+            r = await userService.GetFavoriteRestaurant();
+
+            if (r == null)
+            {
+                r = (await context.Restaurants.OrderByDescending(r => r.CatalogueUpdate).FirstOrDefaultAsync(r => r.CatalogueUpdate != null))?.ToDisplay();
+            }
         }
 
-        return new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate);
+        return r;
     }
 
     public async Task<RestaurantDisplay[]> GetRestaurants()
@@ -263,7 +270,8 @@ public class GetDataService(BKDbContext context)
         var offersUpdate = await GetOffersUpdate();
         var restaurants = await GetRestaurants();
         var restaurant = await GetRestaurant(restaurantId);
+        var favoriteRestaurant = await userService.GetFavoriteRestaurant();
 
-        return new(restaurant, restaurants, offersUpdate);
+        return new(restaurant, restaurants, offersUpdate, userService.IsAuthenticated, favoriteRestaurant);
     }
 }

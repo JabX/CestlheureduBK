@@ -1,0 +1,34 @@
+﻿@page "/me"
+@using CestlheureduBK.Services
+@inject NavigationManager navigationManager;
+@inject UserService userService;
+
+@if (userService.IsAuthenticated)
+{
+    <h1>@userService.Name</h1>
+
+    <h3>@userService.Email</h3>
+
+    @if (favoriteRestaurant != null)
+    {
+        <p>Votre restaurant préféré : <strong>@favoriteRestaurant.Name (@favoriteRestaurant.Departement)</strong></p>
+    }
+
+    <RadzenLink Icon="login" Path="./logout">Se déconnecter</RadzenLink>
+}
+
+@code {
+    RestaurantDisplay? favoriteRestaurant;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!userService.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/");
+        } 
+        else
+        {
+            favoriteRestaurant = await userService.GetFavoriteRestaurant();
+        }
+    }
+}

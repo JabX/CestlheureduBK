@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using CestlheureduBK.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace CestlheureduBK.Model;
@@ -31,6 +32,8 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
 
     public DbSet<UpdateDb> Updates { get; set; }
 
+    public DbSet<UserDb> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<MenuRestaurantDb>().HasKey(m => new { m.MenuId, m.RestaurantId });
@@ -40,6 +43,8 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
         modelBuilder.Entity<StepDb>().HasMany(p => p.Products).WithMany().UsingEntity("StepProducts");
         modelBuilder.Entity<StepDb>().HasMany(p => p.ProductsL).WithMany().UsingEntity("StepProductsL");
         modelBuilder.Entity<StepDb>().HasMany(p => p.ProductsXL).WithMany().UsingEntity("StepProductsXL");
+
+        modelBuilder.Entity<UserDb>().Navigation(p => p.FavoriteRestaurant).AutoInclude();
     }
 }
 
@@ -191,6 +196,11 @@ public class RestaurantDb
     public bool Opened { get; set; } = true;
 
     public DateTime? CatalogueUpdate { get; set; }
+
+    public RestaurantDisplay ToDisplay()
+    {
+        return new RestaurantDisplay(Id, Name, AddressFull, Departement, Lat, Lng, CatalogueUpdate);
+    }
 }
 
 [Table("Snacks")]
@@ -237,4 +247,16 @@ public record UpdateDb
     public DateTime? Restaurants { get; set; }
 
     public DateTime? Offers { get; set; }
+}
+
+[Table("Users")]
+public record UserDb
+{
+    public Guid Id { get; set; }
+
+    public required string Name { get; set; }
+
+    public required string Email { get; set; }
+
+    public RestaurantDb? FavoriteRestaurant { get; set; }
 }
