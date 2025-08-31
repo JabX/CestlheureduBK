@@ -24,15 +24,15 @@
 }
 else if (MainData.SelectMany(s => s.Burgers).Any())
 {
-    @foreach (var snack in MainData)
+    @foreach (var campaign in MainData)
     {
         <br />
-        <RadzenText Text="@snack.Name" TextStyle="TextStyle.DisplayH6" />
-        <span style="font-size:0.9em;font-style:italic">Prix : @snack.Price.ToString("0.00 €") / Espérance : @snack.PriceExpectancy.ToString("0.00 €") et @snack.EnergyExpectancy.ToString("0 kcal")</span>
+        <RadzenText Text="@campaign.Name" TextStyle="TextStyle.DisplayH6" />
+        <span style="font-size:0.9em;font-style:italic">Prix : @campaign.Price.ToString("0.00 €") / Espérance : @campaign.PriceExpectancy.ToString("0.00 €") et @campaign.EnergyExpectancy.ToString("0 kcal")</span>
         <br />
         <br />
 
-        <RadzenDataGrid Data="@snack.Burgers">
+        <RadzenDataGrid Data="@campaign.Burgers">
             <Columns>
                 <RadzenDataGridColumn Title="Produit">
                     <Template Context="data">
@@ -70,8 +70,8 @@ else if (MainData.SelectMany(s => s.Burgers).Any())
                     </HeaderTemplate>
                     <Template Context="data">
                         <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                            <span>@(data.Price?.ToString("0.00 €") ?? "-")</span>
-                            <span class="detail">(x @(data.Value?.ToString("0.00") ?? "-"))</span>
+                            <span>@(data.Price.ToString("0.00 €") ?? "-")</span>
+                            <span class="detail">(x @((data.Price / campaign.Price).ToString("0.00") ?? "-"))</span>
                         </RadzenStack>
                     </Template>
                 </RadzenDataGridColumn>
@@ -87,7 +87,7 @@ else if (MainData.SelectMany(s => s.Burgers).Any())
                     </HeaderTemplate>
                     <Template Context="data">
                         <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                            <span>@(data.Energy?.ToString("0 kcal") ?? "-")</span>
+                            <span>@(data.Energy.ToString("0 kcal") ?? "-")</span>
                         </RadzenStack>
                     </Template>
                 </RadzenDataGridColumn>

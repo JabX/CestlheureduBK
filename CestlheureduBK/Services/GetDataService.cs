@@ -6,58 +6,10 @@ namespace CestlheureduBK.Services;
 
 public class GetDataService(BKDbContext context, UserService userService)
 {
-    private readonly Dictionary<string, Dictionary<string, double>> _burgerMystereProbabilites = new()
+    public async Task<IList<string>> GetBurgerMystereMonths()
     {
-        ["2025-03"] = new()
-        {
-            ["2"] = 0.16, // Big King
-            ["1101"] = 0.16, // Double Cheese Bacon
-            ["702"] = 0.14, // Crispy Chicken Cheese
-            ["49"] = 0.12, // Whopper
-            ["46"] = 0.11, // Steakhouse
-            ["802"] = 0.11, // Chicken Louisiane Steakhouse
-            ["1110"] = 0.05, // Double King
-            ["1055"] = 0.04, // Master Poulet Cantal
-            ["1054"] = 0.03, // Master Cantal Bacon
-            ["213"] = 0.03, // Big Fish
-            ["17"] = 0.03, // Double Whopper Cheese
-            ["15"] = 0.02 // Double Cheese Bacon XXL
-        },
-        ["2024-09"] = new()
-        {
-            ["702"] = 0.14, // Crispy Chicken Cheese
-            ["2"] = 0.12, // Big King
-            ["49"] = 0.12, // Whopper
-            ["1101"] = 0.11, // Double Cheese Bacon
-            ["463"] = 0.10, // Wrap Chicken Louisiane
-            ["46"] = 0.10, // Steakhouse
-            ["953"] = 0.07, // Chicken Spicy
-            ["802"] = 0.07, // Chicken Louisiane Steakhouse
-            ["1055"] = 0.05, // Master Poulet
-            ["1054"] = 0.05, // Master Bacon Grill
-            ["17"] = 0.04, // Double Whopper Cheese
-            ["15"] = 0.03 // Double Cheese Bacon XXL
-        }
-    };
-
-    private readonly Dictionary<string, Dictionary<string, double>> _veggieMystereProbabilites = new()
-    {
-        ["2025-03"] = new()
-        {
-            ["664"] = 0.36, // Veggie Whopper
-            ["666"] = 0.32, // Veggie Steakhouse
-            ["801"] = 0.32 // Veggie Chicken Louisiane Steakhouse
-        },
-        ["2024-09"] = new()
-        {
-            ["664"] = 0.26, // Veggie Whopper
-            ["544"] = 0.26, // Wrap Crousty Chèvre
-            ["666"] = 0.24, // Veggie Steakhouse
-            ["801"] = 0.24 // Veggie Chicken Louisiane Steakhouse
-        }
-    };
-
-    public IList<string> BurgerMystereMonths => _burgerMystereProbabilites.Keys.ToList();
+        return await context.MysteryCampaigns.Select(c => c.Month).Distinct().OrderByDescending(c => c).ToListAsync();
+    }
 
     public async Task<CatalogueDisplay[]> GetCatalogue(string codeRestaurant)
     {
@@ -216,48 +168,24 @@ public class GetDataService(BKDbContext context, UserService userService)
 
     public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(string month, string codeRestaurant)
     {
-        if (!_burgerMystereProbabilites.TryGetValue(month, out var meatProbs))
-        {
-            return [];
-        }
-
-        var meat = await context.ProductsRestaurants
-            .AsSingleQuery()
-            .Where(prd => prd.Restaurant.Id == codeRestaurant && meatProbs.Keys.Contains(prd.Product.Id))
-            .Select(prd => new BurgerMystereDisplay(
-                prd.Product.Id,
-                prd.Product.Name,
-                prd.Product.Image,
-                prd.Price,
-                prd.Product.Energy ?? 0,
-                meatProbs[prd.Product.Id]))
-            .ToListAsync();
-
-        foreach (var meatProb in meatProbs.Where(mp => !meat.Any(m => m.Id == mp.Key)))
-        {
-            meat.Add(new(meatProb.Key, "Produit retiré de la carte 🥺", null, null, null, meatProb.Value));
-        }
-
-        var veggieProbs = _veggieMystereProbabilites[month];
-
-        var veggie = await context.ProductsRestaurants
-            .AsSingleQuery()
-            .Where(prd => prd.Restaurant.Id == codeRestaurant && veggieProbs.Keys.Contains(prd.Product.Id))
-            .Select(prd => new BurgerMystereDisplay(
-                prd.Product.Id,
-                prd.Product.Name,
-                prd.Product.Image,
-                prd.Price,
-                prd.Product.Energy ?? 0,
-                veggieProbs[prd.Product.Id]))
-            .ToListAsync();
-
-        foreach (var veggieProb in veggieProbs.Where(mp => !veggie.Any(m => m.Id == mp.Key)))
-        {
-            veggie.Add(new(veggieProb.Key, "Produit retiré de la carte 🥺", null, null, null, veggieProb.Value));
-        }
-
-        return [new("Burger Mystère", 2.9, meat), new("Veggie Mystère", 2.9, veggie)];
+        return await (
+            from mc in context.MysteryProducts
+            join pr in context.ProductsRestaurants on mc.Product equals pr.Product
+            where mc.Campaign.Month == month
+            where pr.Restaurant.Id == codeRestaurant
+            group new { pr, mc } by mc.Campaign into g
+            select new BurgerMystereListDisplay(
+                g.Key.Kind == MysteryCampaignKind.Classic ? "Burger Mystère" : "Veggie Mystère",
+                g.Key.Price,
+                g.Select(c => new BurgerMystereDisplay(
+                    c.pr.Product.Id,
+                    c.pr.Product.Name,
+                    c.pr.Product.Image,
+                    c.pr.Price,
+                    c.pr.Product.Energy ?? 0,
+                    c.mc.Chance
+                )).ToList()))
+        .ToListAsync();
     }
 
     public async Task<DateTime?> GetOffersUpdate()

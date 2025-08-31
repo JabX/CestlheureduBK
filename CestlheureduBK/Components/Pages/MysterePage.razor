@@ -12,12 +12,13 @@
 
 @if (data != null)
 {
-    <Mystere Data="@data" Month="@Month" Months="@getDataService.BurgerMystereMonths" />
+    <Mystere Data="@data" Month="@Month" Months="@months" />
 } 
 
 @code {
     private IList<BurgerMystereListDisplay>? data;
     private HeaderDisplay? headerData;
+    private IList<string>? months;
 
     [Parameter]
     public required string Month { get; set; }
@@ -31,6 +32,7 @@
 
         if (headerData.Restaurant != null)
         {
+            months = await getDataService.GetBurgerMystereMonths();
             data = await getDataService.GetBurgerMystere(Month, headerData.Restaurant.Id);
         }
     }
