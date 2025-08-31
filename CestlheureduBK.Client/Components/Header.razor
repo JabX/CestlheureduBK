@@ -74,7 +74,7 @@
         {
             if (Data.Restaurant?.CatalogueUpdate != null)
             {
-                <span class="detail">Dernières mises à jour : catalogue le @ToLocalTime(Data.Restaurant.CatalogueUpdate) et offres le @ToLocalTime(Data.OffersUpdate)</span>
+                <span class="detail">Dernières mises à jour : catalogue le @Data.Restaurant.CatalogueUpdate.ToLocalDisplay() et offres le @Data.OffersUpdate.ToLocalDisplay()</span>
 
                 if (Data.Restaurant.CatalogueUpdate.Value.AddDays(7) < DateTime.UtcNow)
                 {
@@ -201,16 +201,5 @@ else
         url += $"{string.Join("/", urlParts)}/{restaurantId}";
 
         navigationManager.NavigateTo(url);
-    }
-
-    private string ToLocalTime(DateTime? date)
-    {
-        if (date == null)
-        {
-            return string.Empty;
-        }
-
-        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
-            .ToString("dd/MM/yyyy à HH:mm");
     }
 }

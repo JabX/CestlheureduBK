@@ -21,13 +21,22 @@ public record SnackProductDisplay(string Name, string? Image, int Amount, double
 
 public record SnackDisplay(string Name, SnackProductDisplay[] Products);
 
-public record BurgerMystereDisplay(string Id, string Name, string? Image, double Price, double Energy, double Chance);
+public record BurgerMystereDisplay(int Id, string Name, string? Image, double Price, double Energy, double Chance, int MyCount, int TotalCount);
 
 public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMystereDisplay> Burgers)
 {
     public double PriceExpectancy => Burgers.Sum(b => b.Chance * b.Price) / Burgers.Sum(b => b.Chance);
 
     public double EnergyExpectancy => Burgers.Sum(b => b.Chance * b.Energy) / Burgers.Sum(b => b.Chance);
+
+    public int MyCount => Burgers.Sum(b => b.MyCount);
+
+    public int TotalCount => Burgers.Sum(b => b.TotalCount);
+}
+
+public record MysteryRollDisplay(int Id, string UserName, string Month, string ProductName, double ProductPrice, double CampaignPrice, string RestaurantName, DateTime RollTime)
+{
+    public double Gain => ProductPrice - CampaignPrice;
 }
 
 public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement, double Lat, double Lng, DateTime? CatalogueUpdate)

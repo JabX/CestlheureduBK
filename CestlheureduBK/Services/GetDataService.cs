@@ -169,21 +169,23 @@ public class GetDataService(BKDbContext context, UserService userService)
     public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(string month, string codeRestaurant)
     {
         return await (
-            from mc in context.MysteryProducts
-            join pr in context.ProductsRestaurants on mc.Product equals pr.Product
-            where mc.Campaign.Month == month
+            from mp in context.MysteryProducts
+            join pr in context.ProductsRestaurants on mp.Product equals pr.Product
+            where mp.Campaign.Month == month
             where pr.Restaurant.Id == codeRestaurant
-            group new { pr, mc } by mc.Campaign into g
+            group new { pr, mc = mp } by mp.Campaign into g
             select new BurgerMystereListDisplay(
                 g.Key.Kind == MysteryCampaignKind.Classic ? "Burger Mystère" : "Veggie Mystère",
                 g.Key.Price,
                 g.Select(c => new BurgerMystereDisplay(
-                    c.pr.Product.Id,
+                    c.mc.Id,
                     c.pr.Product.Name,
                     c.pr.Product.Image,
                     c.pr.Price,
                     c.pr.Product.Energy ?? 0,
-                    c.mc.Chance
+                    c.mc.Chance,
+                    context.MysteryRolls.Count(mr => mr.Product == c.mc && mr.User.Id == userService.Id),
+                    context.MysteryRolls.Count(mr => mr.Product == c.mc)
                 )).ToList()))
         .ToListAsync();
     }

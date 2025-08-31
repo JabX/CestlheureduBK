@@ -11,7 +11,12 @@
 
     @if (favoriteRestaurant != null)
     {
-        <p>Votre restaurant préféré : <strong>@favoriteRestaurant.Name (@favoriteRestaurant.Departement)</strong></p>
+        <p>Mon restaurant préféré : <strong>@favoriteRestaurant.Name (@favoriteRestaurant.Departement)</strong></p>
+    }
+
+    @if (mysteryRolls != null)
+    {
+        <Me MysteryRolls="mysteryRolls" />
     }
 
     <RadzenLink Icon="login" Path="./logout">Se déconnecter</RadzenLink>
@@ -19,6 +24,7 @@
 
 @code {
     RestaurantDisplay? favoriteRestaurant;
+    IList<MysteryRollDisplay>? mysteryRolls;
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,6 +35,7 @@
         else
         {
             favoriteRestaurant = await userService.GetFavoriteRestaurant();
+            mysteryRolls = await userService.GetMysteryRolls();
         }
     }
 }

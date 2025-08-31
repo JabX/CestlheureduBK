@@ -10,9 +10,16 @@
 
 <Header Data=@headerData />
 
-@if (data != null)
+@if (data != null && headerData?.Restaurant != null)
 {
-    <Mystere Data="@data" Month="@Month" Months="@months" />
+    <Mystere 
+        Data="@data"
+        Month="@Month" 
+        Months="@months"
+        IsAuthenticated=@(headerData.IsAuthenticated)
+        IsCurrent="@(Month == DateTime.UtcNow.ToString("yyyy-MM"))"
+        CodeRestaurant="@headerData.Restaurant.Id"
+    />
 } 
 
 @code {

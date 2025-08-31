@@ -81,6 +81,18 @@ app.MapPut("api/favorite/{codeRestaurant}", async (string codeRestaurant, [FromS
     return Results.Ok();
 });
 
+app.MapPut("api/mystery/{mpId}/{codeRestaurant}", async (int mpId, string codeRestaurant, [FromServices] UserService userService) =>
+{
+    await userService.AddMysteryRoll(mpId, codeRestaurant);
+    return Results.Ok();
+});
+
+app.MapDelete("api/mystery/{mrId}", async (int mrId, [FromServices] UserService userService) =>
+{
+    await userService.DeleteMysteryRoll(mrId);
+    return Results.Ok();
+});
+
 app.MapGet("/login", async context =>
 {
     if (context.User.Identity?.IsAuthenticated != true)

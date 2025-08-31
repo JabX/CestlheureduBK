@@ -18,85 +18,124 @@
     </RadzenDropDown>
 </RadzenStack>
 
-@if (Data.Count == 0)
-{
-    <p>Pas de Burger Mystère ce mois-ci 🥺</p>
-}
-else if (MainData.SelectMany(s => s.Burgers).Any())
-{
-    @foreach (var campaign in MainData)
+<div class="@(IsAuthenticated ? "mystere" : "")">
+    @if (Data.Count == 0)
     {
-        <br />
-        <RadzenText Text="@campaign.Name" TextStyle="TextStyle.DisplayH6" />
-        <span style="font-size:0.9em;font-style:italic">Prix : @campaign.Price.ToString("0.00 €") / Espérance : @campaign.PriceExpectancy.ToString("0.00 €") et @campaign.EnergyExpectancy.ToString("0 kcal")</span>
-        <br />
-        <br />
-
-        <RadzenDataGrid Data="@campaign.Burgers">
-            <Columns>
-                <RadzenDataGridColumn Title="Produit">
-                    <Template Context="data">
-                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
-                            <img src="@data.Image" class="image" />
-                            <span>@data.Name</span>
-                        </RadzenStack>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn HeaderCssClass="col-1">
-                    <HeaderTemplate>
-                        <span class="header" @onclick="@(() => ToggleSort("chance"))">
-                            <span>%</span>
-                            @if (sortBy == "chance")
-                            {
-                                <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
-                            }
-                        </span>
-                    </HeaderTemplate>
-                    <Template Context="data">
-                        <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                            <span>@data.Chance.ToString("0 %")</span>
-                        </RadzenStack>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn HeaderCssClass="col-2">
-                    <HeaderTemplate>
-                        <span class="header" @onclick="@(() => ToggleSort("price"))">
-                            <span>Prix</span>
-                            @if (sortBy == "price")
-                            {
-                                <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
-                            }
-                        </span>
-                    </HeaderTemplate>
-                    <Template Context="data">
-                        <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                            <span>@(data.Price.ToString("0.00 €") ?? "-")</span>
-                            <span class="detail">(x @((data.Price / campaign.Price).ToString("0.00") ?? "-"))</span>
-                        </RadzenStack>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn HeaderCssClass="col-4">
-                    <HeaderTemplate>
-                        <span class="header" @onclick="@(() => ToggleSort("energy"))">
-                            <span>Calories</span>
-                            @if (sortBy == "energy")
-                            {
-                                <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
-                            }
-                        </span>
-                    </HeaderTemplate>
-                    <Template Context="data">
-                        <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                            <span>@(data.Energy.ToString("0 kcal") ?? "-")</span>
-                        </RadzenStack>
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
+        <p>Pas de Burger Mystère ce mois-ci 🥺</p>
     }
-}
+    else if (MainData.SelectMany(s => s.Burgers).Any())
+    {
+        @foreach (var campaign in MainData)
+        {
+            <br />
+            <RadzenText Text="@campaign.Name" TextStyle="TextStyle.DisplayH6" />
+            <span style="font-size:0.9em;font-style:italic">Prix : @campaign.Price.ToString("0.00 €") / Espérance : @campaign.PriceExpectancy.ToString("0.00 €") et @campaign.EnergyExpectancy.ToString("0 kcal")</span>
+            <br />
+            <br />
+
+            <RadzenDataGrid Data="@campaign.Burgers">
+                <Columns>
+                    <RadzenDataGridColumn Title="Produit">
+                        <Template Context="data">
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                                <img src="@data.Image" class="image" />
+                                <span>@data.Name</span>
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn HeaderCssClass="col-3">
+                        <HeaderTemplate>
+                            <span class="header" @onclick="@(() => ToggleSort("chance"))">
+                                <span>%</span>
+                                @if (sortBy == "chance")
+                                {
+                                    <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                }
+                            </span>
+                        </HeaderTemplate>
+                        <Template Context="data">
+                            <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                                <span>@data.Chance.ToString("0 %")</span>
+                                @if (campaign.TotalCount > 0)
+                                {
+                                    <span class="detail">réel : @((data.TotalCount / (decimal)campaign.TotalCount).ToString("0 %"))</span>
+                                }
+                                @if (IsAuthenticated && campaign.MyCount > 0)
+                                {
+                                    <span class="detail">moi : @((data.MyCount / (decimal)campaign.MyCount).ToString("0 %"))</span>
+                                }
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn HeaderCssClass="col-2">
+                        <HeaderTemplate>
+                            <span class="header" @onclick="@(() => ToggleSort("price"))">
+                                <span>Prix</span>
+                                @if (sortBy == "price")
+                                {
+                                    <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                }
+                            </span>
+                        </HeaderTemplate>
+                        <Template Context="data">
+                            <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                                <span>@(data.Price.ToString("0.00 €") ?? "-")</span>
+                                <span class="detail">(x @((data.Price / campaign.Price).ToString("0.00")))</span>
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn HeaderCssClass="col-4">
+                        <HeaderTemplate>
+                            <span class="header" @onclick="@(() => ToggleSort("energy"))">
+                                <span>kcal</span>
+                                @if (sortBy == "energy")
+                                {
+                                    <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                }
+                            </span>
+                        </HeaderTemplate>
+                        <Template Context="data">
+                            <RadzenStack AlignItems="AlignItems.Start" Gap="0">
+                                <span>@(data.Energy.ToString("0 kcal") ?? "-")</span>
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    @if (IsAuthenticated)
+                    {
+                        <RadzenDataGridColumn HeaderCssClass="col-1" CssClass="@(IsCurrent ? "mystere-count" : "")">
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleSort("count"))">
+                                    <span>Loot</span>
+                                    @if (sortBy == "count")
+                                    {
+                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                <span>@data.MyCount</span>
+                                @if (IsCurrent)
+                                {
+                                    <RadzenButton Disabled="loading" Icon="add_reaction" Click="@(() => AddMysteryRoll(data.Id))" />
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
+                    }
+                </Columns>
+            </RadzenDataGrid>
+        }
+    }
+</div>
 
 @code {
+    readonly HttpClient? _client;
+    private bool loading;
+
+    public Mystere(HttpClient? client = null)
+    {
+        _client = client;
+    }
+
     [Parameter]
     public required IList<BurgerMystereListDisplay> Data { get; set; }
 
@@ -105,6 +144,15 @@ else if (MainData.SelectMany(s => s.Burgers).Any())
 
     [Parameter]
     public required IList<string> Months { get; set; }
+
+    [Parameter]
+    public bool IsAuthenticated { get; set; }
+
+    [Parameter]
+    public bool IsCurrent { get; set; }
+
+    [Parameter]
+    public required string CodeRestaurant { get; set; }
 
     private string sortBy = "chance";
     private bool asc = false;
@@ -125,6 +173,8 @@ else if (MainData.SelectMany(s => s.Burgers).Any())
                     ("energy", true) => d.Burgers.OrderBy(off => off.Energy).ThenBy(off => off.Price),
                     ("price", false) => d.Burgers.OrderByDescending(off => off.Price).ThenBy(off => off.Energy),
                     ("price", true) => d.Burgers.OrderBy(off => off.Price).ThenBy(off => off.Energy),
+                    ("count", false) => d.Burgers.OrderByDescending(off => off.MyCount).ThenByDescending(off => off.Chance),
+                    ("count", true) => d.Burgers.OrderBy(off => off.MyCount).ThenByDescending(off => off.Chance),
                     _ => throw new InvalidOperationException()
                 }).ToArray()
             }).ToArray();
@@ -141,5 +191,16 @@ else if (MainData.SelectMany(s => s.Burgers).Any())
     {
         var month = (string)change;
         navigationManager.NavigateTo(navigationManager.Uri.Replace(Month, month));
+    }
+
+    private async Task AddMysteryRoll(int mpId)
+    {
+        if (_client != null)
+        {
+            loading = true;
+            var response = await _client.PutAsync($"api/mystery/{mpId}/{CodeRestaurant}", null);
+            loading = false;
+            navigationManager.Refresh();
+        }
     }
 }

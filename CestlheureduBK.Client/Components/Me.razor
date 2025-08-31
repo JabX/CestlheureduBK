@@ -1,0 +1,65 @@
+﻿@rendermode InteractiveWebAssembly
+
+@inject NavigationManager navigationManager;
+
+<h2>Mes burgers mystères</h2>
+
+@if (MysteryRolls.Count > 0)
+{
+    <RadzenTable>
+        <RadzenTableHeader>
+            <RadzenTableHeaderRow>
+                <RadzenTableHeaderCell>Quand ?</RadzenTableHeaderCell>
+                <RadzenTableHeaderCell>Quoi ?</RadzenTableHeaderCell>
+                <RadzenTableHeaderCell>Où ?</RadzenTableHeaderCell>
+                <RadzenTableHeaderCell>Prix</RadzenTableHeaderCell>
+                <RadzenTableHeaderCell Style="width:60px" />
+            </RadzenTableHeaderRow>
+        </RadzenTableHeader>
+        <RadzenTableBody>
+            @foreach (var roll in MysteryRolls)
+            {
+                <RadzenTableRow>
+                    <RadzenTableCell>Le @roll.RollTime.ToLocalDisplay()</RadzenTableCell>
+                    <RadzenTableCell>@roll.ProductName</RadzenTableCell>
+                    <RadzenTableCell>@roll.RestaurantName</RadzenTableCell>
+                    <RadzenTableCell>
+                        <span>@roll.ProductPrice.ToString("0.00 €")</span>
+                        <span class="detail">(@roll.Gain.ToString("0.00 €") gagné !)</span>
+                    </RadzenTableCell>
+                    <RadzenTableCell><RadzenButton Icon="delete" Disabled="loading" Click="@(() => DeleteMysteryRoll(roll.Id))" /></RadzenTableCell>
+                </RadzenTableRow>
+            }
+        </RadzenTableBody>
+    </RadzenTable>
+    <br />
+}
+else
+{
+    <p>J'ai jamais mangé de burger mystère... 🥺</p>
+}
+
+
+@code {
+    readonly HttpClient? _client;
+    private bool loading;
+
+    public Me(HttpClient? client = null)
+    {
+        _client = client;
+    }
+
+    [Parameter]
+    public required IList<MysteryRollDisplay> MysteryRolls { get; set; }
+
+    private async Task DeleteMysteryRoll(int mrId)
+    {
+        if (_client != null)
+        {
+            loading = true;
+            var response = await _client.DeleteAsync($"api/mystery/{mrId}");
+            loading = false;
+            navigationManager.Refresh();
+        }
+    }
+}

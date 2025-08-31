@@ -7,7 +7,6 @@
 @using GeoCoordinate.NetStandard2;
 @using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
-@inject BKDbContext context;
 @inject GetDataService getDataService;
 @inject UpdateDataService updateDataService;
 
@@ -37,14 +36,14 @@
             {
                 <RadzenTableRow>
                     <RadzenTableCell>@restaurant.FullName</RadzenTableCell>
-                    <RadzenTableCell>@ToLocalTime(restaurant.CatalogueUpdate)</RadzenTableCell>
+                    <RadzenTableCell>@restaurant.CatalogueUpdate.ToLocalDisplay()</RadzenTableCell>
                     <RadzenTableCell><RadzenButton Icon="refresh" Disabled="loading" Click="@(() => ReloadCatalogue(restaurant.Id))" /></RadzenTableCell>
                 </RadzenTableRow>
             }
         </RadzenTableBody>
     </RadzenTable>
 
-    <RadzenButton Click="() => CallService(Service.ResetDb)" Disabled="loading" Text="Tout réinitialiser" />
+    <RadzenButton Click="() => CallService(Service.ResetDb)" Disabled Text="Tout réinitialiser" />
 
     @if (loading)
     {
@@ -110,16 +109,5 @@
         Offers,
         Restaurants,
         ResetDb
-    }
-
-    private string ToLocalTime(DateTime? date)
-    {
-        if (date == null)
-        {
-            return string.Empty;
-        }
-
-        return TimeZoneInfo.ConvertTimeFromUtc(date.Value, TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris"))
-            .ToString("dd/MM/yyyy à HH:mm");
     }
 }

@@ -14,6 +14,52 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
 
     public string Email => httpContextAccessor.HttpContext?.User.Identity?.Name ?? string.Empty;
 
+    public async Task AddMysteryRoll(int mpId, string codeRestaurant)
+    {
+        var user = await GetUser();
+        if (user == null)
+        {
+            return;
+        }
+
+        var mp = await context.MysteryProducts.AsTracking().SingleAsync(p => p.Id == mpId);
+        var restaurant = await context.Restaurants.AsTracking().SingleAsync(p => p.Id == codeRestaurant);
+
+        var price = await (
+            from mpr in context.MysteryProducts
+            join pr in context.ProductsRestaurants on mpr.Product equals pr.Product
+            where pr.Restaurant.Id == codeRestaurant
+            where mpr.Id == mpId
+            select pr.Price)
+        .SingleAsync();
+
+        context.MysteryRolls.Add(new()
+        {
+            Price = price,
+            Product = mp,
+            Restaurant = restaurant,
+            RollTime = DateTime.UtcNow,
+            User = user
+        });
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteMysteryRoll(int mrId)
+    {
+        if (!IsAuthenticated)
+        {
+            return;
+        }
+
+        var mp = await context.MysteryRolls.AsTracking().SingleOrDefaultAsync(p => p.Id == mrId && p.User.Id == Id);
+        if (mp != null)
+        {
+            context.Remove(mp);
+            await context.SaveChangesAsync();
+        }
+    }
+
     public async Task<RestaurantDisplay?> GetFavoriteRestaurant()
     {
         if (!IsAuthenticated)
@@ -21,7 +67,7 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
             return null;
         }
 
-        var r = (await GetUser()).FavoriteRestaurant;
+        var r = (await GetUser())?.FavoriteRestaurant;
         if (r == null)
         {
             return null;
@@ -30,8 +76,50 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
         return r.ToDisplay();
     }
 
-    private async Task<UserDb> GetUser()
+    public async Task<IList<MysteryRollDisplay>> GetMysteryRolls()
     {
+        if (IsAuthenticated)
+        {
+            return await context.MysteryRolls
+                .Where(mr => mr.User.Id == Id)
+                .OrderByDescending(m => m.RollTime)
+                .Select(mr => new MysteryRollDisplay(
+                    mr.Id,
+                    mr.User.Name,
+                    mr.Product.Campaign.Month,
+                    mr.Product.Product.Name,
+                    mr.Price,
+                    mr.Product.Campaign.Price,
+                    $"{mr.Restaurant.Name} ({mr.Restaurant.Departement})",
+                    mr.RollTime
+                ))
+                .ToListAsync();
+        }
+
+        return [];
+    }
+
+    public async Task SetFavoriteRestaurant(string id)
+    {
+        var restaurant = await context.Restaurants.AsTracking().SingleOrDefaultAsync(r => r.Id == id);
+        if (restaurant != null)
+        {
+            var user = await GetUser();
+            if (user != null)
+            {
+                user.FavoriteRestaurant = restaurant;
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+
+    private async Task<UserDb?> GetUser()
+    {
+        if (!IsAuthenticated)
+        {
+            return null;
+        }
+
         var user = await context.Users.AsTracking().SingleOrDefaultAsync(r => r.Id == Id);
         if (user != null)
         {
@@ -42,16 +130,5 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
         context.Users.Add(user);
         await context.SaveChangesAsync();
         return user;
-    }
-
-    public async Task SetFavoriteRestaurant(string id)
-    {
-        var restaurant = await context.Restaurants.AsTracking().SingleOrDefaultAsync(r => r.Id == id);
-        if (restaurant != null)
-        {
-            var user = await GetUser();
-            user.FavoriteRestaurant = restaurant;
-            await context.SaveChangesAsync();
-        }
     }
 }
