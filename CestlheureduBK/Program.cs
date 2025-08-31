@@ -29,6 +29,13 @@ builder.Services
     .AddHttpContextAccessor()
     .AddMicrosoftIdentityWebAppAuthentication(builder.Configuration);
 
+builder.Services.Configure<CookieAuthenticationOptions>(
+    CookieAuthenticationDefaults.AuthenticationScheme,
+    options =>
+    {
+        options.Cookie.MaxAge = TimeSpan.MaxValue;
+    });
+
 Directory.CreateDirectory("./data");
 builder.Services.AddDbContext<BKDbContext>(e => e
     .UseSqlite("Data Source=./data/bk.db")
