@@ -13,9 +13,8 @@ public class GetDataService(BKDbContext context, UserService userService)
 
     public async Task<CatalogueDisplay[]> GetCatalogue(string codeRestaurant)
     {
-        return
-        [
-            .. await context
+        var catalogue = (
+            await context
                 .ProductsRestaurants.AsSingleQuery()
                 .Where(prd =>
                     prd.Restaurant.Id == codeRestaurant
@@ -24,7 +23,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                     && prd.Price > 0
                 )
                 .Select(prd => new CatalogueDisplay(
-                    "Produit",
+                    ItemType.Product,
                     prd.ProductId,
                     prd.Product.Name,
                     prd.Product.Image,
@@ -35,35 +34,57 @@ public class GetDataService(BKDbContext context, UserService userService)
                         .ThenBy(c => c.Name)
                         .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
                 ))
-                .ToArrayAsync(),
-            .. await context
-                .MenusRestaurants.AsSingleQuery()
-                .Where(men =>
-                    men.Restaurant.Id == codeRestaurant && men.Active && men.Menu.AvailableInCatalogue && men.Price > 0
-                )
-                .Select(men => new CatalogueDisplay(
-                    "Menu",
-                    men.MenuId,
-                    men.Menu.Name,
-                    men.Menu.Image,
-                    men.Price,
-                    men.Menu.Steps.Sum(s =>
-                        s.DefaultProduct != null && s.DefaultProduct.Energy != null ? s.DefaultProduct.Energy.Value : 0
-                    ),
-                    men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                    men.Menu.Categories.OrderBy(c => c.SubCategory)
-                        .ThenBy(c => c.Name)
-                        .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
-                ))
-                .ToArrayAsync(),
-        ];
+                .ToListAsync()
+        )
+            .Concat(
+                await context
+                    .MenusRestaurants.AsSingleQuery()
+                    .Where(men =>
+                        men.Restaurant.Id == codeRestaurant
+                        && men.Active
+                        && men.Menu.AvailableInCatalogue
+                        && men.Price > 0
+                    )
+                    .Select(men => new CatalogueDisplay(
+                        men.Menu.Steps.All(s => s.Type == 1 || s.DefaultProduct.Id == "1287") // Parce que les Baby Burgers et les Tenders sans menus sont des menus...
+                            ? ItemType.ProductAsMenu
+                            : ItemType.Menu,
+                        men.MenuId,
+                        men.Menu.Name,
+                        men.Menu.Image,
+                        men.Price,
+                        men.Menu.Steps.Sum(s =>
+                            s.DefaultProduct != null && s.DefaultProduct.Energy != null
+                                ? s.DefaultProduct.Energy.Value
+                                : 0
+                        ),
+                        men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                        men.Menu.Categories.OrderBy(c => c.SubCategory)
+                            .ThenBy(c => c.Name)
+                            .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
+                    ))
+                    .ToListAsync()
+            )
+            .ToArray();
+
+        foreach (var item in catalogue)
+        {
+            if (item.Type == ItemType.ProductAsMenu)
+            {
+                catalogue[Array.IndexOf(catalogue, item)] = item with
+                {
+                    Categories = item.Categories.Where(c => c.Name != "Menus"),
+                };
+            }
+        }
+
+        return catalogue;
     }
 
     public async Task<OfferDisplay[]> GetOffers(string codeRestaurant)
     {
-        return
-        [
-            .. await context
+        var offers = (
+            await context
                 .ProductsRestaurants.AsSingleQuery()
                 .Where(p =>
                     p.Restaurant.Id == codeRestaurant
@@ -76,7 +97,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                     )
                 )
                 .Select(prd => new OfferDisplay(
-                    "Produit",
+                    ItemType.Product,
                     prd.Product.Name,
                     prd.Product.Image,
                     context.Offers.Single(o => o.Promotion.Products.Any(pp => pp.Id == prd.Product.Id)).Points,
@@ -87,33 +108,51 @@ public class GetDataService(BKDbContext context, UserService userService)
                         .ThenBy(c => c.Name)
                         .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
                 ))
-                .ToArrayAsync(),
-            .. await context
-                .MenusRestaurants.AsSingleQuery()
-                .Where(p =>
-                    p.Restaurant.Id == codeRestaurant
-                    && p.Active
-                    && context.Offers.Any(o =>
-                        o.Promotion.Menus.Any(pp => p.Menu.Id == pp.Id)
-                        && context.PromotionsRestaurants.Any(pr =>
-                            pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active
+                .ToListAsync()
+        )
+            .Concat(
+                await context
+                    .MenusRestaurants.AsSingleQuery()
+                    .Where(p =>
+                        p.Restaurant.Id == codeRestaurant
+                        && p.Active
+                        && context.Offers.Any(o =>
+                            o.Promotion.Menus.Any(pp => p.Menu.Id == pp.Id)
+                            && context.PromotionsRestaurants.Any(pr =>
+                                pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active
+                            )
                         )
                     )
-                )
-                .Select(men => new OfferDisplay(
-                    "Menu",
-                    men.Menu.Name,
-                    men.Menu.Image,
-                    context.Offers.Single(o => o.Promotion.Menus.Any(pp => pp.Id == men.Menu.Id)).Points,
-                    men.Price,
-                    men.Menu.Steps.Sum(s => s.DefaultProduct!.Energy ?? 0),
-                    men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                    men.Menu.Categories.OrderBy(c => c.SubCategory)
-                        .ThenBy(c => c.Name)
-                        .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
-                ))
-                .ToArrayAsync(),
-        ];
+                    .Select(men => new OfferDisplay(
+                        men.Menu.Steps.All(s => s.Type == 1 || s.DefaultProduct.Id == "1287") // Parce que les Baby Burgers et les Tenders sans menus sont des menus...
+                            ? ItemType.ProductAsMenu
+                            : ItemType.Menu,
+                        men.Menu.Name,
+                        men.Menu.Image,
+                        context.Offers.Single(o => o.Promotion.Menus.Any(pp => pp.Id == men.Menu.Id)).Points,
+                        men.Price,
+                        men.Menu.Steps.Sum(s => s.DefaultProduct!.Energy ?? 0),
+                        men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
+                        men.Menu.Categories.OrderBy(c => c.SubCategory)
+                            .ThenBy(c => c.Name)
+                            .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
+                    ))
+                    .ToListAsync()
+            )
+            .ToArray();
+
+        foreach (var item in offers)
+        {
+            if (item.Type == ItemType.ProductAsMenu)
+            {
+                offers[Array.IndexOf(offers, item)] = item with
+                {
+                    Categories = item.Categories.Where(c => c.Name != "Menus"),
+                };
+            }
+        }
+
+        return offers;
     }
 
     public async Task<RestaurantDisplay?> GetRestaurant(string? codeRestaurant = null)

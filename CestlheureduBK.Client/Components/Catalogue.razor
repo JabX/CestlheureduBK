@@ -55,7 +55,7 @@
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
                     <img class="image" src="@data.Image" />
                     <RadzenStack Gap="0">
-                        <span>@(data.Type == "Menu" ? "Menu " : "")@data.Name</span>
+                        <span>@(data.Type == ItemType.Menu ? "Menu " : "")@data.Name</span>
                         <RadzenStack Orientation="Orientation.Horizontal" Style="font-size:0.8em;column-gap:6px" Wrap="FlexWrap.Wrap">
                             @foreach (var categorie in data.Categories ?? [])
                             {
@@ -78,7 +78,7 @@
             </HeaderTemplate>
             <Template Context="data">
                  <RadzenStack AlignItems="AlignItems.Start" Gap="2">                    
-                    @if (data.Type == "Produit")
+                    @if (data.Type == ItemType.Product)
                     {
                         <a data-loading="@loading" class="energy" @onclick="() => ReloadEnergy(data.Id)" title="Clique pour vérifier que la valeur est correcte">@(data.Energy.ToString("0 kcal"))</a>
                     } 
@@ -86,7 +86,7 @@
                     {
                         <span>@(data.Energy.ToString("0 kcal"))</span>
                     }
-                    @if (data.Snacks.Any() && data.Type == "Produit")
+                    @if (data.Snacks.Any() && data.Type == ItemType.Product)
                     {
                         <span class="detail">(@((data.Energy / data.Snacks.Sum(s => s.Amount)).ToString("0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
@@ -106,7 +106,7 @@
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
                     <span>@data.Price.ToString("0.00 €")</span>
-                    @if (data.Snacks.Any() && data.Type == "Product")
+                    @if (data.Snacks.Any() && data.Type == ItemType.Product)
                     {
                         <span class="detail">(@(double.Round((data.Price / data.Snacks.Sum(s => s.Amount)), 2)) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
@@ -222,8 +222,8 @@
             var updates =  await response.Content.ReadFromJsonAsync<IEnumerable<CatalogueEnergyUpdate>>() ?? [];            
             foreach (var update in updates)
             {
-                var matching = Data.SingleOrDefault(d => d.Type == update.Type && d.Id == update.Id);
-                if (matching != null) 
+                var matching = Data.SingleOrDefault(d => (d.Type == update.Type || d.Type == ItemType.ProductAsMenu && update.Type == ItemType.Menu) && d.Id == update.Id);
+                if (matching != null)
                 {
                     Data[Array.IndexOf(Data, matching)] = matching with { Energy = update.Energy };
                 }

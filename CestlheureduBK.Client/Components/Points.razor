@@ -79,7 +79,7 @@
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
                     <img class="image" src="@data.Image" />
                     <RadzenStack Gap="0">
-                        <span>@(data.Type == "Menu" ? "Menu " : "")@data.Name</span>
+                        <span>@(data.Type == ItemType.Menu ? "Menu " : "")@data.Name</span>
                         <RadzenStack Orientation="Orientation.Horizontal" Style="font-size:0.8em;column-gap:6px" Wrap="FlexWrap.Wrap">
                             @foreach (var categorie in data.Categories ?? [])
                             {

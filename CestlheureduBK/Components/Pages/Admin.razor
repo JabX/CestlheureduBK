@@ -23,6 +23,13 @@
     <RadzenButton Click="() => CallService(Service.Offers)" Disabled="loading" Text="Recharger les offres" />
     <RadzenButton Click="() => CallService(Service.Restaurants)" Disabled="loading" Text="Recharger les restaurants" />
 
+    @if (loading)
+    {
+        <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
+    }
+
+    <RadzenText class="@ClassName" Text="@message" />
+
     <RadzenTable>
         <RadzenTableHeader>
             <RadzenTableHeaderRow>
@@ -44,16 +51,7 @@
     </RadzenTable>
 
     <RadzenButton Click="() => CallService(Service.ResetDb)" Disabled Text="Tout réinitialiser" />
-
-    @if (loading)
-    {
-        <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
-    }
-
-    <RadzenText class="@ClassName" Text="@message" />
 </RadzenStack>
-
-
 
 @code {
     bool loading;

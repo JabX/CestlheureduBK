@@ -4,8 +4,15 @@ public record CategorieDisplay(string Id, string Name, bool SubCategory);
 
 public record SnackAmountDisplay(string Name, int Amount);
 
+public enum ItemType
+{
+    Product,
+    Menu,
+    ProductAsMenu,
+}
+
 public record OfferDisplay(
-    string Type,
+    ItemType Type,
     string Name,
     string? Image,
     int Points,
@@ -20,7 +27,7 @@ public record OfferDisplay(
 }
 
 public record CatalogueDisplay(
-    string Type,
+    ItemType Type,
     string Id,
     string Name,
     string? Image,
@@ -33,7 +40,7 @@ public record CatalogueDisplay(
     public double EnergyValue => Energy / Price;
 }
 
-public record CatalogueEnergyUpdate(string Type, string Id, double Energy);
+public record CatalogueEnergyUpdate(ItemType Type, string Id, double Energy);
 
 public record SnackProductDisplay(string Name, string? Image, int Amount, double Price, double Ratio)
 {

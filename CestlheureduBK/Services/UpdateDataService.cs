@@ -117,7 +117,17 @@ public class UpdateDataService(BKDbContext context)
                                         : [],
                                 DefaultProduct = products
                                     .Select(p => p.Product)
-                                    .SingleOrDefault(prd => prd.Id == stp.DefaultId),
+                                    .SingleOrDefault(prd =>
+                                        prd.Id
+                                        == stp.DefaultId switch
+                                        {
+                                            // Le Baby Burgers x9 pointe vers les mauvais Baby Burgers...
+                                            "1267" => "1264",
+                                            "1268" => "1265",
+                                            "1269" => "1266",
+                                            var id => id,
+                                        }
+                                    ),
                                 Type = stp.StepType,
                             })
                             .ToList(),
@@ -381,13 +391,13 @@ public class UpdateDataService(BKDbContext context)
             await context.SaveChangesAsync();
             return
             [
-                new("Produit", productId, energy.Value),
+                new(ItemType.Product, productId, energy.Value),
                 .. (
                     await context
                         .Menus.Where(men => men.Steps.Any(s => s.DefaultProduct!.Id == productId))
                         .Select(men => new { men.Id, Energy = men.Steps.Sum(m => m.DefaultProduct!.Energy) })
                         .ToListAsync()
-                ).Select(men => new CatalogueEnergyUpdate("Menu", men.Id, men.Energy ?? 0)),
+                ).Select(men => new CatalogueEnergyUpdate(ItemType.Menu, men.Id, men.Energy ?? 0)),
             ];
         }
 
@@ -553,7 +563,7 @@ public class UpdateDataService(BKDbContext context)
         return client;
     }
 
-    private async Task<double?> GetEnergy(HttpClient client, string routeId)
+    private static async Task<double?> GetEnergy(HttpClient client, string routeId)
     {
         var productResult = await client.GetAsync(
             $"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{routeId}"
