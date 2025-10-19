@@ -8,7 +8,16 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
 {
     public bool IsAuthenticated => httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 
-    public Guid Id => Guid.TryParse(httpContextAccessor.HttpContext?.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value.Split(" ").First(), out var id) ? id : default;
+    public Guid Id =>
+        Guid.TryParse(
+            httpContextAccessor
+                .HttpContext?.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")
+                ?.Value.Split(" ")
+                .First(),
+            out var id
+        )
+            ? id
+            : default;
 
     public string Name => httpContextAccessor.HttpContext?.User.FindFirst("name")?.Value.Split(" ").First() ?? "Michel";
 
@@ -30,17 +39,19 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
             join pr in context.ProductsRestaurants on mpr.Product equals pr.Product
             where pr.Restaurant.Id == codeRestaurant
             where mpr.Id == mpId
-            select pr.Price)
-        .SingleAsync();
+            select pr.Price
+        ).SingleAsync();
 
-        context.MysteryRolls.Add(new()
-        {
-            Price = price,
-            Product = mp,
-            Restaurant = restaurant,
-            RollTime = DateTime.UtcNow,
-            User = user
-        });
+        context.MysteryRolls.Add(
+            new()
+            {
+                Price = price,
+                Product = mp,
+                Restaurant = restaurant,
+                RollTime = DateTime.UtcNow,
+                User = user,
+            }
+        );
 
         await context.SaveChangesAsync();
     }
@@ -80,8 +91,8 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
     {
         if (IsAuthenticated)
         {
-            return await context.MysteryRolls
-                .Where(mr => mr.User.Id == Id)
+            return await context
+                .MysteryRolls.Where(mr => mr.User.Id == Id)
                 .OrderByDescending(m => m.RollTime)
                 .Select(mr => new MysteryRollDisplay(
                     mr.Id,
@@ -126,7 +137,12 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
             return user;
         }
 
-        user = new UserDb { Id = Id, Email = Email, Name = Name };
+        user = new UserDb
+        {
+            Id = Id,
+            Email = Email,
+            Name = Name,
+        };
         context.Users.Add(user);
         await context.SaveChangesAsync();
         return user;

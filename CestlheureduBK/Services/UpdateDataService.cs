@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using CestlheureduBK.Common;
 using CestlheureduBK.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,70 +23,118 @@ public class UpdateDataService(BKDbContext context)
 
         try
         {
-            var result = await client.GetAsync($"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json");
+            var result = await client.GetAsync(
+                $"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json"
+            );
             result.EnsureSuccessStatusCode();
             var catalogue = (await result.Content.ReadFromJsonAsync<Catalogue>())!;
 
             var restaurant = await context.Restaurants.AsTracking().SingleAsync(r => r.Id == codeRestaurant);
 
-            var categories = catalogue.Categories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image })
-                .Concat(catalogue.SubCategories.Select(cat => new CategorieDb { Id = cat.Id, Name = cat.Name, Image = cat.Image, SubCategory = true }))
+            var categories = catalogue
+                .Categories.Select(cat => new CategorieDb
+                {
+                    Id = cat.Id,
+                    Name = cat.Name,
+                    Image = cat.Image,
+                })
+                .Concat(
+                    catalogue.SubCategories.Select(cat => new CategorieDb
+                    {
+                        Id = cat.Id,
+                        Name = cat.Name,
+                        Image = cat.Image,
+                        SubCategory = true,
+                    })
+                )
                 .ToList();
 
             var snackRegex = new Regex(@"(.+)\((\d+)\)");
             var kingboxRegex = new Regex(@"kingbox (\d+) ([a-z ]+)([ +&]*(\d+) ([a-z ]+))?", RegexOptions.IgnoreCase);
 
-            var products = catalogue.Products.Select(prd => new ProductRestaurantDb
-            {
-                ProductId = prd.Id,
-                Product = new()
+            var products = catalogue
+                .Products.Select(prd => new ProductRestaurantDb
                 {
-                    Id = prd.Id,
-                    Name = prd.Name
-                        .Replace("®", "")
-                        .Replace("Lousiane", "Louisiane")
-                        .Replace("(6) King Nuggets", "King Nuggets (6)"),
-                    Image = prd.Image,
-                    Categories = prd.Categories?.Select(c => c.Id).Concat(prd.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? []
-                },
-                Active = prd.Active,
-                Price = prd.Price,
-                RestaurantId = restaurant.Id,
-                Restaurant = restaurant
-            }).ToList();
-            var menus = catalogue.Menus.Select(men => new MenuRestaurantDb
-            {
-                MenuId = men.Id,
-                Menu = new()
-                {
-                    Id = men.Id,
-                    Name = men.Name
-                        .Replace("®", "")
-                        .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
-                        .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
-                        .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
-                        .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
-                        .Trim()
-                        .Trim('-')
-                        .Trim(),
-                    Image = men.Image,
-                    Steps = men.Steps.Select(stp => new StepDb
+                    ProductId = prd.Id,
+                    Product = new()
                     {
-                        Products = products.Select(p => p.Product).Where(prd => stp.ProductIds.Contains(prd.Id)).ToList(),
-                        ProductsL = stp.ProductLIds != null ? products.Select(p => p.Product).Where(prd => stp.ProductLIds.Contains(prd.Id)).ToList() : [],
-                        ProductsXL = stp.ProductXLIds != null ? products.Select(p => p.Product).Where(prd => stp.ProductXLIds.Contains(prd.Id)).ToList() : [],
-                        DefaultProduct = products.Select(p => p.Product).SingleOrDefault(prd => prd.Id == stp.DefaultId),
-                        Type = stp.StepType
-                    }).ToList(),
-                    Categories = men.Categories?.Select(c => c.Id).Concat(men.SubCategories ?? []).Select(c => categories.Single(cat => c == cat.Id)).ToList() ?? [],
-                },
-                Active = men.Active,
-                Price = men.Price,
-                PriceL = men.PriceL,
-                PriceXL = men.PriceXL,
-                RestaurantId = restaurant.Id,
-                Restaurant = restaurant
-            }).ToList();
+                        Id = prd.Id,
+                        RouteId = prd.RouteId,
+                        Name = prd
+                            .Name.Replace("®", "")
+                            .Replace("Lousiane", "Louisiane")
+                            .Replace("(6) King Nuggets", "King Nuggets (6)"),
+                        Image = prd.Image,
+                        Categories =
+                            prd.Categories?.Select(c => c.Id)
+                                .Concat(prd.SubCategories ?? [])
+                                .Select(c => categories.Single(cat => c == cat.Id))
+                                .ToList() ?? [],
+                    },
+                    Active = prd.Active,
+                    Price = prd.Price,
+                    RestaurantId = restaurant.Id,
+                    Restaurant = restaurant,
+                })
+                .ToList();
+            var menus = catalogue
+                .Menus.Select(men => new MenuRestaurantDb
+                {
+                    MenuId = men.Id,
+                    Menu = new()
+                    {
+                        Id = men.Id,
+                        Name = men
+                            .Name.Replace("®", "")
+                            .Replace("Steakhouse Louisiane", "Louisiane Steakhouse")
+                            .Replace("[kingdom]", "", StringComparison.InvariantCultureIgnoreCase)
+                            .Replace("[kd blason]", "", StringComparison.InvariantCultureIgnoreCase)
+                            .Replace("menu", "", StringComparison.InvariantCultureIgnoreCase)
+                            .Trim()
+                            .Trim('-')
+                            .Trim(),
+                        Image = men.Image,
+                        Steps = men
+                            .Steps.Select(stp => new StepDb
+                            {
+                                Products = products
+                                    .Select(p => p.Product)
+                                    .Where(prd => stp.ProductIds.Contains(prd.Id))
+                                    .ToList(),
+                                ProductsL =
+                                    stp.ProductLIds != null
+                                        ? products
+                                            .Select(p => p.Product)
+                                            .Where(prd => stp.ProductLIds.Contains(prd.Id))
+                                            .ToList()
+                                        : [],
+                                ProductsXL =
+                                    stp.ProductXLIds != null
+                                        ? products
+                                            .Select(p => p.Product)
+                                            .Where(prd => stp.ProductXLIds.Contains(prd.Id))
+                                            .ToList()
+                                        : [],
+                                DefaultProduct = products
+                                    .Select(p => p.Product)
+                                    .SingleOrDefault(prd => prd.Id == stp.DefaultId),
+                                Type = stp.StepType,
+                            })
+                            .ToList(),
+                        Categories =
+                            men.Categories?.Select(c => c.Id)
+                                .Concat(men.SubCategories ?? [])
+                                .Select(c => categories.Single(cat => c == cat.Id))
+                                .ToList() ?? [],
+                    },
+                    Active = men.Active,
+                    Price = men.Price,
+                    PriceL = men.PriceL,
+                    PriceXL = men.PriceXL,
+                    RestaurantId = restaurant.Id,
+                    Restaurant = restaurant,
+                })
+                .ToList();
 
             var snacks = products
                 .Select(p => p.Product)
@@ -96,7 +145,12 @@ public class UpdateDataService(BKDbContext context)
 
             foreach (var product in products.Select(p => p.Product).Where(prd => prd.Image == null))
             {
-                product.Image = products.FirstOrDefault(prd => prd.Product.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase) && prd.Product.Image != null)?.Product.Image;
+                product.Image = products
+                    .FirstOrDefault(prd =>
+                        prd.Product.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)
+                        && prd.Product.Image != null
+                    )
+                    ?.Product.Image;
             }
 
             var productsDb = await context.Products.ToDictionaryAsync(p => p.Id);
@@ -109,48 +163,56 @@ public class UpdateDataService(BKDbContext context)
                 }
                 else
                 {
-                    var productResult = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{catalogue.Products.Single(prd => prd.Id == product.Id).RouteId}");
-                    if (productResult.IsSuccessStatusCode)
-                    {
-                        var productDetail = (await productResult.Content.ReadFromJsonAsync<ProductResult>())!;
-                        var energy = productDetail.Product.Nutrition.SingleOrDefault(n => n.Item == "product.nutritional.energy")?.Portion;
-                        if (!string.IsNullOrEmpty(energy))
-                        {
-                            product.Energy = double.Parse(energy.Replace(",", "."), CultureInfo.InvariantCulture);
-                        }
-                    }
+                    product.Energy = await GetEnergy(
+                        client,
+                        catalogue.Products.Single(prd => prd.Id == product.Id).RouteId
+                    );
                 }
 
                 product.AvailableInCatalogue = product.Categories.Any();
-                product.Categories = product.Categories.Concat(products.Where(prd => prd.Product.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(prd => prd.Product.Categories ?? [])).ToList();
+                product.Categories = product
+                    .Categories.Concat(
+                        products
+                            .Where(prd =>
+                                prd.Product.Name.StartsWith(product.Name, StringComparison.InvariantCultureIgnoreCase)
+                            )
+                            .SelectMany(prd => prd.Product.Categories ?? [])
+                    )
+                    .ToList();
 
                 var match = snackRegex.Match(product.Name);
                 if (match.Success)
                 {
-                    product.Snacks.Add(new()
-                    {
-                        Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
-                        Amount = int.Parse(match.Groups[2].Value)
-                    });
+                    product.Snacks.Add(
+                        new()
+                        {
+                            Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
+                            Amount = int.Parse(match.Groups[2].Value),
+                        }
+                    );
                 }
                 else
                 {
                     var match2 = kingboxRegex.Match(product.Name);
                     if (match2.Success)
                     {
-                        product.Snacks.Add(new()
-                        {
-                            Snack = snacks.Single(s => s.Name == match2.Groups[2].Value.Trim()),
-                            Amount = int.Parse(match2.Groups[1].Value.Trim())
-                        });
+                        product.Snacks.Add(
+                            new()
+                            {
+                                Snack = snacks.Single(s => s.Name == match2.Groups[2].Value.Trim()),
+                                Amount = int.Parse(match2.Groups[1].Value.Trim()),
+                            }
+                        );
 
                         if (match2.Groups[3].Success)
                         {
-                            product.Snacks.Add(new()
-                            {
-                                Snack = snacks.Single(s => s.Name == match2.Groups[5].Value.Trim()),
-                                Amount = int.Parse(match2.Groups[4].Value.Trim())
-                            });
+                            product.Snacks.Add(
+                                new()
+                                {
+                                    Snack = snacks.Single(s => s.Name == match2.Groups[5].Value.Trim()),
+                                    Amount = int.Parse(match2.Groups[4].Value.Trim()),
+                                }
+                            );
                         }
                     }
                 }
@@ -158,41 +220,62 @@ public class UpdateDataService(BKDbContext context)
 
             foreach (var menu in menus.Select(m => m.Menu).Where(men => men.Image == null))
             {
-                menu.Image = menus.FirstOrDefault(men => men.Menu.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase) && men.Menu.Image != null)?.Menu.Image;
+                menu.Image = menus
+                    .FirstOrDefault(men =>
+                        men.Menu.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)
+                        && men.Menu.Image != null
+                    )
+                    ?.Menu.Image;
             }
 
             foreach (var menu in menus.Select(m => m.Menu))
             {
                 menu.AvailableInCatalogue = menu.Categories.Any();
-                menu.Categories = menu.Categories.Concat(menus.Where(men => men.Menu.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)).SelectMany(men => men.Menu.Categories ?? [])).ToList();
+                menu.Categories = menu
+                    .Categories.Concat(
+                        menus
+                            .Where(men =>
+                                men.Menu.Name.StartsWith(menu.Name, StringComparison.InvariantCultureIgnoreCase)
+                            )
+                            .SelectMany(men => men.Menu.Categories ?? [])
+                    )
+                    .ToList();
 
                 var match = snackRegex.Match(menu.Name);
                 if (match.Success)
                 {
                     var n = menu.Name;
-                    menu.Snacks.Add(new()
-                    {
-                        Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
-                        Amount = int.Parse(match.Groups[2].Value)
-                    });
+                    menu.Snacks.Add(
+                        new()
+                        {
+                            Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
+                            Amount = int.Parse(match.Groups[2].Value),
+                        }
+                    );
                 }
             }
 
-            var promotions = catalogue.Promotions.Select(prm => new PromotionRestaurantDb
-            {
-                PromotionId = prm.Id,
-                Promotion = new()
+            var promotions = catalogue
+                .Promotions.Select(prm => new PromotionRestaurantDb
                 {
-                    Id = prm.Id,
-                    Name = prm.Name,
-                    Products = products.Select(p => p.Product).Where(prd => prm.ProductIds.Contains(prd.Id)).ToList(),
-                    Menus = menus.Select(m => m.Menu).Where(men => prm.MenuIds.Contains(men.Id)).ToList()
-                },
-                RestaurantId = restaurant.Id,
-                Restaurant = restaurant
-            }).ToList();
+                    PromotionId = prm.Id,
+                    Promotion = new()
+                    {
+                        Id = prm.Id,
+                        Name = prm.Name,
+                        Products = products
+                            .Select(p => p.Product)
+                            .Where(prd => prm.ProductIds.Contains(prd.Id))
+                            .ToList(),
+                        Menus = menus.Select(m => m.Menu).Where(men => prm.MenuIds.Contains(men.Id)).ToList(),
+                    },
+                    RestaurantId = restaurant.Id,
+                    Restaurant = restaurant,
+                })
+                .ToList();
 
-            await context.Database.ExecuteSqlRawAsync(@"
+            await context.Database.ExecuteSqlRawAsync(
+                @"
                 delete from StepProducts;
                 delete from StepProductsL;
                 delete from StepProductsXL;
@@ -202,7 +285,8 @@ public class UpdateDataService(BKDbContext context)
                 delete from CategorieDbMenuDb;
                 delete from MenuDbPromotionDb;
                 delete from ProductDbPromotionDb;
-            ");
+            "
+            );
 
             var snacksDb = await context.Snacks.ToDictionaryAsync(p => p.Name);
             foreach (var snack in snacks)
@@ -224,33 +308,53 @@ public class UpdateDataService(BKDbContext context)
             context.AddRange(promotions.Select(p => p.Promotion).Where(r => !promotionsDb.ContainsKey(r.Id)));
             context.UpdateRange(promotions.Select(p => p.Promotion).Where(r => promotionsDb.ContainsKey(r.Id)));
 
-            var menusRestaurantsDb = await context.MenusRestaurants.Where(m => m.Restaurant.Id == codeRestaurant).ToDictionaryAsync(p => (p.MenuId, p.RestaurantId));
-            var productsRestaurantsDb = await context.ProductsRestaurants.Where(m => m.Restaurant.Id == codeRestaurant).ToDictionaryAsync(p => (p.ProductId, p.RestaurantId));
-            var promotionsRestaurantsDb = await context.PromotionsRestaurants.Where(m => m.Restaurant.Id == codeRestaurant).ToDictionaryAsync(p => (p.PromotionId, p.RestaurantId));
+            var menusRestaurantsDb = await context
+                .MenusRestaurants.Where(m => m.Restaurant.Id == codeRestaurant)
+                .ToDictionaryAsync(p => (p.MenuId, p.RestaurantId));
+            var productsRestaurantsDb = await context
+                .ProductsRestaurants.Where(m => m.Restaurant.Id == codeRestaurant)
+                .ToDictionaryAsync(p => (p.ProductId, p.RestaurantId));
+            var promotionsRestaurantsDb = await context
+                .PromotionsRestaurants.Where(m => m.Restaurant.Id == codeRestaurant)
+                .ToDictionaryAsync(p => (p.PromotionId, p.RestaurantId));
 
             context.AddRange(menus.Where(r => !menusRestaurantsDb.ContainsKey((r.Menu.Id, r.Restaurant.Id))));
             context.UpdateRange(menus.Where(r => menusRestaurantsDb.ContainsKey((r.Menu.Id, r.Restaurant.Id))));
             context.AddRange(products.Where(r => !productsRestaurantsDb.ContainsKey((r.Product.Id, r.Restaurant.Id))));
-            context.UpdateRange(products.Where(r => productsRestaurantsDb.ContainsKey((r.Product.Id, r.Restaurant.Id))));
-            context.AddRange(promotions.Where(r => !promotionsRestaurantsDb.ContainsKey((r.Promotion.Id, r.Restaurant.Id))));
-            context.UpdateRange(promotions.Where(r => promotionsRestaurantsDb.ContainsKey((r.Promotion.Id, r.Restaurant.Id))));
+            context.UpdateRange(
+                products.Where(r => productsRestaurantsDb.ContainsKey((r.Product.Id, r.Restaurant.Id)))
+            );
+            context.AddRange(
+                promotions.Where(r => !promotionsRestaurantsDb.ContainsKey((r.Promotion.Id, r.Restaurant.Id)))
+            );
+            context.UpdateRange(
+                promotions.Where(r => promotionsRestaurantsDb.ContainsKey((r.Promotion.Id, r.Restaurant.Id)))
+            );
 
             await context.SaveChangesAsync();
 
-            await context.Snacks
-                .Where(r => !snacks.Select(re => re.Id).Contains(r.Id))
+            await context
+                .Snacks.Where(r => !snacks.Select(re => re.Id).Contains(r.Id))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
-            await context.ProductsRestaurants
-                .Where(r => r.Restaurant.Id == codeRestaurant && !products.Select(re => re.Product.Id).Contains(r.ProductId))
+            await context
+                .ProductsRestaurants.Where(r =>
+                    r.Restaurant.Id == codeRestaurant && !products.Select(re => re.Product.Id).Contains(r.ProductId)
+                )
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
-            await context.MenusRestaurants
-                .Where(r => r.Restaurant.Id == codeRestaurant && !menus.Select(re => re.Menu.Id).Contains(r.MenuId))
+            await context
+                .MenusRestaurants.Where(r =>
+                    r.Restaurant.Id == codeRestaurant && !menus.Select(re => re.Menu.Id).Contains(r.MenuId)
+                )
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
-            await context.PromotionsRestaurants
-                .Where(r => r.Restaurant.Id == codeRestaurant && !promotions.Select(re => re.Promotion.Id).Contains(r.PromotionId))
+            await context
+                .PromotionsRestaurants.Where(r =>
+                    r.Restaurant.Id == codeRestaurant
+                    && !promotions.Select(re => re.Promotion.Id).Contains(r.PromotionId)
+                )
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Active, false));
 
-            await context.Restaurants.Where(r => r.Id == codeRestaurant)
+            await context
+                .Restaurants.Where(r => r.Id == codeRestaurant)
                 .ExecuteUpdateAsync(u => u.SetProperty(v => v.CatalogueUpdate, DateTime.UtcNow));
 
             return ("Catalogue rechargé avec succès !", false);
@@ -265,6 +369,31 @@ public class UpdateDataService(BKDbContext context)
         }
     }
 
+    public async Task<IEnumerable<CatalogueEnergyUpdate>> ReloadEnergy(string productId)
+    {
+        var product = context.Products.AsTracking().Single(prd => prd.Id == productId);
+        var client = GetClient();
+
+        var energy = await GetEnergy(client, product.RouteId);
+        if (energy != null)
+        {
+            product.Energy = energy;
+            await context.SaveChangesAsync();
+            return
+            [
+                new("Produit", productId, energy.Value),
+                .. (
+                    await context
+                        .Menus.Where(men => men.Steps.Any(s => s.DefaultProduct!.Id == productId))
+                        .Select(men => new { men.Id, Energy = men.Steps.Sum(m => m.DefaultProduct!.Energy) })
+                        .ToListAsync()
+                ).Select(men => new CatalogueEnergyUpdate("Menu", men.Id, men.Energy ?? 0)),
+            ];
+        }
+
+        return [];
+    }
+
     public async Task<(string Message, bool Error)> ReloadOffers(string? accessToken)
     {
         using var client = GetClient(accessToken);
@@ -277,13 +406,17 @@ public class UpdateDataService(BKDbContext context)
 
             var promotions = await context.Promotions.AsTracking().ToDictionaryAsync(p => p.Id);
 
-            var offers = points.Levels.SelectMany(lvl => lvl.Offers.Select(off => new OfferDb
-            {
-                Id = off.TransformationId,
-                Title = off.Title,
-                Points = off.Points,
-                Promotion = promotions[off.PromotionId]
-            })).ToList();
+            var offers = points
+                .Levels.SelectMany(lvl =>
+                    lvl.Offers.Select(off => new OfferDb
+                    {
+                        Id = off.TransformationId,
+                        Title = off.Title,
+                        Points = off.Points,
+                        Promotion = promotions[off.PromotionId],
+                    })
+                )
+                .ToList();
 
             await context.Offers.ExecuteDeleteAsync();
             context.AddRange(offers);
@@ -309,42 +442,49 @@ public class UpdateDataService(BKDbContext context)
 
         try
         {
-            var storeLocator = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/public/store-locator");
+            var storeLocator = await client.GetAsync(
+                "https://webapi.burgerking.fr/blossom/api/v13/public/store-locator"
+            );
             storeLocator.EnsureSuccessStatusCode();
             var stores = (await storeLocator.Content.ReadFromJsonAsync<StoreLocator>())!;
 
             var restaurantsDb = await context.Restaurants.ToDictionaryAsync(r => r.Id);
 
-            var restaux = await stores.Markers.ToAsyncEnumerable().SelectAwait(async store =>
-            {
-                if (restaurantsDb.TryGetValue(store.Id, out var restaurantDb))
+            var restaux = await stores
+                .Markers.ToAsyncEnumerable()
+                .SelectAwait(async store =>
                 {
-                    return restaurantDb;
-                }
-                else
-                {
-                    await Task.Delay(200); // L'API nous jette au bout d'un moment sinon :(
-                    var restaurant = await client.GetAsync($"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}");
-                    restaurant.EnsureSuccessStatusCode();
-                    var restaurantData = (await restaurant.Content.ReadFromJsonAsync<Restaurant>())!;
-                    return new RestaurantDb
+                    if (restaurantsDb.TryGetValue(store.Id, out var restaurantDb))
                     {
-                        AddressFull = restaurantData.AddressFull,
-                        Id = restaurantData.Id,
-                        Name = restaurantData.Name,
-                        Lat = restaurantData.Lat,
-                        Lng = restaurantData.Lng,
-                        Departement = restaurantData.AddressFull.Split("- ").Last().Trim()[..2]
-                    };
-                }
-            }).ToArrayAsync();
+                        return restaurantDb;
+                    }
+                    else
+                    {
+                        await Task.Delay(200); // L'API nous jette au bout d'un moment sinon :(
+                        var restaurant = await client.GetAsync(
+                            $"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}"
+                        );
+                        restaurant.EnsureSuccessStatusCode();
+                        var restaurantData = (await restaurant.Content.ReadFromJsonAsync<Restaurant>())!;
+                        return new RestaurantDb
+                        {
+                            AddressFull = restaurantData.AddressFull,
+                            Id = restaurantData.Id,
+                            Name = restaurantData.Name,
+                            Lat = restaurantData.Lat,
+                            Lng = restaurantData.Lng,
+                            Departement = restaurantData.AddressFull.Split("- ").Last().Trim()[..2],
+                        };
+                    }
+                })
+                .ToArrayAsync();
 
             context.AddRange(restaux.Where(r => !restaurantsDb.ContainsKey(r.Id)));
             context.UpdateRange(restaux.Where(r => restaurantsDb.ContainsKey(r.Id)));
             await context.SaveChangesAsync();
 
-            await context.Restaurants
-                .Where(r => !restaux.Select(re => re.Id).Contains(r.Id))
+            await context
+                .Restaurants.Where(r => !restaux.Select(re => re.Id).Contains(r.Id))
                 .ExecuteUpdateAsync(e => e.SetProperty(r => r.Opened, false));
 
             await context.Updates.ExecuteUpdateAsync(u => u.SetProperty(v => v.Restaurants, DateTime.UtcNow));
@@ -411,5 +551,26 @@ public class UpdateDataService(BKDbContext context)
         }
 
         return client;
+    }
+
+    private async Task<double?> GetEnergy(HttpClient client, string routeId)
+    {
+        var productResult = await client.GetAsync(
+            $"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{routeId}"
+        );
+
+        if (productResult.IsSuccessStatusCode)
+        {
+            var productDetail = (await productResult.Content.ReadFromJsonAsync<ProductResult>())!;
+            var energy = productDetail
+                .Product.Nutrition.SingleOrDefault(n => n.Item == "product.nutritional.energy")
+                ?.Portion;
+            if (!string.IsNullOrEmpty(energy))
+            {
+                return double.Parse(energy.Replace(",", "."), CultureInfo.InvariantCulture);
+            }
+        }
+
+        return null;
     }
 }

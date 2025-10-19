@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.35122.118
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11111.16 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CestlheureduBK", "CestlheureduBK\CestlheureduBK.csproj", "{30244177-ABB2-46CD-8711-FD295452FCE8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CestlheureduBK.Client", "CestlheureduBK.Client\CestlheureduBK.Client.csproj", "{25D55CD5-3303-400E-B566-089EBF494F79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CestlheureduBK.Common", "CestlheureduBK.Common\CestlheureduBK.Common.csproj", "{1D4AF890-81D7-4B7C-9BC9-826DD7DCE861}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A2C9288-939C-4334-A733-C88A549013E5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

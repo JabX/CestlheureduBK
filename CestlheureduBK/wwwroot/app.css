@@ -213,3 +213,16 @@ th, .rz-column-title, .rz-column-title-content {
         align-items: center;
         justify-content: center;
     }
+
+a.energy {
+    cursor: pointer;
+    border-bottom: 1px dashed white;
+}
+
+    a.energy:hover {
+        border-bottom-style: solid;
+    }
+
+    a.energy[data-loading] {
+        opacity: 0.5;
+    }

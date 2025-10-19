@@ -77,9 +77,16 @@
                 </span>
             </HeaderTemplate>
             <Template Context="data">
-                <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@(data.Energy.ToString("0 kcal"))</span>
-                    @if (data.Snacks.Any() && data.Type == "Product")
+                 <RadzenStack AlignItems="AlignItems.Start" Gap="2">                    
+                    @if (data.Type == "Produit")
+                    {
+                        <a data-loading="@loading" class="energy" @onclick="() => ReloadEnergy(data.Id)" title="Clique pour vérifier que la valeur est correcte">@(data.Energy.ToString("0 kcal"))</a>
+                    } 
+                    else 
+                    {
+                        <span>@(data.Energy.ToString("0 kcal"))</span>
+                    }
+                    @if (data.Snacks.Any() && data.Type == "Produit")
                     {
                         <span class="detail">(@((data.Energy / data.Snacks.Sum(s => s.Amount)).ToString("0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
@@ -124,6 +131,14 @@
 </RadzenDataGrid>
 
 @code {
+    readonly HttpClient? _client;
+    private bool loading;
+
+    public Catalogue(HttpClient? client = null)
+    {
+        _client = client;
+    }
+
     [Parameter]
     public required CatalogueDisplay[] Data { get; set; }
 
@@ -193,6 +208,29 @@
     private void OnCategorieChange(IEnumerable<CategorieDisplay>? categories)
     {
         criteria.Categories = categories?.Count() == allCategories.Count ? null : (categories ?? []).ToList();
+    }
+
+
+    private async Task ReloadEnergy(string productId)
+    {
+        if (_client != null)
+        {
+            loading = true;
+            var response = await _client.PutAsync($"api/energy/{productId}", null);
+            loading = false;
+
+            var updates =  await response.Content.ReadFromJsonAsync<IEnumerable<CatalogueEnergyUpdate>>() ?? [];            
+            foreach (var update in updates)
+            {
+                var matching = Data.SingleOrDefault(d => d.Type == update.Type && d.Id == update.Id);
+                if (matching != null) 
+                {
+                    Data[Array.IndexOf(Data, matching)] = matching with { Energy = update.Energy };
+                }
+            }
+
+            StateHasChanged();
+        }
     }
 
     private record CatalogueCriteria

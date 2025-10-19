@@ -15,30 +15,47 @@ public class GetDataService(BKDbContext context, UserService userService)
     {
         return
         [
-            .. await context.ProductsRestaurants
-                .AsSingleQuery()
-                .Where(prd => prd.Restaurant.Id == codeRestaurant && prd.Active && prd.Product.AvailableInCatalogue && prd.Price > 0)
+            .. await context
+                .ProductsRestaurants.AsSingleQuery()
+                .Where(prd =>
+                    prd.Restaurant.Id == codeRestaurant
+                    && prd.Active
+                    && prd.Product.AvailableInCatalogue
+                    && prd.Price > 0
+                )
                 .Select(prd => new CatalogueDisplay(
                     "Produit",
+                    prd.ProductId,
                     prd.Product.Name,
                     prd.Product.Image,
                     prd.Price,
                     prd.Product.Energy ?? 0,
                     prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                    prd.Product.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                    prd.Product.Categories.OrderBy(c => c.SubCategory)
+                        .ThenBy(c => c.Name)
+                        .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
+                ))
                 .ToArrayAsync(),
-            .. await context.MenusRestaurants
-                .AsSingleQuery()
-                .Where(men => men.Restaurant.Id == codeRestaurant && men.Active && men.Menu.AvailableInCatalogue && men.Price > 0)
+            .. await context
+                .MenusRestaurants.AsSingleQuery()
+                .Where(men =>
+                    men.Restaurant.Id == codeRestaurant && men.Active && men.Menu.AvailableInCatalogue && men.Price > 0
+                )
                 .Select(men => new CatalogueDisplay(
                     "Menu",
+                    men.MenuId,
                     men.Menu.Name,
                     men.Menu.Image,
                     men.Price,
-                    men.Menu.Steps.Sum(s => s.DefaultProduct != null && s.DefaultProduct.Energy != null ? s.DefaultProduct.Energy.Value : 0),
+                    men.Menu.Steps.Sum(s =>
+                        s.DefaultProduct != null && s.DefaultProduct.Energy != null ? s.DefaultProduct.Energy.Value : 0
+                    ),
                     men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                    men.Menu.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
-                .ToArrayAsync()
+                    men.Menu.Categories.OrderBy(c => c.SubCategory)
+                        .ThenBy(c => c.Name)
+                        .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
+                ))
+                .ToArrayAsync(),
         ];
     }
 
@@ -46,14 +63,18 @@ public class GetDataService(BKDbContext context, UserService userService)
     {
         return
         [
-            .. await context.ProductsRestaurants
-                .AsSingleQuery()
+            .. await context
+                .ProductsRestaurants.AsSingleQuery()
                 .Where(p =>
                     p.Restaurant.Id == codeRestaurant
                     && p.Active
                     && context.Offers.Any(o =>
                         o.Promotion.Products.Any(pp => p.Product.Id == pp.Id)
-                        && context.PromotionsRestaurants.Any(pr => pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active)))
+                        && context.PromotionsRestaurants.Any(pr =>
+                            pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active
+                        )
+                    )
+                )
                 .Select(prd => new OfferDisplay(
                     "Produit",
                     prd.Product.Name,
@@ -62,17 +83,23 @@ public class GetDataService(BKDbContext context, UserService userService)
                     prd.Price,
                     prd.Product.Energy ?? 0,
                     prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                    prd.Product.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
-                .ToArrayAsync()
-,
-            .. await context.MenusRestaurants
-                .AsSingleQuery()
+                    prd.Product.Categories.OrderBy(c => c.SubCategory)
+                        .ThenBy(c => c.Name)
+                        .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
+                ))
+                .ToArrayAsync(),
+            .. await context
+                .MenusRestaurants.AsSingleQuery()
                 .Where(p =>
                     p.Restaurant.Id == codeRestaurant
                     && p.Active
                     && context.Offers.Any(o =>
                         o.Promotion.Menus.Any(pp => p.Menu.Id == pp.Id)
-                        && context.PromotionsRestaurants.Any(pr => pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active)))
+                        && context.PromotionsRestaurants.Any(pr =>
+                            pr.Restaurant.Id == codeRestaurant && pr.Promotion.Id == o.Promotion.Id && pr.Active
+                        )
+                    )
+                )
                 .Select(men => new OfferDisplay(
                     "Menu",
                     men.Menu.Name,
@@ -81,7 +108,10 @@ public class GetDataService(BKDbContext context, UserService userService)
                     men.Price,
                     men.Menu.Steps.Sum(s => s.DefaultProduct!.Energy ?? 0),
                     men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
-                    men.Menu.Categories.OrderBy(c => c.SubCategory).ThenBy(c => c.Name).Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))))
+                    men.Menu.Categories.OrderBy(c => c.SubCategory)
+                        .ThenBy(c => c.Name)
+                        .Select(c => new CategorieDisplay(c.Id, c.Name, c.SubCategory))
+                ))
                 .ToArrayAsync(),
         ];
     }
@@ -100,7 +130,11 @@ public class GetDataService(BKDbContext context, UserService userService)
 
             if (r == null)
             {
-                r = (await context.Restaurants.OrderByDescending(r => r.CatalogueUpdate).FirstOrDefaultAsync(r => r.CatalogueUpdate != null))?.ToDisplay();
+                r = (
+                    await context
+                        .Restaurants.OrderByDescending(r => r.CatalogueUpdate)
+                        .FirstOrDefaultAsync(r => r.CatalogueUpdate != null)
+                )?.ToDisplay();
             }
         }
 
@@ -109,18 +143,26 @@ public class GetDataService(BKDbContext context, UserService userService)
 
     public async Task<RestaurantDisplay[]> GetRestaurants()
     {
-        return await context.Restaurants
-            .Where(r => r.Opened)
+        return await context
+            .Restaurants.Where(r => r.Opened)
             .OrderBy(r => r.Departement)
             .ThenBy(r => r.Name)
-            .Select(r => new RestaurantDisplay(r.Id, r.Name, r.AddressFull, r.Departement, r.Lat, r.Lng, r.CatalogueUpdate))
+            .Select(r => new RestaurantDisplay(
+                r.Id,
+                r.Name,
+                r.AddressFull,
+                r.Departement,
+                r.Lat,
+                r.Lng,
+                r.CatalogueUpdate
+            ))
             .ToArrayAsync();
     }
 
     public async Task<SnackDisplay[]> GetSnacks(string codeRestaurant)
     {
-        var allProducts = await context.ProductsRestaurants
-            .Include(p => p.Product)
+        var allProducts = await context
+            .ProductsRestaurants.Include(p => p.Product)
             .ThenInclude(p => p.Snacks)
             .ThenInclude(p => p.Snack)
             .AsSingleQuery()
@@ -128,42 +170,58 @@ public class GetDataService(BKDbContext context, UserService userService)
             .ToListAsync();
 
         return allProducts
-            .SelectMany(p => p.Product.Snacks.Select(s =>
-            {
-                var ratio = 1d;
-
-                if (p.Product.Snacks.Count > 1)
+            .SelectMany(p =>
+                p.Product.Snacks.Select(s =>
                 {
-                    var prices = p.Product.Snacks.Select(s2 =>
+                    var ratio = 1d;
+
+                    if (p.Product.Snacks.Count > 1)
                     {
-                        var bestProduct = allProducts
-                            .Where(p2 => p2.Product.Snacks.Count == 1 && p2.Product.Snacks.Single().Snack.Name == s2.Snack.Name && p2.Product.Snacks.Single().Amount < p.Product.Snacks.Sum(s3 => s3.Amount))
-                            .OrderByDescending(p2 => p2.Product.Snacks.Single().Amount)
-                            .First();
+                        var prices = p
+                            .Product.Snacks.Select(s2 =>
+                            {
+                                var bestProduct = allProducts
+                                    .Where(p2 =>
+                                        p2.Product.Snacks.Count == 1
+                                        && p2.Product.Snacks.Single().Snack.Name == s2.Snack.Name
+                                        && p2.Product.Snacks.Single().Amount < p.Product.Snacks.Sum(s3 => s3.Amount)
+                                    )
+                                    .OrderByDescending(p2 => p2.Product.Snacks.Single().Amount)
+                                    .First();
 
-                        return new { s2.Snack.Name, Price = bestProduct.Price / bestProduct.Product.Snacks.Single().Amount };
-                    }).ToDictionary(s2 => s2.Name, s2 => s2.Price);
+                                return new
+                                {
+                                    s2.Snack.Name,
+                                    Price = bestProduct.Price / bestProduct.Product.Snacks.Single().Amount,
+                                };
+                            })
+                            .ToDictionary(s2 => s2.Name, s2 => s2.Price);
 
-                    ratio = s.Amount * prices[s.Snack.Name] / p.Product.Snacks.Sum(s2 => s2.Amount * prices[s2.Snack.Name]);
-                }
+                        ratio =
+                            s.Amount
+                            * prices[s.Snack.Name]
+                            / p.Product.Snacks.Sum(s2 => s2.Amount * prices[s2.Snack.Name]);
+                    }
 
-                return new
-                {
-                    SnackName = s.Snack.Name,
-                    s.Amount,
-                    ProductName = p.Product.Name,
-                    p.Product.Image,
-                    p.Price,
-                    Ratio = ratio
-                };
-            }))
+                    return new
+                    {
+                        SnackName = s.Snack.Name,
+                        s.Amount,
+                        ProductName = p.Product.Name,
+                        p.Product.Image,
+                        p.Price,
+                        Ratio = ratio,
+                    };
+                })
+            )
             .GroupBy(s => s.SnackName)
             .Select(s =>
             {
-                var products = s.DistinctBy(p => p.ProductName.ToLower().Replace("&", "+")).Select(t => new SnackProductDisplay(t.ProductName, t.Image, t.Amount, t.Price, t.Ratio));
+                var products = s.DistinctBy(p => p.ProductName.ToLower().Replace("&", "+"))
+                    .Select(t => new SnackProductDisplay(t.ProductName, t.Image, t.Amount, t.Price, t.Ratio));
                 return new SnackDisplay(s.Key, products.ToArray());
             })
-                .ToArray();
+            .ToArray();
     }
 
     public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(string month, string codeRestaurant)
@@ -178,16 +236,18 @@ public class GetDataService(BKDbContext context, UserService userService)
                 g.Key.Kind == MysteryCampaignKind.Classic ? "Burger Mystère" : "Veggie Mystère",
                 g.Key.Price,
                 g.Select(c => new BurgerMystereDisplay(
-                    c.mc.Id,
-                    c.pr.Product.Name,
-                    c.pr.Product.Image,
-                    c.pr.Price,
-                    c.pr.Product.Energy ?? 0,
-                    c.mc.Chance,
-                    context.MysteryRolls.Count(mr => mr.Product == c.mc && mr.User.Id == userService.Id),
-                    context.MysteryRolls.Count(mr => mr.Product == c.mc)
-                )).ToList()))
-        .ToListAsync();
+                        c.mc.Id,
+                        c.pr.Product.Name,
+                        c.pr.Product.Image,
+                        c.pr.Price,
+                        c.pr.Product.Energy ?? 0,
+                        c.mc.Chance,
+                        context.MysteryRolls.Count(mr => mr.Product == c.mc && mr.User.Id == userService.Id),
+                        context.MysteryRolls.Count(mr => mr.Product == c.mc)
+                    ))
+                    .ToList()
+            )
+        ).ToListAsync();
     }
 
     public async Task<DateTime?> GetOffersUpdate()

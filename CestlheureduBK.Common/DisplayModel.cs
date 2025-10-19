@@ -1,18 +1,39 @@
 ﻿namespace CestlheureduBK.Common;
 
 public record CategorieDisplay(string Id, string Name, bool SubCategory);
+
 public record SnackAmountDisplay(string Name, int Amount);
 
-public record OfferDisplay(string Type, string Name, string? Image, int Points, double Price, double Energy, IEnumerable<SnackAmountDisplay> Snacks, IEnumerable<CategorieDisplay> Categories)
+public record OfferDisplay(
+    string Type,
+    string Name,
+    string? Image,
+    int Points,
+    double Price,
+    double Energy,
+    IEnumerable<SnackAmountDisplay> Snacks,
+    IEnumerable<CategorieDisplay> Categories
+)
 {
     public double EnergyValue => Energy / Points;
     public double PriceValue => Price / Points;
 }
 
-public record CatalogueDisplay(string Type, string Name, string? Image, double Price, double Energy, IEnumerable<SnackAmountDisplay> Snacks, IEnumerable<CategorieDisplay> Categories)
+public record CatalogueDisplay(
+    string Type,
+    string Id,
+    string Name,
+    string? Image,
+    double Price,
+    double Energy,
+    IEnumerable<SnackAmountDisplay> Snacks,
+    IEnumerable<CategorieDisplay> Categories
+)
 {
     public double EnergyValue => Energy / Price;
 }
+
+public record CatalogueEnergyUpdate(string Type, string Id, double Energy);
 
 public record SnackProductDisplay(string Name, string? Image, int Amount, double Price, double Ratio)
 {
@@ -21,7 +42,16 @@ public record SnackProductDisplay(string Name, string? Image, int Amount, double
 
 public record SnackDisplay(string Name, SnackProductDisplay[] Products);
 
-public record BurgerMystereDisplay(int Id, string Name, string? Image, double Price, double Energy, double Chance, int MyCount, int TotalCount);
+public record BurgerMystereDisplay(
+    int Id,
+    string Name,
+    string? Image,
+    double Price,
+    double Energy,
+    double Chance,
+    int MyCount,
+    int TotalCount
+);
 
 public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMystereDisplay> Burgers)
 {
@@ -34,14 +64,37 @@ public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMy
     public int TotalCount => Burgers.Sum(b => b.TotalCount);
 }
 
-public record MysteryRollDisplay(int Id, string UserName, string Month, string ProductName, double ProductPrice, double CampaignPrice, string RestaurantName, DateTime RollTime)
+public record MysteryRollDisplay(
+    int Id,
+    string UserName,
+    string Month,
+    string ProductName,
+    double ProductPrice,
+    double CampaignPrice,
+    string RestaurantName,
+    DateTime RollTime
+)
 {
     public double Gain => ProductPrice - CampaignPrice;
 }
 
-public record RestaurantDisplay(string Id, string Name, string AddressFull, string Departement, double Lat, double Lng, DateTime? CatalogueUpdate)
+public record RestaurantDisplay(
+    string Id,
+    string Name,
+    string AddressFull,
+    string Departement,
+    double Lat,
+    double Lng,
+    DateTime? CatalogueUpdate
+)
 {
     public string FullName => $"{Departement} - {Name}";
 }
 
-public record HeaderDisplay(RestaurantDisplay? Restaurant, RestaurantDisplay[] Restaurants, DateTime? OffersUpdate, bool IsAuthenticated, RestaurantDisplay? FavoriteRestaurant);
+public record HeaderDisplay(
+    RestaurantDisplay? Restaurant,
+    RestaurantDisplay[] Restaurants,
+    DateTime? OffersUpdate,
+    bool IsAuthenticated,
+    RestaurantDisplay? FavoriteRestaurant
+);
