@@ -77,15 +77,9 @@
                 </span>
             </HeaderTemplate>
             <Template Context="data">
-                 <RadzenStack AlignItems="AlignItems.Start" Gap="2">                    
-                    @if (data.Type == ItemType.Product)
-                    {
-                        <a data-loading="@loading" class="energy" @onclick="() => ReloadEnergy(data.Id)" title="Clique pour vérifier que la valeur est correcte">@(data.Energy.ToString("0 kcal"))</a>
-                    } 
-                    else 
-                    {
-                        <span>@(data.Energy.ToString("0 kcal"))</span>
-                    }
+                 <RadzenStack AlignItems="AlignItems.Start" Gap="2">
+                    <a data-loading="@loading" class="energy" @onclick="() => ReloadEnergy(data)" title="Clique pour vérifier que la valeur est correcte">@(data.Energy.ToString("0 kcal"))</a>
+
                     @if (data.Snacks.Any() && data.Type == ItemType.Product)
                     {
                         <span class="detail">(@((data.Energy / data.Snacks.Sum(s => s.Amount)).ToString("0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
@@ -211,12 +205,12 @@
     }
 
 
-    private async Task ReloadEnergy(string productId)
+    private async Task ReloadEnergy(CatalogueDisplay item)
     {
         if (_client != null)
         {
             loading = true;
-            var response = await _client.PutAsync($"api/energy/{productId}", null);
+            var response = await _client.PutAsync($"api/energy/{item.Type}/{item.Id}", null);
             loading = false;
 
             var updates =  await response.Content.ReadFromJsonAsync<IEnumerable<CatalogueEnergyUpdate>>() ?? [];            

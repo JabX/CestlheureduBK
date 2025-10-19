@@ -46,7 +46,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                         && men.Price > 0
                     )
                     .Select(men => new CatalogueDisplay(
-                        men.Menu.Steps.All(s => s.Type == 1 || s.DefaultProduct.Id == "1287") // Parce que les Baby Burgers et les Tenders sans menus sont des menus...
+                        men.Menu.Steps.All(s => s.Type == 1 || s.DefaultProduct!.Id == "1287") // Parce que les Baby Burgers et les Tenders sans menus sont des menus...
                             ? ItemType.ProductAsMenu
                             : ItemType.Menu,
                         men.MenuId,
@@ -124,7 +124,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                         )
                     )
                     .Select(men => new OfferDisplay(
-                        men.Menu.Steps.All(s => s.Type == 1 || s.DefaultProduct.Id == "1287") // Parce que les Baby Burgers et les Tenders sans menus sont des menus...
+                        men.Menu.Steps.All(s => s.Type == 1 || s.DefaultProduct!.Id == "1287") // Parce que les Baby Burgers et les Tenders sans menus sont des menus...
                             ? ItemType.ProductAsMenu
                             : ItemType.Menu,
                         men.Menu.Name,

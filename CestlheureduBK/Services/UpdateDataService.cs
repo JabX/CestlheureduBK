@@ -8,22 +8,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CestlheureduBK.Services;
 
-public class UpdateDataService(BKDbContext context)
+public class UpdateDataService(BKDbContext context) : IDisposable
 {
-    public async Task CheckAccessToken(string? accessToken)
+    private HttpClient? _client;
+
+    private HttpClient Client
     {
-        var client = GetClient(accessToken);
-        var result = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
-        result.EnsureSuccessStatusCode();
+        get
+        {
+            if (_client == null)
+            {
+                _client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip });
+                _client.DefaultRequestHeaders.Accept.Add(new("application/json"));
+            }
+
+            return _client;
+        }
+    }
+
+    private string? AccessToken
+    {
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _client?.Dispose();
     }
 
     public async Task<(string Message, bool Error)> ReloadCatalogue(string codeRestaurant)
     {
-        using var client = GetClient();
-
         try
         {
-            var result = await client.GetAsync(
+            var result = await Client.GetAsync(
                 $"https://ecoceabkstorageprdnorth.blob.core.windows.net/catalog/pick-up.{codeRestaurant}.json"
             );
             result.EnsureSuccessStatusCode();
@@ -173,10 +196,7 @@ public class UpdateDataService(BKDbContext context)
                 }
                 else
                 {
-                    product.Energy = await GetEnergy(
-                        client,
-                        catalogue.Products.Single(prd => prd.Id == product.Id).RouteId
-                    );
+                    product.Energy = await GetEnergy(catalogue.Products.Single(prd => prd.Id == product.Id).RouteId);
                 }
 
                 product.AvailableInCatalogue = product.Categories.Any();
@@ -379,38 +399,43 @@ public class UpdateDataService(BKDbContext context)
         }
     }
 
-    public async Task<IEnumerable<CatalogueEnergyUpdate>> ReloadEnergy(string productId)
+    public async IAsyncEnumerable<CatalogueEnergyUpdate> ReloadEnergy(ItemType type, string id)
     {
-        var product = context.Products.AsTracking().Single(prd => prd.Id == productId);
-        var client = GetClient();
-
-        var energy = await GetEnergy(client, product.RouteId);
-        if (energy != null)
+        if (type == ItemType.Product)
         {
-            product.Energy = energy;
-            await context.SaveChangesAsync();
-            return
-            [
-                new(ItemType.Product, productId, energy.Value),
-                .. (
-                    await context
-                        .Menus.Where(men => men.Steps.Any(s => s.DefaultProduct!.Id == productId))
-                        .Select(men => new { men.Id, Energy = men.Steps.Sum(m => m.DefaultProduct!.Energy) })
-                        .ToListAsync()
-                ).Select(men => new CatalogueEnergyUpdate(ItemType.Menu, men.Id, men.Energy ?? 0)),
-            ];
+            var product = context.Products.AsTracking().Single(prd => prd.Id == id);
+            foreach (var update in await ReloadProductEnergy(product))
+            {
+                yield return update;
+            }
+        }
+        else
+        {
+            var products = await context
+                .Menus.AsTracking()
+                .Where(men => men.Id == id)
+                .SelectMany(men => men.Steps.Select(s => s.DefaultProduct!))
+                .ToListAsync();
+
+            foreach (var product in products)
+            {
+                foreach (var update in await ReloadProductEnergy(product))
+                {
+                    yield return update;
+                }
+            }
         }
 
-        return [];
+        await context.SaveChangesAsync();
     }
 
     public async Task<(string Message, bool Error)> ReloadOffers(string? accessToken)
     {
-        using var client = GetClient(accessToken);
+        AccessToken = accessToken;
 
         try
         {
-            var result = await client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
+            var result = await Client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
             result.EnsureSuccessStatusCode();
             var points = (await result.Content.ReadFromJsonAsync<Points>())!;
 
@@ -448,11 +473,9 @@ public class UpdateDataService(BKDbContext context)
 
     public async Task<(string Message, bool Error)> ReloadRestaurants()
     {
-        using var client = GetClient();
-
         try
         {
-            var storeLocator = await client.GetAsync(
+            var storeLocator = await Client.GetAsync(
                 "https://webapi.burgerking.fr/blossom/api/v13/public/store-locator"
             );
             storeLocator.EnsureSuccessStatusCode();
@@ -471,7 +494,7 @@ public class UpdateDataService(BKDbContext context)
                     else
                     {
                         await Task.Delay(200); // L'API nous jette au bout d'un moment sinon :(
-                        var restaurant = await client.GetAsync(
+                        var restaurant = await Client.GetAsync(
                             $"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}"
                         );
                         restaurant.EnsureSuccessStatusCode();
@@ -515,7 +538,9 @@ public class UpdateDataService(BKDbContext context)
     {
         try
         {
-            await CheckAccessToken(accessToken);
+            AccessToken = accessToken;
+            var result = await Client.GetAsync("https://webapi.burgerking.fr/blossom/api/v13/kingdom/points");
+            result.EnsureSuccessStatusCode();
 
             await context.Database.EnsureDeletedAsync();
             await context.Database.MigrateAsync();
@@ -550,22 +575,9 @@ public class UpdateDataService(BKDbContext context)
         }
     }
 
-    private static HttpClient GetClient(string? accessToken = null)
+    private async Task<double?> GetEnergy(string routeId)
     {
-        var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip });
-        client.DefaultRequestHeaders.Accept.Add(new("application/json"));
-
-        if (!string.IsNullOrEmpty(accessToken))
-        {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        }
-
-        return client;
-    }
-
-    private static async Task<double?> GetEnergy(HttpClient client, string routeId)
-    {
-        var productResult = await client.GetAsync(
+        var productResult = await Client.GetAsync(
             $"https://webapi.burgerking.fr/blossom/api/v13/public/produit/{routeId}"
         );
 
@@ -582,5 +594,26 @@ public class UpdateDataService(BKDbContext context)
         }
 
         return null;
+    }
+
+    private async Task<IEnumerable<CatalogueEnergyUpdate>> ReloadProductEnergy(ProductDb product)
+    {
+        var energy = await GetEnergy(product.RouteId);
+        if (energy != null)
+        {
+            product.Energy = energy;
+            return
+            [
+                new(ItemType.Product, product.Id, energy.Value),
+                .. (
+                    await context
+                        .Menus.Where(men => men.Steps.Any(s => s.DefaultProduct!.Id == product.Id && s.Type == 1))
+                        .Select(men => new { men.Id, Energy = men.Steps.Sum(m => m.DefaultProduct!.Energy) })
+                        .ToListAsync()
+                ).Select(men => new CatalogueEnergyUpdate(ItemType.Menu, men.Id, men.Energy ?? 0)),
+            ];
+        }
+
+        return [];
     }
 }
