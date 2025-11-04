@@ -53,6 +53,8 @@ public record BurgerMystereDisplay(
     int Id,
     string Name,
     string? Image,
+    string? Name2,
+    string? Image2,
     double Price,
     double Energy,
     double Chance,

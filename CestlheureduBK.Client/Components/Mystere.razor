@@ -41,6 +41,13 @@
                                 <img src="@data.Image" class="image" />
                                 <span>@data.Name</span>
                             </RadzenStack>
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                                @if (data.Name2 != null)
+                                {
+                                    <img src="@data.Image2" class="image" />
+                                    <span>@data.Name2</span>
+                                }
+                            </RadzenStack>
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn HeaderCssClass="col-3">
@@ -55,7 +62,7 @@
                         </HeaderTemplate>
                         <Template Context="data">
                             <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                                <span>@data.Chance.ToString("0 %")</span>
+                                <span>@data.Chance.ToString("0.0 %")</span>
                                 @if (campaign.TotalCount > 0)
                                 {
                                     <span class="detail">réel : @((data.TotalCount / (decimal)campaign.TotalCount).ToString("0 %"))</span>
