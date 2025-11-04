@@ -25,6 +25,50 @@
     }
     else if (MainData.SelectMany(s => s.Burgers).Any())
     {
+        @if (MainData.Any(s => s.Name == "Duo Mystère"))
+        {
+            <br />
+            <RadzenPanel AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
+                <HeaderTemplate>
+                    @if (criteria != new MysteryCriteria())
+                    {
+                        <RadzenButton Text="Réinitialiser" Variant="Variant.Outlined" Icon="replay" Click="@(() => criteria = new())" />
+                    }
+                    <span @onclick="@(() => filter = !filter)">Filtres</span>
+                </HeaderTemplate>
+                <ChildContent>
+                    <RadzenCard Variant="Variant.Flat">
+                        <RadzenStack>                            
+                            <RadzenStack Orientation="Orientation.Vertical" Wrap="FlexWrap.Wrap">
+                                <RadzenLabel Text="Produits" Component="burgers" />
+
+                                <RadzenCheckBoxList AllowSelectAll="true"
+                                    SelectAllText="Tous"
+                                    Name="burgers"
+                                    Value=@(criteria.Burgers ?? AllBurgers)
+                                    TValue="string"
+                                    Change="OnBurgerChange">
+                                    <Items>
+                                        @foreach (var burger in AllBurgers)
+                                        {
+                                            <RadzenCheckBoxListItem Text="@burger" Value="@burger" />
+                                        }
+                                    </Items>
+                                </RadzenCheckBoxList>
+
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                                    <span style="cursor:pointer" @onclick=@(() => criteria.And = false)>Au moins un produit</span>
+                                    <RadzenSwitch Name="and" Value="@criteria.And" Change="@(() => criteria.And = !criteria.And)" />
+                                    <span style="cursor:pointer" @onclick=@(() => criteria.And = true)>Tous les produits</span>
+                                </RadzenStack>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </RadzenCard>
+                </ChildContent>
+            </RadzenPanel>
+            <br />
+        }
+
         @foreach (var campaign in MainData)
         {
             <br />
@@ -32,8 +76,16 @@
             <span style="font-size:0.9em;font-style:italic">Prix : @campaign.Price.ToString("0.00 €") / Espérance : @campaign.PriceExpectancy.ToString("0.00 €") et @campaign.EnergyExpectancy.ToString("0 kcal")</span>
             <br />
             <br />
-
-            <RadzenDataGrid Data="@campaign.Burgers">
+            <span>
+                @GetFilteredBurgers(campaign.Burgers).Count() produits
+                @if (criteria.Burgers != null)
+                {
+                    <span style="font-size:0.9em;font-style:italic"> (sélection : @GetFilteredBurgers(campaign.Burgers).Sum(b => b.Chance).ToString("0.0%"))</span>
+                }
+            </span>
+            <br />
+            <br />
+            <RadzenDataGrid Data="@GetFilteredBurgers(campaign.Burgers)" PageSize="50" AllowPaging="true">
                 <Columns>
                     <RadzenDataGridColumn Title="Produit">
                         <Template Context="data">
@@ -54,9 +106,9 @@
                         <HeaderTemplate>
                             <span class="header" @onclick="@(() => ToggleSort("chance"))">
                                 <span>%</span>
-                                @if (sortBy == "chance")
+                                @if (criteria.SortBy == "chance")
                                 {
-                                    <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                                 }
                             </span>
                         </HeaderTemplate>
@@ -78,9 +130,9 @@
                         <HeaderTemplate>
                             <span class="header" @onclick="@(() => ToggleSort("price"))">
                                 <span>Prix</span>
-                                @if (sortBy == "price")
+                                @if (criteria.SortBy == "price")
                                 {
-                                    <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                                 }
                             </span>
                         </HeaderTemplate>
@@ -95,9 +147,9 @@
                         <HeaderTemplate>
                             <span class="header" @onclick="@(() => ToggleSort("energy"))">
                                 <span>kcal</span>
-                                @if (sortBy == "energy")
+                                @if (criteria.SortBy == "energy")
                                 {
-                                    <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                                 }
                             </span>
                         </HeaderTemplate>
@@ -113,9 +165,9 @@
                             <HeaderTemplate>
                                 <span class="header" @onclick="@(() => ToggleSort("count"))">
                                     <span>Loot</span>
-                                    @if (sortBy == "count")
+                                    @if (criteria.SortBy == "count")
                                     {
-                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                        <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
                                     }
                                 </span>
                             </HeaderTemplate>
@@ -137,6 +189,10 @@
 @code {
     readonly HttpClient? _client;
     private bool loading;
+
+    private bool filter;
+
+    private MysteryCriteria criteria = new();
 
     public Mystere(HttpClient? client = null)
     {
@@ -161,8 +217,7 @@
     [Parameter]
     public required string CodeRestaurant { get; set; }
 
-    private string sortBy = "chance";
-    private bool asc = false;
+
 
     private IList<BurgerMystereListDisplay> MainData
     {
@@ -170,7 +225,7 @@
         {
             return Data.Select(d => d with
             {
-                Burgers = ((sortBy, asc) switch
+                Burgers = ((criteria.SortBy, criteria.Asc) switch
                 {
                     ("name", false) => d.Burgers.OrderByDescending(off => off.Name).ThenByDescending(off => off.Price),
                     ("name", true) => d.Burgers.OrderBy(off => off.Name).ThenBy(off => off.Price),
@@ -183,21 +238,41 @@
                     ("count", false) => d.Burgers.OrderByDescending(off => off.MyCount).ThenByDescending(off => off.Chance),
                     ("count", true) => d.Burgers.OrderBy(off => off.MyCount).ThenByDescending(off => off.Chance),
                     _ => throw new InvalidOperationException()
-                }).ToArray()
+                })                
+                .ToArray()
             }).ToArray();
         }
     }
 
+    private IEnumerable<BurgerMystereDisplay> GetFilteredBurgers(IEnumerable<BurgerMystereDisplay> burgers)
+    {
+        return burgers.Where(b =>
+            criteria.Burgers == null
+            || !criteria.And && (criteria.Burgers.Contains(b.Name) || criteria.Burgers.Contains(b.Name2!))
+            || criteria.And && (
+                criteria.Burgers.Count == 1 && criteria.Burgers[0] == b.Name && b.Name == b.Name2)
+                || criteria.Burgers.Count == 2 && (
+                    criteria.Burgers[0] == b.Name && criteria.Burgers[1] == b.Name2
+                    || criteria.Burgers[0] == b.Name2 && criteria.Burgers[1] == b.Name));
+    }
+
+    private IEnumerable<string> AllBurgers => Data.SelectMany(d => d.Burgers).SelectMany(b => new[] { b.Name, b.Name2! }).Where(n => n != null).Distinct().Order();
+
     private void ToggleSort(string field)
     {
-        asc = !asc;
-        sortBy = field;
+        criteria.Asc = !criteria.Asc;
+        criteria.SortBy = field;
     }
 
     private void OnMonthChange(object change)
     {
         var month = (string)change;
         navigationManager.NavigateTo(navigationManager.Uri.Replace(Month, month));
+    }
+
+    private void OnBurgerChange(IEnumerable<string>? burgers)
+    {
+        criteria.Burgers = burgers?.Count() == AllBurgers.Count() ? null : (burgers ?? []).ToList();
     }
 
     private async Task AddMysteryRoll(int mpId)
@@ -209,5 +284,16 @@
             loading = false;
             navigationManager.Refresh();
         }
+    }
+
+    private record MysteryCriteria
+    {
+        public string SortBy { get; set; } = "chance";
+
+        public bool Asc { get; set; }
+
+        public bool And { get; set; }
+
+        public IList<string>? Burgers { get; set; }
     }
 }

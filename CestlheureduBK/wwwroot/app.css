@@ -226,3 +226,7 @@ a.energy {
     a.energy[data-loading] {
         opacity: 0.5;
     }
+
+.rz-checkbox-list-horizontal .rz-stack {
+    row-gap: 10px;
+}

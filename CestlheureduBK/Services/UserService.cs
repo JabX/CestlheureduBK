@@ -37,9 +37,11 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
         var price = await (
             from mpr in context.MysteryProducts
             join pr in context.ProductsRestaurants on mpr.Product equals pr.Product
+            from pr2 in context.ProductsRestaurants.Where(pr => mpr.Product2 == pr.Product).DefaultIfEmpty()
             where pr.Restaurant.Id == codeRestaurant
+            where pr2 == null || pr2.Restaurant.Id == codeRestaurant
             where mpr.Id == mpId
-            select pr.Price
+            select pr.Price + (pr2 != null ? pr2.Price : 0)
         ).SingleAsync();
 
         context.MysteryRolls.Add(
@@ -98,7 +100,9 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
                     mr.Id,
                     mr.User.Name,
                     mr.Product.Campaign.Month,
-                    mr.Product.Product.Name,
+                    mr.Product.Product2 != null
+                        ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"
+                        : mr.Product.Product.Name,
                     mr.Price,
                     mr.Product.Campaign.Price,
                     $"{mr.Restaurant.Name} ({mr.Restaurant.Departement})",
