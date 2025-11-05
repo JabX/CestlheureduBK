@@ -73,7 +73,9 @@
         {
             <br />
             <RadzenText Text="@campaign.Name" TextStyle="TextStyle.DisplayH6" />
-            <span style="font-size:0.9em;font-style:italic">Prix : @campaign.Price.ToString("0.00 €") / Espérance : @campaign.PriceExpectancy.ToString("0.00 €") et @campaign.EnergyExpectancy.ToString("0 kcal")</span>
+            <span style="font-size:0.9em;font-style:italic">
+                Prix : @campaign.Price.ToString("0.00 €") / Espérance : @campaign.PriceExpectancy.ToString("0.00 €") <span style="font-size:0.8em">(x @campaign.PriceGain.ToString("0.00"))</span> et @campaign.EnergyExpectancy.ToString("0 kcal") <span style="font-size:0.8em">(@campaign.EnergyGain.ToString("0 kcal/€"))</span>
+            </span>
             <br />
             <br />
             <span>

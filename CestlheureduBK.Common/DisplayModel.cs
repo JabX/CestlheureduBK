@@ -66,7 +66,11 @@ public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMy
 {
     public double PriceExpectancy => Burgers.Sum(b => b.Chance * b.Price) / Burgers.Sum(b => b.Chance);
 
+    public double PriceGain => PriceExpectancy / Price;
+
     public double EnergyExpectancy => Burgers.Sum(b => b.Chance * b.Energy) / Burgers.Sum(b => b.Chance);
+
+    public double EnergyGain => EnergyExpectancy / Price;
 
     public int MyCount => Burgers.Sum(b => b.MyCount);
 
