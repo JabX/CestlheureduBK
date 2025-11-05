@@ -308,8 +308,10 @@ public class GetDataService(BKDbContext context, UserService userService)
                         c.pr.Product.Image,
                         c.pr2.Product.Name,
                         c.pr2.Product.Image,
-                        c.pr.Price + (c.pr2 != null ? c.pr2.Price : 0),
-                        (c.pr.Product.Energy ?? 0) + (c.pr2!.Product.Energy ?? 0),
+                        c.pr.Price,
+                        c.pr.Product.Energy ?? 0,
+                        c.pr2 != null ? c.pr2.Price : 0,
+                        c.pr2 != null ? (c.pr2.Product.Energy ?? 0) : 0,
                         c.mp.Chance,
                         context.MysteryRolls.Count(mr => mr.Product == c.mp && mr.User.Id == userService.Id),
                         context.MysteryRolls.Count(mr => mr.Product == c.mp)

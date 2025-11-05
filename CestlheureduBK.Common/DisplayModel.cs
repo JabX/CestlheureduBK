@@ -55,12 +55,19 @@ public record BurgerMystereDisplay(
     string? Image,
     string? Name2,
     string? Image2,
-    double Price,
-    double Energy,
+    double Price1,
+    double Energy1,
+    double Price2,
+    double Energy2,
     double Chance,
     int MyCount,
     int TotalCount
-);
+)
+{
+    public double Price => Price1 + Price2;
+
+    public double Energy => Energy1 + Energy2;
+}
 
 public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMystereDisplay> Burgers)
 {
