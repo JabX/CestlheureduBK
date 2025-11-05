@@ -81,6 +81,25 @@ public class GetDataService(BKDbContext context, UserService userService)
         return catalogue;
     }
 
+    public async Task<IList<MysteryRollDisplay>> GetMysteryRolls()
+    {
+        return await context
+            .MysteryRolls.OrderByDescending(m => m.RollTime)
+            .Select(mr => new MysteryRollDisplay(
+                mr.Id,
+                $"{mr.User.Name} ({mr.User.Email.Split('@', StringSplitOptions.None)[0].Substring(0, 2)}..@{mr.User.Email.Split('@', StringSplitOptions.None)[1].Substring(0, 2)}..)",
+                mr.Product.Campaign.Month,
+                mr.Product.Product2 != null
+                    ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"
+                    : mr.Product.Product.Name,
+                mr.Price,
+                mr.Product.Campaign.Price,
+                $"{mr.Restaurant.Name} ({mr.Restaurant.Departement})",
+                mr.RollTime
+            ))
+            .ToListAsync();
+    }
+
     public async Task<OfferDisplay[]> GetOffers(string codeRestaurant)
     {
         var offers = (

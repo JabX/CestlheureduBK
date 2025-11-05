@@ -29,26 +29,62 @@
     }
 
     <RadzenText class="@ClassName" Text="@message" />
+    
+    <h2 style="margin:0">Données chargées</h2>
 
-    <RadzenTable>
-        <RadzenTableHeader>
-            <RadzenTableHeaderRow>
-                <RadzenTableHeaderCell>Restaurant</RadzenTableHeaderCell>
-                <RadzenTableHeaderCell Style="width:170px">Dernière MàJ</RadzenTableHeaderCell>
-                <RadzenTableHeaderCell Style="width:60px" />
-            </RadzenTableHeaderRow>
-        </RadzenTableHeader>
-        <RadzenTableBody>
-            @foreach (var restaurant in restaurants)
-            {
-                <RadzenTableRow>
-                    <RadzenTableCell>@restaurant.FullName</RadzenTableCell>
-                    <RadzenTableCell>@restaurant.CatalogueUpdate.ToLocalDisplay()</RadzenTableCell>
-                    <RadzenTableCell><RadzenButton Icon="refresh" Disabled="loading" Click="@(() => ReloadCatalogue(restaurant.Id))" /></RadzenTableCell>
-                </RadzenTableRow>
-            }
-        </RadzenTableBody>
-    </RadzenTable>
+    <RadzenTabs RenderMode="TabRenderMode.Client" >
+        <Tabs>
+            <RadzenTabsItem Text="Restaurants">
+                <RadzenTable>
+                    <RadzenTableHeader>
+                        <RadzenTableHeaderRow>
+                            <RadzenTableHeaderCell>Restaurant</RadzenTableHeaderCell>
+                            <RadzenTableHeaderCell Style="width:170px">Dernière MàJ</RadzenTableHeaderCell>
+                            <RadzenTableHeaderCell Style="width:60px" />
+                        </RadzenTableHeaderRow>
+                    </RadzenTableHeader>
+                    <RadzenTableBody>
+                        @foreach (var restaurant in restaurants)
+                        {
+                            <RadzenTableRow>
+                                <RadzenTableCell>@restaurant.FullName</RadzenTableCell>
+                                <RadzenTableCell>@restaurant.CatalogueUpdate.ToLocalDisplay()</RadzenTableCell>
+                                <RadzenTableCell><RadzenButton Icon="refresh" Disabled="loading" Click="@(() => ReloadCatalogue(restaurant.Id))" /></RadzenTableCell>
+                            </RadzenTableRow>
+                        }
+                    </RadzenTableBody>
+                </RadzenTable>
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Burgers Mystère">
+                <RadzenTable>
+                    <RadzenTableHeader>
+                        <RadzenTableHeaderRow>
+                            <RadzenTableHeaderCell>Qui ?</RadzenTableHeaderCell>
+                            <RadzenTableHeaderCell>Quand ?</RadzenTableHeaderCell>
+                            <RadzenTableHeaderCell>Quoi ?</RadzenTableHeaderCell>
+                            <RadzenTableHeaderCell>Où ?</RadzenTableHeaderCell>
+                            <RadzenTableHeaderCell>Prix</RadzenTableHeaderCell>
+                        </RadzenTableHeaderRow>
+                    </RadzenTableHeader>
+                    <RadzenTableBody>
+                        @foreach (var roll in mysteryRolls)
+                        {
+                            <RadzenTableRow>
+                                <RadzenTableCell>@roll.UserName</RadzenTableCell>
+                                <RadzenTableCell>Le @roll.RollTime.ToLocalDisplay()</RadzenTableCell>
+                                <RadzenTableCell>@roll.ProductName</RadzenTableCell>
+                                <RadzenTableCell>@roll.RestaurantName</RadzenTableCell>
+                                <RadzenTableCell>
+                                    <span>@roll.ProductPrice.ToString("0.00 €")</span>
+                                    <span class="detail">(@roll.Gain.ToString("0.00 €") gagné !)</span>
+                                </RadzenTableCell>
+                              </RadzenTableRow>
+                        }
+                    </RadzenTableBody>
+                </RadzenTable>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
 
     <RadzenButton Click="() => CallService(Service.ResetDb)" Disabled Text="Tout réinitialiser" />
 </RadzenStack>
@@ -60,6 +96,7 @@
     bool error;
 
     RestaurantDisplay[] restaurants = [];
+    MysteryRollDisplay[] mysteryRolls = [];
 
     string ClassName => error ? "error" : "";
 
@@ -68,6 +105,8 @@
         restaurants = (await getDataService.GetRestaurants()).Where(r => r.CatalogueUpdate != null)
             .OrderByDescending(r => r.CatalogueUpdate)
             .ToArray();
+
+        mysteryRolls = (await getDataService.GetMysteryRolls()).ToArray();
     }
 
     private async Task CallService(Service service)
