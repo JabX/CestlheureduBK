@@ -74,11 +74,13 @@
                                             </Items>
                                         </RadzenCheckBoxList>
 
-                                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                                            <span style="cursor:pointer" @onclick=@(() => criteria.And = false)>Au moins un produit</span>
-                                            <RadzenSwitch Name="and" Value="@criteria.And" Change="@(() => criteria.And = !criteria.And)" />
-                                            <span style="cursor:pointer" @onclick=@(() => criteria.And = true)>Tous les produits</span>
-                                        </RadzenStack>
+                                        <RadzenRadioButtonList @bind-Value=@criteria.CombinationMode TValue="CombinationMode">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Au moins un produit sélectionné" Value="CombinationMode.AtLeastOne" />
+                                                <RadzenRadioButtonListItem Text="Uniquement parmi les produits sélectionés" Value="CombinationMode.OnlySelected" />
+                                                <RadzenRadioButtonListItem Text="Exactement les produits sélectionés" Value="CombinationMode.ExactSelection" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
                                     </RadzenStack>
                                 </RadzenStack>
                             </RadzenCard>
@@ -332,8 +334,9 @@
             _ => burgers
         }).Where(b =>
             criteria.Burgers == null
-            || !criteria.And && (criteria.Burgers.Contains(b.Name) || criteria.Burgers.Contains(b.Name2!))
-            || criteria.And && (
+            || criteria.CombinationMode == CombinationMode.AtLeastOne && (criteria.Burgers.Contains(b.Name) || criteria.Burgers.Contains(b.Name2!))
+            || criteria.CombinationMode == CombinationMode.OnlySelected && criteria.Burgers.Contains(b.Name) && criteria.Burgers.Contains(b.Name2!)
+            || criteria.CombinationMode == CombinationMode.ExactSelection && (
                 criteria.Burgers.Count == 1 && criteria.Burgers[0] == b.Name && b.Name == b.Name2)
                 || criteria.Burgers.Count == 2 && (
                     criteria.Burgers[0] == b.Name && criteria.Burgers[1] == b.Name2
@@ -402,13 +405,20 @@
         }
     }
 
+    private enum CombinationMode
+    {
+        AtLeastOne,
+        OnlySelected,
+        ExactSelection
+    }
+
     private record MysteryCriteria
     {
         public string SortBy { get; set; } = "chance";
 
         public bool Asc { get; set; }
 
-        public bool And { get; set; }
+        public CombinationMode CombinationMode { get; set; }
 
         public IList<string>? Burgers { get; set; }
 
