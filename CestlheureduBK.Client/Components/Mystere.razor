@@ -10,10 +10,10 @@
                     Style="width:350px"
                     Change="OnMonthChange">
         <Template>
-            @DateTime.Parse(@context).ToString("MMMM yyyy")
+            @DateTime.Parse(@context).ToString("MMMM yyyy") @(((string)context).Count(c => c == '-') == 2 && Months.Count(m => m.StartsWith(((string)context)[0..^3])) > 1 ? $"v{Months.Where(m => m.StartsWith(((string)context)[0..^3])).Reverse().ToList().IndexOf(context) + 1}" : "")
         </Template>
         <ValueTemplate>
-            @DateTime.Parse(@context).ToString("MMMM yyyy")
+            @DateTime.Parse(@context).ToString("MMMM yyyy") @(((string)context).Count(c => c == '-') == 2 && Months.Count(m => m.StartsWith(((string)context)[0..^3])) > 1 ? $"v{Months.Where(m => m.StartsWith(((string)context)[0..^3])).Reverse().ToList().IndexOf(context) + 1}" : "")
         </ValueTemplate>
     </RadzenDropDown>
 </RadzenStack>

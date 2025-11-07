@@ -17,7 +17,7 @@
         Month="@Month" 
         Months="@months"
         IsAuthenticated=@(headerData.IsAuthenticated)
-        IsCurrent="@(Month == DateTime.UtcNow.ToString("yyyy-MM"))"
+        IsCurrent="@(isCurrent)"
         CodeRestaurant="@headerData.Restaurant.Id"
     />
 } 
@@ -26,6 +26,7 @@
     private IList<BurgerMystereListDisplay>? data;
     private HeaderDisplay? headerData;
     private IList<string>? months;
+    private bool isCurrent;
 
     [Parameter]
     public required string Month { get; set; }
@@ -41,6 +42,7 @@
         {
             months = await getDataService.GetBurgerMystereMonths();
             data = await getDataService.GetBurgerMystere(Month, headerData.Restaurant.Id);
+            isCurrent = Month.StartsWith(DateTime.Now.ToString("yyyy-MM")) && Month == months.First(m => m.StartsWith(DateTime.Now.ToString("yyyy-MM")));
         }
     }
 }

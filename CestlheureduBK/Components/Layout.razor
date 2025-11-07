@@ -3,6 +3,7 @@
 @inject ThemeService themeService;
 @inject NavigationManager navigationManager;
 @inject UserService userService;
+@inject GetDataService getDataService;
 
 <RadzenLayout>
     <RadzenHeader>
@@ -25,7 +26,7 @@
                 <RadzenPanelMenuItem Path=@($"/points{RestaurantId}") Text="Couronnes" Icon="star" />
                 <RadzenPanelMenuItem Path=@($"/carte{RestaurantId}") Text="Carte" Icon="menu_book" />
                 <RadzenPanelMenuItem Path=@($"/snacks{RestaurantId}") Text="Snacks" Icon="fastfood" />
-                <RadzenPanelMenuItem Path=@($"/mystere/{DateTime.UtcNow.ToString("yyyy-MM")}{RestaurantId}") Text="Burger Mystère" Icon="question_mark" />
+                <RadzenPanelMenuItem Path=@($"/mystere/{burgerMystereMonth}{RestaurantId}") Text="Burger Mystère" Icon="question_mark" />
             </RadzenPanelMenu>
         </RadzenStack>
     </RadzenHeader>
@@ -37,6 +38,8 @@
 @code {
     [CascadingParameter]
     HttpContext? HttpContext { get; set; }
+
+    string burgerMystereMonth = string.Empty;
 
     string RestaurantId
     {
@@ -52,11 +55,15 @@
         }
     }
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
         if (HttpContext != null && HttpContext.Request.Cookies.TryGetValue("theme", out var cookie) && cookie != null)
         {
             themeService.SetTheme(cookie);
         }
+
+        var burgerMysteresMonths = await getDataService.GetBurgerMystereMonths();
+        var currentMonth = DateTime.Now.ToString("yyyy-MM");
+        burgerMystereMonth = burgerMysteresMonths.FirstOrDefault(b => b.StartsWith(currentMonth)) ?? currentMonth;
     }
 }

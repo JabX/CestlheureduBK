@@ -13,7 +13,7 @@ public static class ApiRoutes
     {
         app.MapPut(
             "api/energy/{type}/{id}",
-            async (ItemType type, string id, [FromServices] UpdateDataService updateDataService) =>
+            (ItemType type, string id, [FromServices] UpdateDataService updateDataService) =>
             {
                 return updateDataService.ReloadEnergy(type, id).Distinct();
             }
