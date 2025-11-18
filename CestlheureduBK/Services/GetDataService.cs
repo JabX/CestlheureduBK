@@ -87,7 +87,9 @@ public class GetDataService(BKDbContext context, UserService userService)
             .MysteryRolls.OrderByDescending(m => m.RollTime)
             .Select(mr => new MysteryRollDisplay(
                 mr.Id,
-                $"{mr.User.Name} ({mr.User.Email.Split('@', StringSplitOptions.None)[0].Substring(0, 2)}..@{mr.User.Email.Split('@', StringSplitOptions.None)[1].Substring(0, 2)}..)",
+                mr.User.Email == "damien.frikha@kleegroup.com"
+                    ? "Anonyme"
+                    : $"{mr.User.Name} ({mr.User.Email.Split('@', StringSplitOptions.None)[0].Substring(0, 2)}..@{mr.User.Email.Split('@', StringSplitOptions.None)[1].Substring(0, 2)}..)",
                 mr.Product.Campaign.Month,
                 mr.Product.Product2 != null
                     ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"

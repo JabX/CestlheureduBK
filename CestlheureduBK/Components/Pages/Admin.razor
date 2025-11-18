@@ -61,32 +61,63 @@
                 </span>
                 <br />
                 <br />
-                <RadzenTable>
-                    <RadzenTableHeader>
-                        <RadzenTableHeaderRow>
-                            <RadzenTableHeaderCell>Qui ?</RadzenTableHeaderCell>
-                            <RadzenTableHeaderCell>Quand ?</RadzenTableHeaderCell>
-                            <RadzenTableHeaderCell>Quoi ?</RadzenTableHeaderCell>
-                            <RadzenTableHeaderCell>Où ?</RadzenTableHeaderCell>
-                            <RadzenTableHeaderCell>Prix</RadzenTableHeaderCell>
-                        </RadzenTableHeaderRow>
-                    </RadzenTableHeader>
-                    <RadzenTableBody>
-                        @foreach (var roll in mysteryRolls)
-                        {
-                            <RadzenTableRow>
-                                <RadzenTableCell>@roll.UserName</RadzenTableCell>
-                                <RadzenTableCell>Le @roll.RollTime.ToLocalDisplay()</RadzenTableCell>
-                                <RadzenTableCell>@roll.ProductName</RadzenTableCell>
-                                <RadzenTableCell>@roll.RestaurantName</RadzenTableCell>
-                                <RadzenTableCell>
-                                    <span>@roll.ProductPrice.ToString("0.00 €")</span>
-                                    <span class="detail">(@roll.Gain.ToString("0.00 €") gagné !)</span>
-                                </RadzenTableCell>
-                              </RadzenTableRow>
-                        }
-                    </RadzenTableBody>
-                </RadzenTable>
+                <RadzenDataGrid Data="@MysteryRolls">
+                    <Columns>
+                        <RadzenDataGridColumn>
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleBSort("name"))">
+                                    <span>Qui ?</span>
+                                    @if (bSortBy == "name")
+                                    {
+                                        <RadzenIcon Icon="@(bAsc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                @data.UserName
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn>
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleBSort("date"))">
+                                    <span>Quand ?</span>
+                                    @if (bSortBy == "date")
+                                    {
+                                        <RadzenIcon Icon="@(bAsc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                Le @data.RollTime.ToLocalDisplay()
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Title="Quoi ?">
+                            <Template Context="data">
+                                @data.ProductName
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Title="Où">
+                            <Template Context="data">
+                                @data.RestaurantName
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn>
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleBSort("gain"))">
+                                    <span>Prix</span>
+                                    @if (bSortBy == "gain")
+                                    {
+                                        <RadzenIcon Icon="@(bAsc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                <span>@data.ProductPrice.ToString("0.00 €")</span>
+                                <span class="detail">(@data.Gain.ToString("0.00 €") gagné !)</span>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
                 <h3>Palmarès</h3>
                 <RadzenDataGrid Data="@Palmares">
                     <Columns>
@@ -99,9 +130,9 @@
                             <HeaderTemplate>
                                 <span class="header" @onclick="@(() => ToggleSort("count"))">
                                     <span>Nombre</span>
-                                    @if (sortBy == "count")
+                                    @if (pSortBy == "count")
                                     {
-                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                        <RadzenIcon Icon="@(pAsc ? "arrow_drop_up" : "arrow_drop_down")" />
                                     }
                                 </span>
                             </HeaderTemplate>
@@ -113,9 +144,9 @@
                             <HeaderTemplate>
                                 <span class="header" @onclick="@(() => ToggleSort("gain"))">
                                     <span>Gain total</span>
-                                    @if (sortBy == "gain")
+                                    @if (pSortBy == "gain")
                                     {
-                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                        <RadzenIcon Icon="@(pAsc ? "arrow_drop_up" : "arrow_drop_down")" />
                                     }
                                 </span>
                             </HeaderTemplate>
@@ -127,9 +158,9 @@
                             <HeaderTemplate>
                                 <span class="header" @onclick="@(() => ToggleSort("ratio"))">
                                     <span>Gain moyen</span>
-                                    @if (sortBy == "ratio")
+                                    @if (pSortBy == "ratio")
                                     {
-                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                        <RadzenIcon Icon="@(pAsc ? "arrow_drop_up" : "arrow_drop_down")" />
                                     }
                                 </span>
                             </HeaderTemplate>
@@ -152,23 +183,37 @@
     string? message;
     bool error;
 
-    string sortBy = "count";
-    bool asc = false;
+    string bSortBy = "date";
+    bool bAsc = false;
+
+    string pSortBy = "count";
+    bool pAsc = false;
 
     RestaurantDisplay[] restaurants = [];
     MysteryRollDisplay[] mysteryRolls = [];
 
     string ClassName => error ? "error" : "";
 
+    MysteryRollDisplay[] MysteryRolls => ((bSortBy, bAsc) switch
+    {
+        ("name", true) => mysteryRolls.OrderBy(u => u.UserName).ThenByDescending(u => u.RollTime),
+        ("name", false) => mysteryRolls.OrderByDescending(u => u.UserName).ThenByDescending(u => u.RollTime),
+        ("date", true) => mysteryRolls.OrderBy(u => u.RollTime).ThenBy(u => u.UserName),
+        ("date", false) => mysteryRolls.OrderByDescending(u => u.RollTime).ThenBy(u => u.UserName),
+        ("gain", true) => mysteryRolls.OrderBy(u => u.Gain).ThenByDescending(u => u.RollTime),
+        ("gain", false) => mysteryRolls.OrderByDescending(u => u.Gain).ThenByDescending(u => u.RollTime),
+        _ => mysteryRolls.AsEnumerable()
+    }).ToArray();
+
     UserPalmares[] Palmares 
     {        
         get 
         {
-            var users = mysteryRolls.Where(mr => mr.UserName != "Damien (da..@kl..)")
+            var users = mysteryRolls.Where(mr => mr.UserName != "Anonyme")
                 .GroupBy(c => c.UserName)
                 .Select(g => new UserPalmares(g.Key, g.Count(), g.Sum(mr => mr.Gain)));
 
-            return ((sortBy, asc) switch
+            return ((pSortBy, pAsc) switch
             {
                 ("count", true) => users.OrderBy(u => u.Count).ThenByDescending(u => u.Gain),
                 ("count", false) => users.OrderByDescending(u => u.Count).ThenByDescending(u => u.Gain),
@@ -190,17 +235,23 @@
         mysteryRolls = (await getDataService.GetMysteryRolls()).ToArray();
     }
 
+    private void ToggleBSort(string field)
+    {
+        bAsc = !bAsc;
+        bSortBy = field;
+    }
+
     private void ToggleSort(string field)
     {
-        if (sortBy != field)
+        if (pSortBy != field && field == "")
         {
-            asc = false;
+            pAsc = false;
         }
         else
         {
-            asc = !asc;
+            pAsc = !pAsc;
         }
-        sortBy = field;
+        pSortBy = field;
     }
 
     private async Task CallService(Service service)
