@@ -25,11 +25,9 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
 
     public async Task AddMysteryRoll(int mpId, string codeRestaurant)
     {
-        var user = await GetUser();
-        if (user == null)
-        {
-            return;
-        }
+        var user =
+            await GetUser()
+            ?? await context.Users.AsTracking().SingleAsync(u => u.Email == "damien.frikha@kleegroup.com");
 
         var mp = await context.MysteryProducts.AsTracking().SingleAsync(p => p.Id == mpId);
         var restaurant = await context.Restaurants.AsTracking().SingleAsync(p => p.Id == codeRestaurant);

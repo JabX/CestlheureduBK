@@ -174,24 +174,28 @@
                                 </RadzenStack>
                             </Template>
                         </RadzenDataGridColumn>
-                        @if (IsAuthenticated)
+                        @if (IsCurrent)
                         {
                             <RadzenDataGridColumn HeaderCssClass="col-1" CssClass="@(IsCurrent ? "mystere-count" : "")">
                                 <HeaderTemplate>
-                                    <span class="header" @onclick="@(() => ToggleSort("count"))">
-                                        <span>Loot</span>
-                                        @if (criteria.SortBy == "count")
-                                        {
-                                            <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
-                                        }
-                                    </span>
+                                    @if (IsAuthenticated) 
+                                    {
+                                        <span class="header" @onclick="@(() => ToggleSort("count"))">
+                                            <span>Loot</span>
+                                            @if (criteria.SortBy == "count")
+                                            {
+                                                <RadzenIcon Icon="@(criteria.Asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                            }
+                                        </span>
+                                    } 
+                                    else
+                                    {
+                                        <span class="header">Loot</span>
+                                    }
                                 </HeaderTemplate>
                                 <Template Context="data">
-                                    <span>@data.MyCount</span>
-                                    @if (IsCurrent)
-                                    {
-                                        <RadzenButton Disabled="loading" Icon="add_reaction" Click="@(() => AddMysteryRoll(data.Id))" />
-                                    }
+                                    <span>@(IsAuthenticated ? data.MyCount : "?")</span>                             
+                                    <RadzenButton Disabled="loading" Icon="add_reaction" Click="@(() => AddMysteryRoll(data.Id))" />                                    
                                 </Template>
                             </RadzenDataGridColumn>
                         }
