@@ -6,6 +6,11 @@
 
 @if (MysteryRolls.Count > 0)
 {
+    <span style="font-size:0.9em;font-style:italic">
+        Nombre total : <strong>@MysteryRolls.Count</strong> / Montant économisé : <strong>@MysteryRolls.Sum(m => m.Gain).ToString("0.00 €")</strong>
+    </span>
+    <br />
+    <br />
     <RadzenTable>
         <RadzenTableHeader>
             <RadzenTableHeaderRow>

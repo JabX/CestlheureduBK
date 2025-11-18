@@ -50,7 +50,7 @@ else
 }
 
 var fhOptions = new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All };
-fhOptions.KnownNetworks.Clear();
+fhOptions.KnownIPNetworks.Clear();
 fhOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(fhOptions);
 

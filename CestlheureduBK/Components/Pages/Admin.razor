@@ -56,6 +56,11 @@
                 </RadzenTable>
             </RadzenTabsItem>
             <RadzenTabsItem Text="Burgers Mystère">
+                <span style="font-size:0.9em;font-style:italic">
+                    Nombre total : <strong>@mysteryRolls.Count()</strong> / Montant économisé : <strong>@mysteryRolls.Sum(m => m.Gain).ToString("0.00 €")</strong>
+                </span>
+                <br />
+                <br />
                 <RadzenTable>
                     <RadzenTableHeader>
                         <RadzenTableHeaderRow>
@@ -82,6 +87,58 @@
                         }
                     </RadzenTableBody>
                 </RadzenTable>
+                <h3>Palmarès</h3>
+                <RadzenDataGrid Data="@Palmares">
+                    <Columns>
+                        <RadzenDataGridColumn Title="Qui ?">
+                            <Template Context="data">
+                                @data.UserName
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn>
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleSort("count"))">
+                                    <span>Nombre</span>
+                                    @if (sortBy == "count")
+                                    {
+                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                @data.Count
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn>
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleSort("gain"))">
+                                    <span>Gain total</span>
+                                    @if (sortBy == "gain")
+                                    {
+                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                @data.Gain.ToString("0.00 €")
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn>
+                            <HeaderTemplate>
+                                <span class="header" @onclick="@(() => ToggleSort("ratio"))">
+                                    <span>Gain moyen</span>
+                                    @if (sortBy == "ratio")
+                                    {
+                                        <RadzenIcon Icon="@(asc ? "arrow_drop_up" : "arrow_drop_down")" />
+                                    }
+                                </span>
+                            </HeaderTemplate>
+                            <Template Context="data">
+                                @data.Ratio.ToString("0.00 €")
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
@@ -95,10 +152,34 @@
     string? message;
     bool error;
 
+    string sortBy = "count";
+    bool asc = false;
+
     RestaurantDisplay[] restaurants = [];
     MysteryRollDisplay[] mysteryRolls = [];
 
     string ClassName => error ? "error" : "";
+
+    UserPalmares[] Palmares 
+    {        
+        get 
+        {
+            var users = mysteryRolls.Where(mr => mr.UserName != "Damien (da..@kl..)")
+                .GroupBy(c => c.UserName)
+                .Select(g => new UserPalmares(g.Key, g.Count(), g.Sum(mr => mr.Gain)));
+
+            return ((sortBy, asc) switch
+            {
+                ("count", true) => users.OrderBy(u => u.Count).ThenByDescending(u => u.Gain),
+                ("count", false) => users.OrderByDescending(u => u.Count).ThenByDescending(u => u.Gain),
+                ("gain", true) => users.OrderBy(u => u.Gain).ThenBy(u => u.Ratio),
+                ("gain", false) => users.OrderByDescending(u => u.Gain).ThenByDescending(u => u.Ratio),
+                ("ratio", true) => users.OrderBy(u => u.Ratio).ThenBy(u => u.Gain),
+                ("ratio", false) => users.OrderByDescending(u => u.Ratio).ThenByDescending(u => u.Gain),
+                _ => users
+            }).ToArray();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -107,6 +188,19 @@
             .ToArray();
 
         mysteryRolls = (await getDataService.GetMysteryRolls()).ToArray();
+    }
+
+    private void ToggleSort(string field)
+    {
+        if (sortBy != field)
+        {
+            asc = false;
+        }
+        else
+        {
+            asc = !asc;
+        }
+        sortBy = field;
     }
 
     private async Task CallService(Service service)
@@ -146,5 +240,10 @@
         Offers,
         Restaurants,
         ResetDb
+    }
+
+    record UserPalmares(string UserName, int Count, double Gain)
+    {
+        public double Ratio => Gain / Count;
     }
 }

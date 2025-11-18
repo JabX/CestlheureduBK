@@ -485,31 +485,33 @@ public class UpdateDataService(BKDbContext context) : IDisposable
 
             var restaux = await stores
                 .Markers.ToAsyncEnumerable()
-                .SelectAwait(async store =>
-                {
-                    if (restaurantsDb.TryGetValue(store.Id, out var restaurantDb))
+                .Select(
+                    async (Marker store, CancellationToken ct) =>
                     {
-                        return restaurantDb;
-                    }
-                    else
-                    {
-                        await Task.Delay(200); // L'API nous jette au bout d'un moment sinon :(
-                        var restaurant = await Client.GetAsync(
-                            $"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}"
-                        );
-                        restaurant.EnsureSuccessStatusCode();
-                        var restaurantData = (await restaurant.Content.ReadFromJsonAsync<Restaurant>())!;
-                        return new RestaurantDb
+                        if (restaurantsDb.TryGetValue(store.Id, out var restaurantDb))
                         {
-                            AddressFull = restaurantData.AddressFull,
-                            Id = restaurantData.Id,
-                            Name = restaurantData.Name,
-                            Lat = restaurantData.Lat,
-                            Lng = restaurantData.Lng,
-                            Departement = restaurantData.AddressFull.Split("- ").Last().Trim()[..2],
-                        };
+                            return restaurantDb;
+                        }
+                        else
+                        {
+                            await Task.Delay(200); // L'API nous jette au bout d'un moment sinon :(
+                            var restaurant = await Client.GetAsync(
+                                $"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}"
+                            );
+                            restaurant.EnsureSuccessStatusCode();
+                            var restaurantData = (await restaurant.Content.ReadFromJsonAsync<Restaurant>())!;
+                            return new RestaurantDb
+                            {
+                                AddressFull = restaurantData.AddressFull,
+                                Id = restaurantData.Id,
+                                Name = restaurantData.Name,
+                                Lat = restaurantData.Lat,
+                                Lng = restaurantData.Lng,
+                                Departement = restaurantData.AddressFull.Split("- ").Last().Trim()[..2],
+                            };
+                        }
                     }
-                })
+                )
                 .ToArrayAsync();
 
             context.AddRange(restaux.Where(r => !restaurantsDb.ContainsKey(r.Id)));
