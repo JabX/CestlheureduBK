@@ -132,11 +132,11 @@
                                     <span>@data.Chance.ToString("0.0 %")</span>
                                     @if (campaign.TotalCount > 0)
                                     {
-                                        <span class="detail">réel : @((data.TotalCount / (decimal)campaign.TotalCount).ToString("0 %"))</span>
+                                        <span class="detail">réel : @((data.TotalCount / (decimal)campaign.TotalCount).ToString("0.0 %"))</span>
                                     }
                                     @if (IsAuthenticated && campaign.MyCount > 0)
                                     {
-                                        <span class="detail">moi : @((data.MyCount / (decimal)campaign.MyCount).ToString("0 %"))</span>
+                                        <span class="detail">moi : @((data.MyCount / (decimal)campaign.MyCount).ToString("0.0 %"))</span>
                                     }
                                 </RadzenStack>
                             </Template>
@@ -241,11 +241,11 @@
                                     <span>@data.Chance.ToString("0.0 %")</span>
                                     @if (campaign.TotalCount > 0)
                                     {
-                                        <span class="detail">réel : @((data.TotalCount / (decimal)campaign.TotalCount).ToString("0 %"))</span>
+                                        <span class="detail">réel : @((data.TotalCount / (decimal)campaign.TotalCount).ToString("0.0 %"))</span>
                                     }
                                     @if (IsAuthenticated && campaign.MyCount > 0)
                                     {
-                                        <span class="detail">moi : @((data.MyCount / (decimal)campaign.MyCount).ToString("0 %"))</span>
+                                        <span class="detail">moi : @((data.MyCount / (decimal)campaign.MyCount).ToString("0.0 %"))</span>
                                     }
                                 </RadzenStack>
                             </Template>
