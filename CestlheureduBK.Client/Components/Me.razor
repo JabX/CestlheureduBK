@@ -1,6 +1,7 @@
 ﻿@rendermode InteractiveWebAssembly
 
 @inject NavigationManager navigationManager;
+@inject NotificationService notificationService;
 
 <h2>Mes burgers mystères</h2>
 
@@ -44,7 +45,6 @@ else
     <p>J'ai jamais mangé de burger mystère... 🥺</p>
 }
 
-
 @code {
     readonly HttpClient? _client;
     private bool loading;
@@ -64,7 +64,9 @@ else
             loading = true;
             var response = await _client.DeleteAsync($"api/mystery/{mrId}");
             loading = false;
-            navigationManager.Refresh();
+            navigationManager.Refresh(); 
+            notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"Votre enregistrement a bien été supprimé !" });
+
         }
     }
 }

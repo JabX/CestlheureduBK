@@ -23,37 +23,18 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
 
     public string Email => httpContextAccessor.HttpContext?.User.Identity?.Name ?? string.Empty;
 
-    public async Task AddMysteryRoll(int mpId, string codeRestaurant)
+    public async Task AddMysteryRollAnonymous(int mpId, string codeRestaurant)
     {
-        var user =
-            await GetUser()
-            ?? await context.Users.AsTracking().SingleAsync(u => u.Email == "damien.frikha@kleegroup.com");
-
-        var mp = await context.MysteryProducts.AsTracking().SingleAsync(p => p.Id == mpId);
-        var restaurant = await context.Restaurants.AsTracking().SingleAsync(p => p.Id == codeRestaurant);
-
-        var price = await (
-            from mpr in context.MysteryProducts
-            join pr in context.ProductsRestaurants on mpr.Product equals pr.Product
-            from pr2 in context.ProductsRestaurants.Where(pr => mpr.Product2 == pr.Product).DefaultIfEmpty()
-            where pr.Restaurant.Id == codeRestaurant
-            where pr2 == null || pr2.Restaurant.Id == codeRestaurant
-            where mpr.Id == mpId
-            select pr.Price + (pr2 != null ? pr2.Price : 0)
-        ).SingleAsync();
-
-        context.MysteryRolls.Add(
-            new()
-            {
-                Price = price,
-                Product = mp,
-                Restaurant = restaurant,
-                RollTime = DateTime.UtcNow,
-                User = user,
-            }
+        await AddMysteryRoll(
+            await context.Users.AsTracking().SingleAsync(u => u.Email == "damien.frikha@kleegroup.com"),
+            mpId,
+            codeRestaurant
         );
+    }
 
-        await context.SaveChangesAsync();
+    public async Task AddMysteryRollMe(int mpId, string codeRestaurant)
+    {
+        await AddMysteryRoll(await GetUser(), mpId, codeRestaurant);
     }
 
     public async Task DeleteMysteryRoll(int mrId)
@@ -148,5 +129,37 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
         context.Users.Add(user);
         await context.SaveChangesAsync();
         return user;
+    }
+
+    private async Task AddMysteryRoll(UserDb? user, int mpId, string codeRestaurant)
+    {
+        if (IsAuthenticated && user != null)
+        {
+            var mp = await context.MysteryProducts.AsTracking().SingleAsync(p => p.Id == mpId);
+            var restaurant = await context.Restaurants.AsTracking().SingleAsync(p => p.Id == codeRestaurant);
+
+            var price = await (
+                from mpr in context.MysteryProducts
+                join pr in context.ProductsRestaurants on mpr.Product equals pr.Product
+                from pr2 in context.ProductsRestaurants.Where(pr => mpr.Product2 == pr.Product).DefaultIfEmpty()
+                where pr.Restaurant.Id == codeRestaurant
+                where pr2 == null || pr2.Restaurant.Id == codeRestaurant
+                where mpr.Id == mpId
+                select pr.Price + (pr2 != null ? pr2.Price : 0)
+            ).SingleAsync();
+
+            context.MysteryRolls.Add(
+                new()
+                {
+                    Price = price,
+                    Product = mp,
+                    Restaurant = restaurant,
+                    RollTime = DateTime.UtcNow,
+                    User = user,
+                }
+            );
+
+            await context.SaveChangesAsync();
+        }
     }
 }

@@ -202,8 +202,9 @@ th, .rz-column-title, .rz-column-title-content {
     --rz-grid-header-title-padding-inline: 1rem;
 }
 
-.mystere-count {
+.rz-grid-table .mystere-count {
     text-align: center;
+    overflow: visible;
 }
 
     .mystere-count > span {
@@ -213,6 +214,22 @@ th, .rz-column-title, .rz-column-title-content {
         align-items: center;
         justify-content: center;
     }
+
+.mystere-count .rz-fabmenu {
+    position: relative;
+    bottom: inherit;
+    right: inherit;
+}
+
+        .mystere-count .rz-fabmenu > button {
+            padding: 0.45rem;
+            min-width: 1rem;
+            min-height: 1rem;
+        }
+
+.rz-fabmenu-items {
+    width: 200px;
+}
 
 a.energy {
     cursor: pointer;

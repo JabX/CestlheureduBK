@@ -38,10 +38,19 @@ public static class ApiRoutes
         );
 
         app.MapPut(
-            "api/mystery/{mpId}/{codeRestaurant}",
+            "api/mystery/me/{mpId}/{codeRestaurant}",
             async (int mpId, string codeRestaurant, [FromServices] UserService userService) =>
             {
-                await userService.AddMysteryRoll(mpId, codeRestaurant);
+                await userService.AddMysteryRollMe(mpId, codeRestaurant);
+                return Results.Ok();
+            }
+        );
+
+        app.MapPut(
+            "api/mystery/anonymous/{mpId}/{codeRestaurant}",
+            async (int mpId, string codeRestaurant, [FromServices] UserService userService) =>
+            {
+                await userService.AddMysteryRollAnonymous(mpId, codeRestaurant);
                 return Results.Ok();
             }
         );

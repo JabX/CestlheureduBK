@@ -1,6 +1,7 @@
 ﻿@rendermode InteractiveWebAssembly
 
 @inject NavigationManager navigationManager;
+@inject NotificationService notificationService;
 
 <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
     <RadzenLabel Text="Mois" Component="month" Style="line-height:40px" />
@@ -190,7 +191,10 @@
                                     <span>@data.MyCount</span>
                                     @if (IsCurrent)
                                     {
-                                        <RadzenButton Disabled="loading" Icon="add_reaction" Click="@(() => AddMysteryRoll(data.Id))" />                                    
+                                        <RadzenFabMenu Icon="add_reaction" Disabled="loading">
+                                            <RadzenFabMenuItem Text="Pour moi" Click=@(args => AddMysteryRollMe(data.Id, campaign.Name)) />
+                                            <RadzenFabMenuItem Text="Pour un autre" Click=@(args => AddMysteryRollAnonymous(data.Id, campaign.Name)) />
+                                        </RadzenFabMenu>       
                                     }
                                 </Template>
                             </RadzenDataGridColumn>
@@ -394,14 +398,27 @@
         criteria.Burgers = burgers?.Count() == AllBurgers.Count() ? null : (burgers ?? []).ToList();
     }
 
-    private async Task AddMysteryRoll(int mpId)
+    private async Task AddMysteryRollMe(int mpId, string campaignName)
     {
         if (_client != null)
         {
             loading = true;
-            var response = await _client.PutAsync($"api/mystery/{mpId}/{CodeRestaurant}", null);
+            var response = await _client.PutAsync($"api/mystery/me/{mpId}/{CodeRestaurant}", null);
             loading = false;
             navigationManager.Refresh();
+            notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"Votre {campaignName} a bien été enregistré !" });
+        }
+    }
+
+    private async Task AddMysteryRollAnonymous(int mpId, string campaignName)
+    {
+        if (_client != null)
+        {
+            loading = true;
+            var response = await _client.PutAsync($"api/mystery/anonymous/{mpId}/{CodeRestaurant}", null);
+            loading = false;
+            navigationManager.Refresh();
+            notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"Votre {campaignName} a bien été enregistré !" });
         }
     }
 
