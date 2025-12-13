@@ -42,7 +42,7 @@
         {
             months = await getDataService.GetBurgerMystereMonths();
             data = await getDataService.GetBurgerMystere(Month, headerData.Restaurant.Id);
-            isCurrent = Month.StartsWith(DateTime.Now.ToString("yyyy-MM")) && Month == months.First(m => m.StartsWith(DateTime.Now.ToString("yyyy-MM")));
+            isCurrent = Month.StartsWith(DateTime.Now.ToString("yyyy-MM")) && Month == months.FirstOrDefault(m => m.StartsWith(DateTime.Now.ToString("yyyy-MM")));
         }
     }
 }
