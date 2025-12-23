@@ -3,6 +3,7 @@
 @using GeoCoordinate.NetStandard2;
 @inject NavigationManager navigationManager;
 @inject IGeolocationService geoService;
+@inject IJSRuntime jsRuntime;
 
 @if (Data?.Restaurant != null)
 {
@@ -43,9 +44,14 @@
             }
             else
             {
+                if (Data.Restaurant?.CatalogueUpdate != null)
+                {
+                    <RadzenButton Icon="refresh" title="Mettre à jour le catalogue" Click="ReloadCatalogue" />
+                }
+
                 if (Data.IsAuthenticated)
                 {
-                    if (Data.FavoriteRestaurant?.Id == Data.Restaurant.Id)
+                    if (Data.FavoriteRestaurant?.Id == Data.Restaurant?.Id)
                     {
                         <RadzenIcon Icon="Favorite" title="Ce restaurant est mon restaurant préféré !" Style="margin:6px 0;" />
                     }
@@ -55,7 +61,7 @@
                     }
                 }
 
-                if (Data.Restaurant.Id == ClosestRestaurant?.Id)
+                if (Data.Restaurant?.Id == ClosestRestaurant?.Id)
                 {
                     <RadzenIcon Icon="distance" title="Il s'agit du restaurant le plus proche de moi" Style="margin:6px 0;" />
                 }
@@ -64,10 +70,7 @@
                     <RadzenButton Icon="location_searching" title="Choisir le restaurant le plus proche de moi" Click="@(() => OnRestaurantChange(ClosestRestaurant.Id))" />
                 }
 
-                if (Data.Restaurant?.CatalogueUpdate != null)
-                {
-                    <RadzenButton Icon="refresh" title="Mettre à jour le catalogue" Click="ReloadCatalogue" />
-                }
+                <RadzenButton Icon="directions" title="Je veux y aller !" Click="GoToRestaurant" />
             }
         </RadzenStack>
         @if (!loading)
@@ -152,6 +155,17 @@ else
             {
                 OnRestaurantChange(ClosestRestaurant.Id);
             }
+        }
+    }
+
+    private async Task GoToRestaurant()
+    {
+        if (Data?.Restaurant?.AddressFull != null)
+        {
+            await jsRuntime.InvokeVoidAsync(
+                "open", 
+                $"https://www.google.com/maps/dir/?api=1&destination={Data?.Restaurant?.AddressFull}", 
+                "_blank");
         }
     }
 
