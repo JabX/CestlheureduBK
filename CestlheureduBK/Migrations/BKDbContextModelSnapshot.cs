@@ -15,7 +15,7 @@ namespace CestlheureduBK.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
             modelBuilder.Entity("CategorieDbMenuDb", b =>
                 {
@@ -3293,9 +3293,23 @@ namespace CestlheureduBK.Migrations
                         },
                         new
                         {
+                            Id = "3",
+                            AvailableInCatalogue = false,
+                            Name = "Big King XXL",
+                            RouteId = ""
+                        },
+                        new
+                        {
                             Id = "15",
                             AvailableInCatalogue = false,
                             Name = "Double Cheese Bacon XXL",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "16",
+                            AvailableInCatalogue = false,
+                            Name = "Double Steakhouse",
                             RouteId = ""
                         },
                         new
@@ -3321,6 +3335,20 @@ namespace CestlheureduBK.Migrations
                         },
                         new
                         {
+                            Id = "77",
+                            AvailableInCatalogue = false,
+                            Name = "Chili Cheese (6)",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "84",
+                            AvailableInCatalogue = false,
+                            Name = "Onion Rings (9)",
+                            RouteId = ""
+                        },
+                        new
+                        {
                             Id = "213",
                             AvailableInCatalogue = false,
                             Name = "Big Fish",
@@ -3342,6 +3370,13 @@ namespace CestlheureduBK.Migrations
                         },
                         new
                         {
+                            Id = "547",
+                            AvailableInCatalogue = false,
+                            Name = "Crousty Chèvre (6)",
+                            RouteId = ""
+                        },
+                        new
+                        {
                             Id = "664",
                             AvailableInCatalogue = false,
                             Name = "Veggie Whopper",
@@ -3352,6 +3387,13 @@ namespace CestlheureduBK.Migrations
                             Id = "666",
                             AvailableInCatalogue = false,
                             Name = "Veggie Steakhouse",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "682",
+                            AvailableInCatalogue = false,
+                            Name = "Cheesebuger Bacon",
                             RouteId = ""
                         },
                         new
@@ -3394,6 +3436,27 @@ namespace CestlheureduBK.Migrations
                             Id = "1055",
                             AvailableInCatalogue = false,
                             Name = "Master Poulet Cantal",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1072",
+                            AvailableInCatalogue = false,
+                            Name = "King Chicken",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1073",
+                            AvailableInCatalogue = false,
+                            Name = "King Fish",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1084",
+                            AvailableInCatalogue = false,
+                            Name = "King Nuggets (7)",
                             RouteId = ""
                         },
                         new
@@ -3585,6 +3648,12 @@ namespace CestlheureduBK.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Update");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1
+                        });
                 });
 
             modelBuilder.Entity("CestlheureduBK.Model.UserDb", b =>

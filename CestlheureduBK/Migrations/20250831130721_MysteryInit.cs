@@ -101,8 +101,36 @@ namespace CestlheureduBK.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "AvailableInCatalogue", "Energy", "Image", "Name" },
-                values: new object[] { "953", false, null, null, "Chicken Spicy" });
+                columns: new[] { "Id", "AvailableInCatalogue", "Name" },
+                values: new object[,] {
+                    { "2", false, "Big King" },
+                    { "3", false, "Big King XXL" },
+                    { "15", false, "Double Cheese Bacon XXL" },
+                    { "16", false, "Double Steakhouse" },
+                    { "17", false, "Double Whopper Cheese" },
+                    { "46", false, "Steakhouse" },
+                    { "49", false, "Whopper" },
+                    { "77", false, "Chili Cheese (6)" },
+                    { "84", false, "Onion Rings (9)" },
+                    { "213", false, "Big Fish" },
+                    { "463", false, "Wrap Chicken Louisiane" },
+                    { "544", false, "Wrap Crousty Chèvre" },
+                    { "547", false, "Crousty Chèvre (6)" },
+                    { "664", false, "Veggie Whopper" },
+                    { "666", false, "Veggie Steakhouse" },
+                    { "682", false, "Cheesebuger Bacon" },
+                    { "702", false, "Crispy Chicken Cheese" },
+                    { "801", false, "Veggie Chicken Louisiane Steakhouse" },
+                    { "802", false, "Chicken Louisiane Steakhouse" },
+                    { "953", false, "Chicken Spicy" },
+                    { "1054", false, "Master Cantal Bacon" },
+                    { "1055", false, "Master Poulet Cantal" },
+                    { "1072", false, "King Chicken" },
+                    { "1073", false, "King Fish" },
+                    { "1084", false, "King Nuggets (7)" },
+                    { "1101", false, "Double Cheese Bacon" },
+                    { "1110", false, "Double King" }
+                });
 
             migrationBuilder.InsertData(
                 table: "MysteryProducts",

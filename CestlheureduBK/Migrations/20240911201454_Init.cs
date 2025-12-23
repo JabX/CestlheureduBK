@@ -112,6 +112,11 @@ namespace CestlheureduBK.Migrations
                     table.PrimaryKey("PK_Update", x => x.Id);
                 });
 
+            migrationBuilder.InsertData(
+              table: "Update",
+              columns: new[] { "Id", "Offers", "Restaurants" },
+              values: new object[] { 1, null, null });
+
             migrationBuilder.CreateTable(
                 name: "CategorieDbMenuDb",
                 columns: table => new

@@ -52,6 +52,8 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
 
         modelBuilder.Entity<UserDb>().Navigation(p => p.FavoriteRestaurant).AutoInclude();
 
+        modelBuilder.Entity<UpdateDb>().HasData(new UpdateDb { Id = 1 });
+
         modelBuilder
             .Entity<MysteryCampaignDb>()
             .HasData(
@@ -106,21 +108,30 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
             .HasData(
                 [
                     new() { Id = "2", Name = "Big King" },
+                    new() { Id = "3", Name = "Big King XXL" },
                     new() { Id = "15", Name = "Double Cheese Bacon XXL" },
+                    new() { Id = "16", Name = "Double Steakhouse" },
                     new() { Id = "17", Name = "Double Whopper Cheese" },
                     new() { Id = "46", Name = "Steakhouse" },
                     new() { Id = "49", Name = "Whopper" },
+                    new() { Id = "77", Name = "Chili Cheese (6)" },
+                    new() { Id = "84", Name = "Onion Rings (9)" },
                     new() { Id = "213", Name = "Big Fish" },
                     new() { Id = "463", Name = "Wrap Chicken Louisiane" },
                     new() { Id = "544", Name = "Wrap Crousty Chèvre" },
+                    new() { Id = "547", Name = "Crousty Chèvre (6)" },
                     new() { Id = "664", Name = "Veggie Whopper" },
                     new() { Id = "666", Name = "Veggie Steakhouse" },
+                    new() { Id = "682", Name = "Cheesebuger Bacon" },
                     new() { Id = "702", Name = "Crispy Chicken Cheese" },
                     new() { Id = "801", Name = "Veggie Chicken Louisiane Steakhouse" },
                     new() { Id = "802", Name = "Chicken Louisiane Steakhouse" },
                     new() { Id = "953", Name = "Chicken Spicy" },
                     new() { Id = "1054", Name = "Master Cantal Bacon" },
                     new() { Id = "1055", Name = "Master Poulet Cantal" },
+                    new() { Id = "1072", Name = "King Chicken" },
+                    new() { Id = "1073", Name = "King Fish" },
+                    new() { Id = "1084", Name = "King Nuggets (7)" },
                     new() { Id = "1101", Name = "Double Cheese Bacon" },
                     new() { Id = "1110", Name = "Double King" },
                 ]

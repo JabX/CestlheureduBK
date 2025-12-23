@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using CestlheureduBK.Common;
 using CestlheureduBK.Model;
@@ -18,7 +19,11 @@ public class UpdateDataService(BKDbContext context) : IDisposable
         {
             if (_client == null)
             {
-                _client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip });
+                _client = new HttpClient(new HttpClientHandler 
+                { 
+                    AutomaticDecompression = DecompressionMethods.GZip,
+                    SslProtocols = SslProtocols.Tls12
+                });
                 _client.DefaultRequestHeaders.Accept.Add(new("application/json"));
             }
 
@@ -547,7 +552,6 @@ public class UpdateDataService(BKDbContext context) : IDisposable
             await context.Database.EnsureDeletedAsync();
             await context.Database.MigrateAsync();
 
-            context.Updates.Add(new());
             await context.SaveChangesAsync();
             context.ChangeTracker.Clear();
 
