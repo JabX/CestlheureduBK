@@ -17,6 +17,7 @@ public record OfferDisplay(
     string? Image,
     int Points,
     double Price,
+    double? MyPrice,
     double Energy,
     IEnumerable<SnackAmountDisplay> Snacks,
     IEnumerable<CategorieDisplay> Categories
@@ -32,6 +33,7 @@ public record CatalogueDisplay(
     string Name,
     string? Image,
     double Price,
+    double? MyPrice,
     double Energy,
     IEnumerable<SnackAmountDisplay> Snacks,
     IEnumerable<CategorieDisplay> Categories

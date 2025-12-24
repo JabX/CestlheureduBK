@@ -1,4 +1,6 @@
-﻿@rendermode InteractiveWebAssembly
+﻿@inject TooltipService tooltipService;
+
+@rendermode InteractiveWebAssembly
 
 <RadzenPanel AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
     <HeaderTemplate>
@@ -102,10 +104,19 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@(criteria.CostBy == "price" ? data.Price.ToString("0.00 €") : data.Energy.ToString("0 kcal"))</span>
+                    <span class="tooltip">
+                        @{
+                            var className = criteria.CostBy == "price" && data.MyPrice != null ? data.MyPrice > data.Price ? "cheaper" : data.MyPrice < data.Price ? "pricier" : "" : "";
+                        }
+                        <span class="@className">@(criteria.CostBy == "price" ? data.Price.ToString("0.00 €") : data.Energy.ToString("0 kcal"))</span>
+                        @if (criteria.CostBy == "price" && data.MyPrice != null && data.Price != data.MyPrice)
+                        {
+                            <RadzenIcon Icon="info" MouseEnter="args => ShowTooltip(args, data.MyPrice.Value)" MouseLeave="tooltipService.Close" />
+                        }
+                    </span>
                     @if (data.Snacks.Any())
                     {
-                        <span class="detail">(@(((criteria.CostBy == "price" ? data.Price : data.Energy) / data.Snacks.Sum(s => s.Amount)).ToString(criteria.CostBy == "price" ? "0.00 €" : "0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        <span class="detail @className">(@(((criteria.CostBy == "price" ? data.Price : data.Energy) / data.Snacks.Sum(s => s.Amount)).ToString(criteria.CostBy == "price" ? "0.00 €" : "0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
                 </RadzenStack>
             </Template>
@@ -195,6 +206,11 @@
     {
         allPoints = Data.Select(o => o.Points).Distinct().OrderBy(a => a).ToList();
         allCategories = Data.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
+    }
+
+    private void ShowTooltip(ElementReference elementReference, double myPrice) 
+    {
+        tooltipService.Open(elementReference, $"Chez moi : {myPrice:0.00 €}", new() { Position = TooltipPosition.Right, Duration = int.MaxValue });
     }
 
     private void ToggleSort(string field)

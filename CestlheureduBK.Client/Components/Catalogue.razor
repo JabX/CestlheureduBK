@@ -1,4 +1,6 @@
-﻿@rendermode InteractiveWebAssembly
+﻿@inject TooltipService tooltipService;
+
+@rendermode InteractiveWebAssembly
 
 <RadzenPanel AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
     <HeaderTemplate>
@@ -99,10 +101,19 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span>@data.Price.ToString("0.00 €")</span>
-                    @if (data.Snacks.Any() && data.Type == ItemType.Product)
+                    <span class="tooltip">
+                        @{
+                            var className =  data.MyPrice != null ? data.MyPrice > data.Price ? "cheaper" : data.MyPrice < data.Price ? "pricier" : "" : "";
+                        }
+                        <span class="@className">@data.Price.ToString("0.00 €")</span>
+                        @if (data.MyPrice != null && data.Price != data.MyPrice)
+                        {
+                            <RadzenIcon Icon="info" MouseEnter="args => ShowTooltip(args, data.MyPrice.Value)" MouseLeave="tooltipService.Close" />
+                        }
+                    </span>
+                    @if (data.Snacks.Any())
                     {
-                        <span class="detail">(@(double.Round((data.Price / data.Snacks.Sum(s => s.Amount)), 2)) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
+                        <span class="detail @className">(@((data.Price / data.Snacks.Sum(s => s.Amount)).ToString("0.00 €")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>
                     }
                 </RadzenStack>
             </Template>
@@ -178,6 +189,11 @@
     protected override void OnInitialized()
     {
         allCategories = Data.SelectMany(o => o.Categories).DistinctBy(a => a.Id).Where(a => !a.SubCategory).OrderBy(a => a.Name).ToList();
+    }
+
+    private void ShowTooltip(ElementReference elementReference, double myPrice)
+    {
+        tooltipService.Open(elementReference, $"Chez moi : {myPrice:0.00 €}", new() { Position = TooltipPosition.Right, Duration = int.MaxValue });
     }
 
     private void ToggleSort(string field)

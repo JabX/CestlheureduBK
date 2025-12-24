@@ -13,6 +13,8 @@ public class GetDataService(BKDbContext context, UserService userService)
 
     public async Task<CatalogueDisplay[]> GetCatalogue(string codeRestaurant)
     {
+        var favoriteRestaurant = await userService.GetFavoriteRestaurant();
+
         var catalogue = (
             await context
                 .ProductsRestaurants.AsSingleQuery()
@@ -28,6 +30,13 @@ public class GetDataService(BKDbContext context, UserService userService)
                     prd.Product.Name,
                     prd.Product.Image,
                     prd.Price,
+                    favoriteRestaurant != null && favoriteRestaurant.Id != codeRestaurant
+                        ? context
+                            .ProductsRestaurants.SingleOrDefault(pr =>
+                                pr.Restaurant.Id == favoriteRestaurant.Id && pr.Product.Id == prd.Product.Id
+                            )!
+                            .Price
+                        : null,
                     prd.Product.Energy ?? 0,
                     prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                     prd.Product.Categories.OrderBy(c => c.SubCategory)
@@ -53,6 +62,13 @@ public class GetDataService(BKDbContext context, UserService userService)
                         men.Menu.Name,
                         men.Menu.Image,
                         men.Price,
+                        favoriteRestaurant != null && favoriteRestaurant.Id != codeRestaurant
+                            ? context
+                                .MenusRestaurants.SingleOrDefault(mr =>
+                                    mr.Restaurant.Id == favoriteRestaurant.Id && mr.Menu.Id == men.Menu.Id
+                                )!
+                                .Price
+                            : null,
                         men.Menu.Steps.Sum(s =>
                             s.DefaultProduct != null && s.DefaultProduct.Energy != null
                                 ? s.DefaultProduct.Energy.Value
@@ -104,6 +120,7 @@ public class GetDataService(BKDbContext context, UserService userService)
 
     public async Task<OfferDisplay[]> GetOffers(string codeRestaurant)
     {
+        var favoriteRestaurant = await userService.GetFavoriteRestaurant();
         var offers = (
             await context
                 .ProductsRestaurants.AsSingleQuery()
@@ -123,6 +140,13 @@ public class GetDataService(BKDbContext context, UserService userService)
                     prd.Product.Image,
                     context.Offers.Single(o => o.Promotion.Products.Any(pp => pp.Id == prd.Product.Id)).Points,
                     prd.Price,
+                    favoriteRestaurant != null && favoriteRestaurant.Id != codeRestaurant
+                        ? context
+                            .ProductsRestaurants.SingleOrDefault(pr =>
+                                pr.Restaurant.Id == favoriteRestaurant.Id && pr.Product.Id == prd.Product.Id
+                            )!
+                            .Price
+                        : null,
                     prd.Product.Energy ?? 0,
                     prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                     prd.Product.Categories.OrderBy(c => c.SubCategory)
@@ -152,6 +176,13 @@ public class GetDataService(BKDbContext context, UserService userService)
                         men.Menu.Image,
                         context.Offers.Single(o => o.Promotion.Menus.Any(pp => pp.Id == men.Menu.Id)).Points,
                         men.Price,
+                        favoriteRestaurant != null && favoriteRestaurant.Id != codeRestaurant
+                            ? context
+                                .MenusRestaurants.SingleOrDefault(mr =>
+                                    mr.Restaurant.Id == favoriteRestaurant.Id && mr.Menu.Id == men.Menu.Id
+                                )!
+                                .Price
+                            : null,
                         men.Menu.Steps.Sum(s => s.DefaultProduct!.Energy ?? 0),
                         men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                         men.Menu.Categories.OrderBy(c => c.SubCategory)
@@ -223,8 +254,8 @@ public class GetDataService(BKDbContext context, UserService userService)
     {
         var allProducts = await context
             .ProductsRestaurants.Include(p => p.Product)
-            .ThenInclude(p => p.Snacks)
-            .ThenInclude(p => p.Snack)
+                .ThenInclude(p => p.Snacks)
+                    .ThenInclude(p => p.Snack)
             .AsSingleQuery()
             .Where(p => p.Restaurant.Id == codeRestaurant && p.Active && p.Product.Snacks.Any(s => s.Snack.Active))
             .ToListAsync();
