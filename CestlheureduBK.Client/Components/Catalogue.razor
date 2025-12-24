@@ -193,7 +193,7 @@
 
     private void ShowTooltip(ElementReference elementReference, double myPrice)
     {
-        tooltipService.Open(elementReference, $"Chez moi : {myPrice:0.00 €}", new() { Position = TooltipPosition.Right, Duration = int.MaxValue });
+        tooltipService.Open(elementReference, $"Chez moi : {myPrice:0.00 €}", new() { Position = TooltipPosition.Left, Duration = int.MaxValue });
     }
 
     private void ToggleSort(string field)

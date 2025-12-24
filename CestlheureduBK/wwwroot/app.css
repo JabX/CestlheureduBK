@@ -21,7 +21,7 @@
     --rz-body-line-height: 1.3;
     --rz-grid-cell-font-size: 1rem;
     --rz-grid-header-title-padding-inline: 1rem;
-    --rz-tooltip-background-color: rgba(187, 30, 50, 0.75);
+    --rz-tooltip-background-color: var(--rz-primary);
 }
 
 @media (max-width: 500px) {
@@ -234,11 +234,12 @@ th, .rz-column-title, .rz-column-title-content {
 
 a.energy {
     cursor: pointer;
-    border-bottom: 1px dashed var(--rz-grid-cell-color);
+    text-decoration: dashed underline;
+    text-underline-offset: 4px;
 }
 
     a.energy:hover {
-        border-bottom-style: solid;
+        text-decoration-style: solid;
     }
 
     a.energy[data-loading] {
@@ -252,12 +253,13 @@ a.energy {
 .tooltip {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    column-gap: 5px;
     line-height: 22px;
     flex-wrap: wrap;
 }
 
     .tooltip i.rzi {
+        cursor: default;
         font-size: 22px;
         margin-top: -2px;
     }
