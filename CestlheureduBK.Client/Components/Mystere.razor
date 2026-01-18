@@ -4,25 +4,25 @@
 @inject NotificationService notificationService;
 
 <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
-    <RadzenLabel Text="Mois" Component="month" Style="line-height:40px" />
-    <RadzenDropDown Value=@Month
-                    Data=@Months
+    <RadzenLabel Text="Période" Component="month" Style="line-height:40px" />
+    <RadzenDropDown Value=@Start
+                    Data=@Campaigns
                     Name="month"
                     Style="width:350px"
                     Change="OnMonthChange">
-        <Template>
-            @DateTime.Parse(@context).ToString("MMMM yyyy") @(((string)context).Count(c => c == '-') == 2 && Months.Count(m => m.StartsWith(((string)context)[0..^3])) > 1 ? $"v{Months.Where(m => m.StartsWith(((string)context)[0..^3])).Reverse().ToList().IndexOf(context) + 1}" : "")
-        </Template>
         <ValueTemplate>
-            @DateTime.Parse(@context).ToString("MMMM yyyy") @(((string)context).Count(c => c == '-') == 2 && Months.Count(m => m.StartsWith(((string)context)[0..^3])) > 1 ? $"v{Months.Where(m => m.StartsWith(((string)context)[0..^3])).Reverse().ToList().IndexOf(context) + 1}" : "")
+            @(Campaigns.SingleOrDefault(c => c.Start == context)?.DisplayName ?? context.ToString("MMMM yyyy"))
         </ValueTemplate>
+        <Template>
+            @context.DisplayName
+        </Template>  
     </RadzenDropDown>
 </RadzenStack>
 
 <div class="@(IsAuthenticated ? "mystere" : "")">
     @if (Data.Count == 0)
     {
-        <p>Pas de Burger Mystère ce mois-ci 🥺</p>
+        <p>Pas de Burger Mystère ce moment 🥺</p>
     }
     else if (Data.SelectMany(s => s.Burgers).Any())
     {
@@ -307,10 +307,10 @@
     public required IList<BurgerMystereListDisplay> Data { get; set; }
 
     [Parameter]
-    public required string Month { get; set; }
+    public required DateOnly Start { get; set; }
 
     [Parameter]
-    public required IList<string> Months { get; set; }
+    public required IList<BurgerMysterePeriodDisplay> Campaigns { get; set; }
 
     [Parameter]
     public bool IsAuthenticated { get; set; }
@@ -389,8 +389,8 @@
 
     private void OnMonthChange(object change)
     {
-        var month = (string)change;
-        navigationManager.NavigateTo(navigationManager.Uri.Replace(Month, month));
+        var campaign = (BurgerMysterePeriodDisplay)change;
+        navigationManager.NavigateTo(navigationManager.Uri.Replace(Start.ToString("o"), campaign.Start.ToString("o")));
     }
 
     private void OnBurgerChange(IEnumerable<string>? burgers)

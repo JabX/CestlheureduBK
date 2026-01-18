@@ -28,7 +28,7 @@
                 <RadzenPanelMenuItem Path=@($"/points{RestaurantId}") Text="Couronnes" Icon="star" />
                 <RadzenPanelMenuItem Path=@($"/carte{RestaurantId}") Text="Carte" Icon="menu_book" />
                 <RadzenPanelMenuItem Path=@($"/snacks{RestaurantId}") Text="Snacks" Icon="fastfood" />
-                <RadzenPanelMenuItem Path=@($"/mystere/{burgerMystereMonth}{RestaurantId}") Text="Burger Mystère" Icon="question_mark" />
+                <RadzenPanelMenuItem Path=@($"/mystere/{burgerMystereStart:o}{RestaurantId}") Text="Burger Mystère" Icon="question_mark" />
             </RadzenPanelMenu>
         </RadzenStack>
     </RadzenHeader>
@@ -41,7 +41,7 @@
     [CascadingParameter]
     HttpContext? HttpContext { get; set; }
 
-    string burgerMystereMonth = string.Empty;
+    DateOnly burgerMystereStart;
 
     string RestaurantId
     {
@@ -64,8 +64,8 @@
             themeService.SetTheme(cookie);
         }
 
-        var burgerMysteresMonths = await getDataService.GetBurgerMystereMonths();
-        var currentMonth = DateTime.Now.ToString("yyyy-MM");
-        burgerMystereMonth = burgerMysteresMonths.FirstOrDefault(b => b.StartsWith(currentMonth)) ?? currentMonth;
+        var burgerMysteresMonths = await getDataService.GetBurgerMystereCampaigns();
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        burgerMystereStart = burgerMysteresMonths.SingleOrDefault(b => b.Start >= today && b.End <= today)?.Start ?? today;
     }
 }

@@ -51,6 +51,12 @@ public record SnackProductDisplay(string Name, string? Image, int Amount, double
 
 public record SnackDisplay(string Name, SnackProductDisplay[] Products);
 
+public record BurgerMysterePeriodDisplay(DateOnly Start, DateOnly End)
+{
+    public string DisplayName =>
+        Start.Month == End.Month ? $"du {Start.Day} au {End:d MMMM yyyy}" : $"du {Start:d MMMM} au {End:d MMMM yyyy}";
+}
+
 public record BurgerMystereDisplay(
     int Id,
     string Name,
@@ -89,7 +95,7 @@ public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMy
 public record MysteryRollDisplay(
     int Id,
     string UserName,
-    string Month,
+    int CampaignId,
     string ProductName,
     double ProductPrice,
     double CampaignPrice,

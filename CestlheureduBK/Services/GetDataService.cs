@@ -6,9 +6,16 @@ namespace CestlheureduBK.Services;
 
 public class GetDataService(BKDbContext context, UserService userService)
 {
-    public async Task<IList<string>> GetBurgerMystereMonths()
+    public async Task<IList<BurgerMysterePeriodDisplay>> GetBurgerMystereCampaigns()
     {
-        return await context.MysteryCampaigns.Select(c => c.Month).Distinct().OrderByDescending(c => c).ToListAsync();
+        return (
+            await context
+                .MysteryCampaigns.Select(c => new BurgerMysterePeriodDisplay(c.Start, c.End))
+                .Distinct()
+                .ToListAsync()
+        )
+            .OrderByDescending(c => c.Start)
+            .ToList();
     }
 
     public async Task<CatalogueDisplay[]> GetCatalogue(string codeRestaurant)
@@ -106,7 +113,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                 mr.User.Email == "damien.frikha@kleegroup.com"
                     ? "Anonyme"
                     : $"{mr.User.Name} ({mr.User.Email.Split('@', StringSplitOptions.None)[0].Substring(0, 2)}..@{mr.User.Email.Split('@', StringSplitOptions.None)[1].Substring(0, 2)}..)",
-                mr.Product.Campaign.Month,
+                mr.Product.Campaign.Id,
                 mr.Product.Product2 != null
                     ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"
                     : mr.Product.Product.Name,
@@ -254,8 +261,8 @@ public class GetDataService(BKDbContext context, UserService userService)
     {
         var allProducts = await context
             .ProductsRestaurants.Include(p => p.Product)
-                .ThenInclude(p => p.Snacks)
-                    .ThenInclude(p => p.Snack)
+            .ThenInclude(p => p.Snacks)
+            .ThenInclude(p => p.Snack)
             .AsSingleQuery()
             .Where(p => p.Restaurant.Id == codeRestaurant && p.Active && p.Product.Snacks.Any(s => s.Snack.Active))
             .ToListAsync();
@@ -315,13 +322,13 @@ public class GetDataService(BKDbContext context, UserService userService)
             .ToArray();
     }
 
-    public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(string month, string codeRestaurant)
+    public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(DateOnly start, string codeRestaurant)
     {
         return await (
             from mp in context.MysteryProducts
             join pr in context.ProductsRestaurants on mp.Product equals pr.Product
             from pr2 in context.ProductsRestaurants.Where(pr => mp.Product2 == pr.Product).DefaultIfEmpty()
-            where mp.Campaign.Month == month
+            where mp.Campaign.Start == start
             where pr.Restaurant.Id == codeRestaurant
             where pr2 == null || pr2.Restaurant.Id == codeRestaurant
             group new

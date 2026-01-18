@@ -61,42 +61,48 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new()
                     {
                         Id = 1,
-                        Month = "2024-09",
+                        Start = new DateOnly(2024, 9, 3),
+                        End = new DateOnly(2024, 9, 30),
                         Kind = MysteryCampaignKind.Classic,
                         Price = 2.9,
                     },
                     new()
                     {
                         Id = 2,
-                        Month = "2024-09",
+                        Start = new DateOnly(2024, 9, 3),
+                        End = new DateOnly(2024, 9, 30),
                         Kind = MysteryCampaignKind.Veggie,
                         Price = 2.9,
                     },
                     new()
                     {
                         Id = 3,
-                        Month = "2025-03",
+                        Start = new DateOnly(2025, 3, 4),
+                        End = new DateOnly(2025, 3, 31),
                         Kind = MysteryCampaignKind.Classic,
                         Price = 2.9,
                     },
                     new()
                     {
                         Id = 4,
-                        Month = "2025-03",
+                        Start = new DateOnly(2025, 3, 4),
+                        End = new DateOnly(2025, 3, 31),
                         Kind = MysteryCampaignKind.Veggie,
                         Price = 2.9,
                     },
                     new()
                     {
                         Id = 5,
-                        Month = "2025-11-04",
+                        Start = new DateOnly(2025, 11, 4),
+                        End = new DateOnly(2025, 11, 6),
                         Kind = MysteryCampaignKind.Duo,
                         Price = 5,
                     },
                     new()
                     {
                         Id = 6,
-                        Month = "2025-11-07",
+                        Start = new DateOnly(2025, 11, 7),
+                        End = new DateOnly(2025, 11, 24),
                         Kind = MysteryCampaignKind.Duo,
                         Price = 5,
                     },
@@ -3207,7 +3213,9 @@ public record MysteryCampaignDb
 {
     public int Id { get; set; }
 
-    public required string Month { get; set; }
+    public required DateOnly Start { get; set; }
+
+    public required DateOnly End { get; set; }
 
     public required MysteryCampaignKind Kind { get; set; }
 

@@ -78,7 +78,7 @@ public class UserService(IHttpContextAccessor httpContextAccessor, BKDbContext c
                 .Select(mr => new MysteryRollDisplay(
                     mr.Id,
                     mr.User.Name,
-                    mr.Product.Campaign.Month,
+                    mr.Product.Campaign.Id,
                     mr.Product.Product2 != null
                         ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"
                         : mr.Product.Product.Name,
