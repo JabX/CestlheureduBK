@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -17,26 +16,25 @@ namespace CestlheureduBK.Migrations
                 name: "MysteryCampaigns",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false).Annotation("Sqlite:Autoincrement", true),
                     Month = table.Column<string>(type: "TEXT", nullable: false),
                     Kind = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<double>(type: "REAL", nullable: false)
+                    Price = table.Column<double>(type: "REAL", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MysteryCampaigns", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "MysteryProducts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false).Annotation("Sqlite:Autoincrement", true),
                     CampaignId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<string>(type: "TEXT", nullable: true),
-                    Chance = table.Column<double>(type: "decimal(4, 2)", nullable: false)
+                    Chance = table.Column<double>(type: "decimal(4, 2)", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -46,25 +44,27 @@ namespace CestlheureduBK.Migrations
                         column: x => x.CampaignId,
                         principalTable: "MysteryCampaigns",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_MysteryProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id");
-                });
+                        principalColumn: "Id"
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "MysteryRolls",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false).Annotation("Sqlite:Autoincrement", true),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     RestaurantId = table.Column<string>(type: "TEXT", nullable: true),
                     RollTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false)
+                    Price = table.Column<double>(type: "decimal(4, 2)", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -74,19 +74,23 @@ namespace CestlheureduBK.Migrations
                         column: x => x.ProductId,
                         principalTable: "MysteryProducts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_MysteryRolls_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
-                        principalColumn: "Id");
+                        principalColumn: "Id"
+                    );
                     table.ForeignKey(
                         name: "FK_MysteryRolls_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.InsertData(
                 table: "MysteryCampaigns",
@@ -96,13 +100,15 @@ namespace CestlheureduBK.Migrations
                     { 1, 0, "2024-09", 2.9 },
                     { 2, 1, "2024-09", 2.9 },
                     { 3, 0, "2025-03", 2.9 },
-                    { 4, 1, "2025-03", 2.9 }
-                });
+                    { 4, 1, "2025-03", 2.9 },
+                }
+            );
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "AvailableInCatalogue", "Name" },
-                values: new object[,] {
+                values: new object[,]
+                {
                     { "2", false, "Big King" },
                     { "3", false, "Big King XXL" },
                     { "15", false, "Double Cheese Bacon XXL" },
@@ -113,9 +119,12 @@ namespace CestlheureduBK.Migrations
                     { "77", false, "Chili Cheese (6)" },
                     { "84", false, "Onion Rings (9)" },
                     { "213", false, "Big Fish" },
+                    { "433", false, "Wrap Chicken Cheese and Bacon" },
                     { "463", false, "Wrap Chicken Louisiane" },
+                    { "508", false, "Wrap Crousty Emmental" },
                     { "544", false, "Wrap Crousty Chèvre" },
                     { "547", false, "Crousty Chèvre (6)" },
+                    { "658", false, "Master Montagnard" },
                     { "664", false, "Veggie Whopper" },
                     { "666", false, "Veggie Steakhouse" },
                     { "682", false, "Cheesebuger Bacon" },
@@ -123,14 +132,17 @@ namespace CestlheureduBK.Migrations
                     { "801", false, "Veggie Chicken Louisiane Steakhouse" },
                     { "802", false, "Chicken Louisiane Steakhouse" },
                     { "953", false, "Chicken Spicy" },
+                    { "1053", false, "Master Montagnard Poulet" },
                     { "1054", false, "Master Cantal Bacon" },
                     { "1055", false, "Master Poulet Cantal" },
                     { "1072", false, "King Chicken" },
                     { "1073", false, "King Fish" },
                     { "1084", false, "King Nuggets (7)" },
                     { "1101", false, "Double Cheese Bacon" },
-                    { "1110", false, "Double King" }
-                });
+                    { "1110", false, "Double King" },
+                    { "1290", false, "Whopper Rings" },
+                }
+            );
 
             migrationBuilder.InsertData(
                 table: "MysteryProducts",
@@ -167,51 +179,43 @@ namespace CestlheureduBK.Migrations
                     { 28, 3, 0.02, "15" },
                     { 29, 4, 0.36, "664" },
                     { 30, 4, 0.32, "666" },
-                    { 31, 4, 0.32, "801" }
-                });
+                    { 31, 4, 0.32, "801" },
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_MysteryProducts_CampaignId",
                 table: "MysteryProducts",
-                column: "CampaignId");
+                column: "CampaignId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_MysteryProducts_ProductId",
                 table: "MysteryProducts",
-                column: "ProductId");
+                column: "ProductId"
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MysteryRolls_ProductId",
-                table: "MysteryRolls",
-                column: "ProductId");
+            migrationBuilder.CreateIndex(name: "IX_MysteryRolls_ProductId", table: "MysteryRolls", column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MysteryRolls_RestaurantId",
                 table: "MysteryRolls",
-                column: "RestaurantId");
+                column: "RestaurantId"
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MysteryRolls_UserId",
-                table: "MysteryRolls",
-                column: "UserId");
+            migrationBuilder.CreateIndex(name: "IX_MysteryRolls_UserId", table: "MysteryRolls", column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "MysteryRolls");
+            migrationBuilder.DropTable(name: "MysteryRolls");
 
-            migrationBuilder.DropTable(
-                name: "MysteryProducts");
+            migrationBuilder.DropTable(name: "MysteryProducts");
 
-            migrationBuilder.DropTable(
-                name: "MysteryCampaigns");
+            migrationBuilder.DropTable(name: "MysteryCampaigns");
 
-            migrationBuilder.DeleteData(
-                table: "Products",
-                keyColumn: "Id",
-                keyValue: "953");
+            migrationBuilder.DeleteData(table: "Products", keyColumn: "Id", keyValue: "953");
         }
     }
 }

@@ -106,6 +106,22 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                         Kind = MysteryCampaignKind.Duo,
                         Price = 5,
                     },
+                    new()
+                    {
+                        Id = 7,
+                        Start = new DateOnly(2026, 1, 20),
+                        End = new DateOnly(2026, 2, 9),
+                        Kind = MysteryCampaignKind.Classic,
+                        Price = 3,
+                    },
+                    new()
+                    {
+                        Id = 8,
+                        Start = new DateOnly(2026, 1, 20),
+                        End = new DateOnly(2026, 2, 9),
+                        Kind = MysteryCampaignKind.Veggie,
+                        Price = 3,
+                    },
                 ]
             );
 
@@ -123,9 +139,12 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new() { Id = "77", Name = "Chili Cheese (6)" },
                     new() { Id = "84", Name = "Onion Rings (9)" },
                     new() { Id = "213", Name = "Big Fish" },
+                    new() { Id = "433", Name = "Wrap Chicken Cheese and Bacon" },
                     new() { Id = "463", Name = "Wrap Chicken Louisiane" },
+                    new() { Id = "508", Name = "Wrap Crousty Emmental" },
                     new() { Id = "544", Name = "Wrap Crousty Chèvre" },
                     new() { Id = "547", Name = "Crousty Chèvre (6)" },
+                    new() { Id = "658", Name = "Master Montagnard" },
                     new() { Id = "664", Name = "Veggie Whopper" },
                     new() { Id = "666", Name = "Veggie Steakhouse" },
                     new() { Id = "682", Name = "Cheesebuger Bacon" },
@@ -133,6 +152,7 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new() { Id = "801", Name = "Veggie Chicken Louisiane Steakhouse" },
                     new() { Id = "802", Name = "Chicken Louisiane Steakhouse" },
                     new() { Id = "953", Name = "Chicken Spicy" },
+                    new() { Id = "1053", Name = "Master Montagnard Poulet" },
                     new() { Id = "1054", Name = "Master Cantal Bacon" },
                     new() { Id = "1055", Name = "Master Poulet Cantal" },
                     new() { Id = "1072", Name = "King Chicken" },
@@ -140,6 +160,7 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new() { Id = "1084", Name = "King Nuggets (7)" },
                     new() { Id = "1101", Name = "Double Cheese Bacon" },
                     new() { Id = "1110", Name = "Double King" },
+                    new() { Id = "1290", Name = "Whopper Rings" },
                 ]
             );
         modelBuilder
@@ -3138,6 +3159,132 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                         ProductId = "702",
                         Product2Id = "77",
                         Chance = 0.033,
+                    },
+                    new
+                    {
+                        Id = 379,
+                        CampaignId = 7,
+                        ProductId = "702",
+                        Chance = 0.15,
+                    },
+                    new
+                    {
+                        Id = 380,
+                        CampaignId = 7,
+                        ProductId = "213",
+                        Chance = 0.03,
+                    },
+                    new
+                    {
+                        Id = 381,
+                        CampaignId = 7,
+                        ProductId = "1110",
+                        Chance = 0.08,
+                    },
+                    new
+                    {
+                        Id = 382,
+                        CampaignId = 7,
+                        ProductId = "2",
+                        Chance = 0.09,
+                    },
+                    new
+                    {
+                        Id = 383,
+                        CampaignId = 7,
+                        ProductId = "1101",
+                        Chance = 0.05,
+                    },
+                    new
+                    {
+                        Id = 384,
+                        CampaignId = 7,
+                        ProductId = "49",
+                        Chance = 0.08,
+                    },
+                    new
+                    {
+                        Id = 385,
+                        CampaignId = 7,
+                        ProductId = "46",
+                        Chance = 0.07,
+                    },
+                    new
+                    {
+                        Id = 386,
+                        CampaignId = 7,
+                        ProductId = "802",
+                        Chance = 0.1,
+                    },
+                    new
+                    {
+                        Id = 387,
+                        CampaignId = 7,
+                        ProductId = "1290",
+                        Chance = 0.05,
+                    },
+                    new
+                    {
+                        Id = 388,
+                        CampaignId = 7,
+                        ProductId = "15",
+                        Chance = 0.02,
+                    },
+                    new
+                    {
+                        Id = 389,
+                        CampaignId = 7,
+                        ProductId = "658",
+                        Chance = 0.025,
+                    },
+                    new
+                    {
+                        Id = 390,
+                        CampaignId = 7,
+                        ProductId = "1053",
+                        Chance = 0.025,
+                    },
+                    new
+                    {
+                        Id = 391,
+                        CampaignId = 7,
+                        ProductId = "463",
+                        Chance = 0.11,
+                    },
+                    new
+                    {
+                        Id = 392,
+                        CampaignId = 7,
+                        ProductId = "433",
+                        Chance = 0.12,
+                    },
+                    new
+                    {
+                        Id = 393,
+                        CampaignId = 8,
+                        ProductId = "664",
+                        Chance = 0.2,
+                    },
+                    new
+                    {
+                        Id = 394,
+                        CampaignId = 8,
+                        ProductId = "666",
+                        Chance = 0.2,
+                    },
+                    new
+                    {
+                        Id = 395,
+                        CampaignId = 8,
+                        ProductId = "801",
+                        Chance = 0.3,
+                    },
+                    new
+                    {
+                        Id = 396,
+                        CampaignId = 8,
+                        ProductId = "508",
+                        Chance = 0.3,
                     },
                 ]
             );
