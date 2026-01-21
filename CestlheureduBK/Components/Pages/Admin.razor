@@ -56,8 +56,24 @@
                 </RadzenTable>
             </RadzenTabsItem>
             <RadzenTabsItem Text="Burgers Mystère">
+                <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
+                    <RadzenLabel Text="Période" Component="month" Style="line-height:40px" />
+                    <RadzenDropDown Value=@selectedMysteryPeriod
+                                    Data=@Campaigns
+                                    Name="month"
+                                    Style="width:350px"
+                                    Change="a => selectedMysteryPeriod = (BurgerMysterePeriodDisplay)a">
+                        <ValueTemplate>
+                            @context.DisplayName
+                        </ValueTemplate>
+                        <Template>
+                            @context.DisplayName
+                        </Template>
+                    </RadzenDropDown>
+                </RadzenStack>
+                <br />
                 <span style="font-size:0.9em;font-style:italic">
-                    Nombre total : <strong>@mysteryRolls.Count()</strong> / Montant économisé : <strong>@mysteryRolls.Sum(m => m.Gain).ToString("0.00 €")</strong>
+                    Nombre total : <strong>@MysteryRolls.Count()</strong> / Montant économisé : <strong>@MysteryRolls.Sum(m => m.Gain).ToString("0.00 €")</strong>
                 </span>
                 <br />
                 <br />
@@ -189,31 +205,35 @@
     string pSortBy = "count";
     bool pAsc = false;
 
+    BurgerMysterePeriodDisplay? selectedMysteryPeriod;
+
     RestaurantDisplay[] restaurants = [];
     MysteryRollDisplay[] mysteryRolls = [];
 
     string ClassName => error ? "error" : "";
 
-    MysteryRollDisplay[] MysteryRolls => ((bSortBy, bAsc) switch
-    {
-        ("name", true) => mysteryRolls.OrderBy(u => u.UserName).ThenByDescending(u => u.RollTime),
-        ("name", false) => mysteryRolls.OrderByDescending(u => u.UserName).ThenByDescending(u => u.RollTime),
-        ("date", true) => mysteryRolls.OrderBy(u => u.RollTime).ThenBy(u => u.UserName),
-        ("date", false) => mysteryRolls.OrderByDescending(u => u.RollTime).ThenBy(u => u.UserName),
-        ("gain", true) => mysteryRolls.OrderBy(u => u.Gain).ThenByDescending(u => u.RollTime),
-        ("gain", false) => mysteryRolls.OrderByDescending(u => u.Gain).ThenByDescending(u => u.RollTime),
-        _ => mysteryRolls.AsEnumerable()
-    }).ToArray();
+    BurgerMysterePeriodDisplay[] Campaigns => mysteryRolls.GroupBy(mr => mr.Period).Select(g => g.Key).ToArray();
 
-    UserPalmares[] Palmares 
-    {        
-        get 
+    IDictionary<BurgerMysterePeriodDisplay, MysteryRollDisplay[]> GroupedMysteryRolls =>
+        mysteryRolls.GroupBy(mr => mr.Period).Select(g => ((g.Key, ((bSortBy, bAsc) switch
         {
-            var users = mysteryRolls.Where(mr => mr.UserName != "Anonyme")
+            ("name", true) => g.OrderBy(u => u.UserName).ThenByDescending(u => u.RollTime),
+            ("name", false) => g.OrderByDescending(u => u.UserName).ThenByDescending(u => u.RollTime),
+            ("date", true) => g.OrderBy(u => u.RollTime).ThenBy(u => u.UserName),
+            ("date", false) => g.OrderByDescending(u => u.RollTime).ThenBy(u => u.UserName),
+            ("gain", true) => g.OrderBy(u => u.Gain).ThenByDescending(u => u.RollTime),
+            ("gain", false) => g.OrderByDescending(u => u.Gain).ThenByDescending(u => u.RollTime),
+            _ => g.AsEnumerable()
+        }).ToArray()))).ToDictionary(g => g.Item1, g => g.Item2);
+
+    IDictionary<BurgerMysterePeriodDisplay, UserPalmares[]> GroupedPalmares =>
+        mysteryRolls.GroupBy(mr => mr.Period).Select(g =>
+        {
+            var users = g.Where(mr => mr.UserName != "Anonyme")
                 .GroupBy(c => c.UserName)
                 .Select(g => new UserPalmares(g.Key, g.Count(), g.Sum(mr => mr.Gain)));
 
-            return ((pSortBy, pAsc) switch
+            return (g.Key, ((pSortBy, pAsc) switch
             {
                 ("count", true) => users.OrderBy(u => u.Count).ThenByDescending(u => u.Gain),
                 ("count", false) => users.OrderByDescending(u => u.Count).ThenByDescending(u => u.Gain),
@@ -222,9 +242,11 @@
                 ("ratio", true) => users.OrderBy(u => u.Ratio).ThenBy(u => u.Gain),
                 ("ratio", false) => users.OrderByDescending(u => u.Ratio).ThenByDescending(u => u.Gain),
                 _ => users
-            }).ToArray();
-        }
-    }
+            }).ToArray());
+        }).ToDictionary(g => g.Item1, g => g.Item2);
+
+    MysteryRollDisplay[] MysteryRolls => GroupedMysteryRolls.TryGetValue(selectedMysteryPeriod!, out var rolls) ? rolls : [];
+    UserPalmares[] Palmares => GroupedPalmares.TryGetValue(selectedMysteryPeriod!, out var palmares) ? palmares : []; 
 
     protected override async Task OnInitializedAsync()
     {
@@ -233,6 +255,8 @@
             .ToArray();
 
         mysteryRolls = (await getDataService.GetMysteryRolls()).ToArray();
+
+        selectedMysteryPeriod = mysteryRolls.FirstOrDefault()?.Period;
     }
 
     private void ToggleBSort(string field)

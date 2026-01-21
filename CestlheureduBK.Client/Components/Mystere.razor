@@ -310,6 +310,9 @@
     public required DateOnly Start { get; set; }
 
     [Parameter]
+    public required string UrlDate { get; set; }
+
+    [Parameter]
     public required IList<BurgerMysterePeriodDisplay> Campaigns { get; set; }
 
     [Parameter]
@@ -390,7 +393,7 @@
     private void OnMonthChange(object change)
     {
         var campaign = (BurgerMysterePeriodDisplay)change;
-        navigationManager.NavigateTo(navigationManager.Uri.Replace(Start.ToString("o"), campaign.Start.ToString("o")));
+        navigationManager.NavigateTo(navigationManager.Uri.Replace(UrlDate, campaign.Start.ToString("o")));
     }
 
     private void OnBurgerChange(IEnumerable<string>? burgers)

@@ -95,7 +95,7 @@ public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMy
 public record MysteryRollDisplay(
     int Id,
     string UserName,
-    int CampaignId,
+    BurgerMysterePeriodDisplay Period,
     string ProductName,
     double ProductPrice,
     double CampaignPrice,

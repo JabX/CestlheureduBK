@@ -113,7 +113,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                 mr.User.Email == "damien.frikha@kleegroup.com"
                     ? "Anonyme"
                     : $"{mr.User.Name} ({mr.User.Email.Split('@', StringSplitOptions.None)[0].Substring(0, 2)}..@{mr.User.Email.Split('@', StringSplitOptions.None)[1].Substring(0, 2)}..)",
-                mr.Product.Campaign.Id,
+                new(mr.Product.Campaign.Start, mr.Product.Campaign.End),
                 mr.Product.Product2 != null
                     ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"
                     : mr.Product.Product.Name,

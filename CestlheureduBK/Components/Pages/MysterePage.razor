@@ -1,5 +1,5 @@
-﻿@page "/mystere/{start}"
-@page "/mystere/{start}/{restaurantId}"
+﻿@page "/mystere/{date}"
+@page "/mystere/{date}/{restaurantId}"
 @using CestlheureduBK.Services
 
 @inject GetDataService getDataService
@@ -14,10 +14,11 @@
 {
     <Mystere 
         Data="@data"
-        Start="@DateOnly.Parse(Start)"
+        Start="@start"
+        UrlDate="@Date"
         Campaigns="@campaigns"
-        IsAuthenticated=@(headerData.IsAuthenticated)
-        IsCurrent="@(isCurrent)"
+        IsAuthenticated=@headerData.IsAuthenticated
+        IsCurrent="@isCurrent"
         CodeRestaurant="@headerData.Restaurant.Id"
     />
 } 
@@ -27,9 +28,10 @@
     private HeaderDisplay? headerData;
     private IList<BurgerMysterePeriodDisplay>? campaigns;
     private bool isCurrent;
+    private DateOnly start;
 
     [Parameter]
-    public required string Start { get; set; }
+    public required string Date { get; set; }
 
     [Parameter]
     public string? RestaurantId { get; set; }
@@ -40,11 +42,16 @@
 
         if (headerData.Restaurant != null)
         {
-            campaigns = await getDataService.GetBurgerMystereCampaigns();
-            data = await getDataService.GetBurgerMystere(DateOnly.Parse(Start), headerData.Restaurant.Id);
-            var current = campaigns.FirstOrDefault();
             var today = DateOnly.FromDateTime(DateTime.Now);
-            isCurrent = current?.Start <= today && current?.End >= today;
+            var date = DateOnly.Parse(Date);
+
+            campaigns = await getDataService.GetBurgerMystereCampaigns();
+
+            start = campaigns.SingleOrDefault(c => c.Start <= date && date <= c.End)?.Start ?? today;
+            data = await getDataService.GetBurgerMystere(start, headerData.Restaurant.Id);
+
+            var current = campaigns.FirstOrDefault();
+            isCurrent = current?.Start <= today && today <= current?.End;
         }
     }
 }
