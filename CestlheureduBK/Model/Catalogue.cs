@@ -10,7 +10,7 @@ public record Catalogue(
     Menu[] Menus,
     Product[] Products,
     Promotion[] Promotions,
-    Categorie[] SubCategories
+    Filter[] Filters
 );
 
 public record Allergen(string Id, string Name, string Description, string Image);
@@ -25,6 +25,8 @@ public record Categorie(
     bool? AcceptFilters,
     CategorieCategorie[]? Categories
 );
+
+public record Filter(string Id, string Code, string Name);
 
 public record Game(
     int Id,
