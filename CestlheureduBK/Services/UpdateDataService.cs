@@ -19,11 +19,13 @@ public class UpdateDataService(BKDbContext context) : IDisposable
         {
             if (_client == null)
             {
-                _client = new HttpClient(new HttpClientHandler 
-                { 
-                    AutomaticDecompression = DecompressionMethods.GZip,
-                    SslProtocols = SslProtocols.Tls12
-                });
+                _client = new HttpClient(
+                    new HttpClientHandler
+                    {
+                        AutomaticDecompression = DecompressionMethods.GZip,
+                        SslProtocols = SslProtocols.Tls12,
+                    }
+                );
                 _client.DefaultRequestHeaders.Accept.Add(new("application/json"));
             }
 
@@ -67,11 +69,10 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                     Image = cat.Image,
                 })
                 .Concat(
-                    catalogue.SubCategories.Select(cat => new CategorieDb
+                    catalogue.Filters.Select(cat => new CategorieDb
                     {
                         Id = cat.Id,
                         Name = cat.Name,
-                        Image = cat.Image,
                         SubCategory = true,
                     })
                 )
@@ -97,7 +98,8 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                             prd.Categories?.Select(c => c.Id)
                                 .Concat(prd.SubCategories ?? [])
                                 .Select(c => categories.Single(cat => c == cat.Id))
-                                .ToList() ?? [],
+                                .ToList()
+                            ?? [],
                     },
                     Active = prd.Active,
                     Price = prd.Price,
@@ -163,7 +165,8 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                             men.Categories?.Select(c => c.Id)
                                 .Concat(men.SubCategories ?? [])
                                 .Select(c => categories.Single(cat => c == cat.Id))
-                                .ToList() ?? [],
+                                .ToList()
+                            ?? [],
                     },
                     Active = men.Active,
                     Price = men.Price,
@@ -221,7 +224,10 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                     product.Snacks.Add(
                         new()
                         {
-                            Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
+                            Snack = snacks.Single(s =>
+                                s.Name == match.Groups[1].Value.Trim()
+                                || s.Name == "Tenders" && match.Groups[1].Value.Contains("Krispper")
+                            ),
                             Amount = int.Parse(match.Groups[2].Value),
                         }
                     );
@@ -280,13 +286,23 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                 if (match.Success)
                 {
                     var n = menu.Name;
-                    menu.Snacks.Add(
-                        new()
-                        {
-                            Snack = snacks.Single(s => s.Name == match.Groups[1].Value.Trim()),
-                            Amount = int.Parse(match.Groups[2].Value),
-                        }
-                    );
+                    try
+                    {
+                        menu.Snacks.Add(
+                            new()
+                            {
+                                Snack = snacks.Single(s =>
+                                    s.Name == match.Groups[1].Value.Trim()
+                                    || s.Name == "Tenders" && match.Groups[1].Value.Trim() == "Krispper"
+                                ),
+                                Amount = int.Parse(match.Groups[2].Value),
+                            }
+                        );
+                    }
+                    catch (Exception e)
+                    {
+                        // lol
+                    }
                 }
             }
 
