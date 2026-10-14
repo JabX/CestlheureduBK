@@ -8,7 +8,7 @@
         {
             <RadzenButton Text="Réinitialiser" Variant="Variant.Outlined" Icon="replay" Click="@(() => criteria = new())" />
         }
-        <span @onclick="@(()=> filter = !filter)">Filtres</span>      
+        <span @onclick="@(() => filter = !filter)">Filtres</span>
     </HeaderTemplate>
     <ChildContent>
         <RadzenCard Variant="Variant.Flat">
@@ -79,8 +79,14 @@
                 </span>
             </HeaderTemplate>
             <Template Context="data">
-                 <RadzenStack AlignItems="AlignItems.Start" Gap="2">
-                    <a data-loading="@loading" class="energy" @onclick="() => ReloadEnergy(data)" title="Clique pour vérifier que la valeur est correcte">@(data.Energy.ToString("0 kcal"))</a>
+                <RadzenStack AlignItems="AlignItems.Start" Gap="2">
+                    <a data-loading="@loading" class="energy" @onclick="() => ReloadEnergy(data)" title="Clique pour vérifier que la valeur est correcte">
+                        @(data.Energy.ToString("0 kcal"))                        
+                    </a>
+                    @if (data.EnergyMin != null && data.EnergyMin != data.Energy)
+                    {
+                        <span class="detail">(min : @(data.EnergyMin.Value.ToString("0 kcal")))</span>
+                    }
 
                     @if (data.Snacks.Any() && data.Type == ItemType.Product)
                     {
@@ -103,7 +109,7 @@
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
                     <span class="tooltip">
                         @{
-                            var className =  data.MyPrice != null ? data.MyPrice > data.Price ? "cheaper" : data.MyPrice < data.Price ? "pricier" : "" : "";
+                            var className = data.MyPrice != null ? data.MyPrice > data.Price ? "cheaper" : data.MyPrice < data.Price ? "pricier" : "" : "";
                         }
                         <span class="@className">@data.Price.ToString("0.00 €")</span>
                         @if (data.MyPrice != null && data.Price != data.MyPrice)
@@ -229,7 +235,7 @@
             var response = await _client.PutAsync($"api/energy/{item.Type}/{item.Id}", null);
             loading = false;
 
-            var updates =  await response.Content.ReadFromJsonAsync<IEnumerable<CatalogueEnergyUpdate>>() ?? [];            
+            var updates = await response.Content.ReadFromJsonAsync<IEnumerable<CatalogueEnergyUpdate>>() ?? [];
             foreach (var update in updates)
             {
                 var matching = Data.SingleOrDefault(d => (d.Type == update.Type || d.Type == ItemType.ProductAsMenu && update.Type == ItemType.Menu) && d.Id == update.Id);

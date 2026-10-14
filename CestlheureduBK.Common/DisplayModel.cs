@@ -19,6 +19,7 @@ public record OfferDisplay(
     double Price,
     double? MyPrice,
     double Energy,
+    double? EnergyMin,
     IEnumerable<SnackAmountDisplay> Snacks,
     IEnumerable<CategorieDisplay> Categories
 )
@@ -35,6 +36,7 @@ public record CatalogueDisplay(
     double Price,
     double? MyPrice,
     double Energy,
+    double? EnergyMin,
     IEnumerable<SnackAmountDisplay> Snacks,
     IEnumerable<CategorieDisplay> Categories
 )

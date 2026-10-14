@@ -299,7 +299,7 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                             }
                         );
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // lol
                     }
@@ -435,7 +435,7 @@ public class UpdateDataService(BKDbContext context) : IDisposable
             var products = await context
                 .Menus.AsTracking()
                 .Where(men => men.Id == id)
-                .SelectMany(men => men.Steps.Select(s => s.DefaultProduct!))
+                .SelectMany(men => men.Steps.SelectMany(s => s.Products))
                 .ToListAsync();
 
             foreach (var product in products)
@@ -507,7 +507,7 @@ public class UpdateDataService(BKDbContext context) : IDisposable
             var restaux = await stores
                 .Markers.ToAsyncEnumerable()
                 .Select(
-                    async (Marker store, CancellationToken ct) =>
+                    async (store, ct) =>
                     {
                         if (restaurantsDb.TryGetValue(store.Id, out var restaurantDb))
                         {
@@ -515,12 +515,15 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                         }
                         else
                         {
-                            await Task.Delay(200); // L'API nous jette au bout d'un moment sinon :(
+                            await Task.Delay(200, ct); // L'API nous jette au bout d'un moment sinon :(
                             var restaurant = await Client.GetAsync(
-                                $"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}"
+                                $"https://webapi.burgerking.fr/blossom/api/v13/public/restaurant/{store.Id}",
+                                ct
                             );
                             restaurant.EnsureSuccessStatusCode();
-                            var restaurantData = (await restaurant.Content.ReadFromJsonAsync<Restaurant>())!;
+                            var restaurantData = (
+                                await restaurant.Content.ReadFromJsonAsync<Restaurant>(cancellationToken: ct)
+                            )!;
                             return new RestaurantDb
                             {
                                 AddressFull = restaurantData.AddressFull,

@@ -104,16 +104,28 @@
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
-                    <span class="tooltip">
-                        @{
-                            var className = criteria.CostBy == "price" && data.MyPrice != null ? data.MyPrice > data.Price ? "cheaper" : data.MyPrice < data.Price ? "pricier" : "" : "";
-                        }
-                        <span class="@className">@(criteria.CostBy == "price" ? data.Price.ToString("0.00 €") : data.Energy.ToString("0 kcal"))</span>
-                        @if (criteria.CostBy == "price" && data.MyPrice != null && data.Price != data.MyPrice)
+                    @{
+                        var className = criteria.CostBy == "price" && data.MyPrice != null ? data.MyPrice > data.Price ? "cheaper" : data.MyPrice < data.Price ? "pricier" : "" : "";
+                    }
+                    @if (criteria.CostBy == "price")
+                    {
+                        <span class="tooltip">
+                           
+                            <span class="@className">@(data.Price.ToString("0.00 €"))</span>
+                            @if (criteria.CostBy == "price" && data.MyPrice != null && data.Price != data.MyPrice)
+                            {
+                                <RadzenIcon Icon="info" MouseEnter="args => ShowTooltip(args, data.MyPrice.Value)" MouseLeave="tooltipService.Close" />
+                            }
+                        </span>
+                    } 
+                    else
+                    {
+                        <span>@(data.Energy.ToString("0 kcal"))</span>
+                        @if (data.EnergyMin != null && data.EnergyMin != data.Energy)
                         {
-                            <RadzenIcon Icon="info" MouseEnter="args => ShowTooltip(args, data.MyPrice.Value)" MouseLeave="tooltipService.Close" />
+                            <span class="detail">min: @(data.EnergyMin.Value.ToString("0 kcal"))</span>
                         }
-                    </span>
+                    }
                     @if (data.Snacks.Any())
                     {
                         <span class="detail @className">(@(((criteria.CostBy == "price" ? data.Price : data.Energy) / data.Snacks.Sum(s => s.Amount)).ToString(criteria.CostBy == "price" ? "0.00 €" : "0 kcal")) / @(string.Join("", data.Snacks.First().Name.Split(' ').Select(e => e.ToLower()[0]))))</span>

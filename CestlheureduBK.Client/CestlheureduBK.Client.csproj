@@ -7,10 +7,10 @@
     <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Blazor.Geolocation" Version="9.0.1" />
+    <PackageReference Include="Blazor.Geolocation" Version="10.1.0" />
     <PackageReference Include="GeoCoordinate.NetStandard2" Version="1.0.1" />
-    <PackageReference Include="Majorsoft.Blazor.Extensions.BrowserStorage" Version="1.5.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
+    <PackageReference Include="Majorsoft.Blazor.Extensions.BrowserStorage" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.13" />
     <PackageReference Include="Radzen.Blazor" Version="8.3.2" />
   </ItemGroup>
   <ItemGroup>

@@ -45,6 +45,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                             .Price
                         : null,
                     prd.Product.Energy ?? 0,
+                    null,
                     prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                     prd.Product.Categories.OrderBy(c => c.SubCategory)
                         .ThenBy(c => c.Name)
@@ -77,10 +78,10 @@ public class GetDataService(BKDbContext context, UserService userService)
                                 .Price
                             : null,
                         men.Menu.Steps.Sum(s =>
-                            s.DefaultProduct != null && s.DefaultProduct.Energy != null
-                                ? s.DefaultProduct.Energy.Value
-                                : 0
+                            s.Products.Where(p => !p.RouteId.Replace("-", string.Empty).ToLower().Contains("kingfries"))
+                                .Max(p => p.Energy ?? 0)
                         ),
+                        men.Menu.Steps.Sum(s => s.Products.Min(p => p.Energy ?? 0)),
                         men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                         men.Menu.Categories.OrderBy(c => c.SubCategory)
                             .ThenBy(c => c.Name)
@@ -155,6 +156,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                             .Price
                         : null,
                     prd.Product.Energy ?? 0,
+                    null,
                     prd.Product.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                     prd.Product.Categories.OrderBy(c => c.SubCategory)
                         .ThenBy(c => c.Name)
@@ -190,7 +192,11 @@ public class GetDataService(BKDbContext context, UserService userService)
                                 )!
                                 .Price
                             : null,
-                        men.Menu.Steps.Sum(s => s.DefaultProduct!.Energy ?? 0),
+                        men.Menu.Steps.Sum(s =>
+                            s.Products.Where(p => !p.RouteId.Replace("-", string.Empty).ToLower().Contains("kingfries"))
+                                .Max(p => p.Energy ?? 0)
+                        ),
+                        men.Menu.Steps.Sum(s => s.Products.Min(p => p.Energy ?? 0)),
                         men.Menu.Snacks.Select(s => new SnackAmountDisplay(s.Snack.Name, s.Amount)),
                         men.Menu.Categories.OrderBy(c => c.SubCategory)
                             .ThenBy(c => c.Name)
@@ -261,8 +267,8 @@ public class GetDataService(BKDbContext context, UserService userService)
     {
         var allProducts = await context
             .ProductsRestaurants.Include(p => p.Product)
-            .ThenInclude(p => p.Snacks)
-            .ThenInclude(p => p.Snack)
+                .ThenInclude(p => p.Snacks)
+                    .ThenInclude(p => p.Snack)
             .AsSingleQuery()
             .Where(p => p.Restaurant.Id == codeRestaurant && p.Active && p.Product.Snacks.Any(s => s.Snack.Active))
             .ToListAsync();
