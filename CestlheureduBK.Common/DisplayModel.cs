@@ -59,28 +59,34 @@ public record BurgerMysterePeriodDisplay(DateOnly Start, DateOnly End)
         Start.Month == End.Month ? $"du {Start.Day} au {End:d MMMM yyyy}" : $"du {Start:d MMMM} au {End:d MMMM yyyy}";
 }
 
-public record BurgerMystereDisplay(
-    int Id,
+public record MysteryProductDisplay(
     string Name,
     string? Image,
-    string? Name2,
-    string? Image2,
-    double Price1,
-    double Energy1,
-    double Price2,
-    double Energy2,
+    double Price,
+    double Energy
+);
+
+public record BurgerMystereDisplay(
+    int Id,
+    IList<MysteryProductDisplay> Products,
     double Chance,
     int MyCount,
     int TotalCount
 )
 {
-    public double Price => Price1 + Price2;
+    public string Name => string.Join(" + ", Products.Select(p => p.Name));
 
-    public double Energy => Energy1 + Energy2;
+    public double Price => Products.Sum(p => p.Price);
+
+    public double Energy => Products.Sum(p => p.Energy);
 }
 
 public record BurgerMystereListDisplay(string Name, double Price, IList<BurgerMystereDisplay> Burgers)
 {
+    public bool HasMultipleProducts => Burgers.Any(b => b.Products.Count > 1);
+
+    public int ProductCount => Burgers.First().Products.Count;
+
     public double PriceExpectancy => Burgers.Sum(b => b.Chance * b.Price) / Burgers.Sum(b => b.Chance);
 
     public double PriceGain => PriceExpectancy / Price;

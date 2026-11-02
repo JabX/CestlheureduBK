@@ -245,8 +245,8 @@
             }).ToArray());
         }).ToDictionary(g => g.Item1, g => g.Item2);
 
-    MysteryRollDisplay[] MysteryRolls => GroupedMysteryRolls.TryGetValue(selectedMysteryPeriod!, out var rolls) ? rolls : [];
-    UserPalmares[] Palmares => GroupedPalmares.TryGetValue(selectedMysteryPeriod!, out var palmares) ? palmares : []; 
+    MysteryRollDisplay[] MysteryRolls => selectedMysteryPeriod != null && GroupedMysteryRolls.TryGetValue(selectedMysteryPeriod, out var rolls) ? rolls : [];
+    UserPalmares[] Palmares => selectedMysteryPeriod != null && GroupedPalmares.TryGetValue(selectedMysteryPeriod, out var palmares) ? palmares : []; 
 
     protected override async Task OnInitializedAsync()
     {

@@ -35,11 +35,11 @@
             </span>
             <br />
             <br />
-            @if (campaign.Name == "Duo Mystère")
+            @if (campaign.HasMultipleProducts)
             {
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
                     <RadzenLabel Text="Afficher les" Component="costBy" />
-                    <span style="cursor:pointer" @onclick=@(() => criteria.OnlyOne = false)>Duos</span>
+                    <span style="cursor:pointer" @onclick=@(() => criteria.OnlyOne = false)>Combinaisons</span>
                     <RadzenSwitch Name="onlyOne" Value="criteria.OnlyOne" Change="@(() => criteria.OnlyOne = !criteria.OnlyOne)" />
                     <span style="cursor:pointer" @onclick=@(() => criteria.OnlyOne = true)>Produits seuls</span>
                 </RadzenStack>
@@ -90,7 +90,7 @@
                     <br />                        
                 }
             }
-            @if (!criteria.OnlyOne) 
+            @if (!criteria.OnlyOne || !campaign.HasMultipleProducts)
             {
                 <span>
                     @GetFilteredBurgers(campaign.Burgers).Count() produits
@@ -105,17 +105,13 @@
                     <Columns>
                         <RadzenDataGridColumn Title="Produit">
                             <Template Context="data">
-                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
-                                    <img src="@data.Image" class="image" />
-                                    <span>@data.Name</span>
-                                </RadzenStack>
-                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
-                                    @if (data.Name2 != null)
-                                    {
-                                        <img src="@data.Image2" class="image" />
-                                        <span>@data.Name2</span>
-                                    }
-                                </RadzenStack>
+                                @foreach (var product in data.Products)
+                                {
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                                        <img src="@product.Image" class="image" />
+                                        <span>@product.Name</span>
+                                    </RadzenStack>
+                                }
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn HeaderCssClass="col-3">
@@ -263,7 +259,7 @@
                             <Template Context="data">
                                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
                                     <span>@(data.Price.ToString("0.00 €") ?? "-")</span>
-                                    <span class="detail">(x @((data.Price * 2 / campaign.Price).ToString("0.00")))</span>
+                                    <span class="detail">(x @((data.Price * campaign.ProductCount / campaign.Price).ToString("0.00")))</span>
                                 </RadzenStack>
                             </Template>
                         </RadzenDataGridColumn>
@@ -341,22 +337,15 @@
             _ => burgers
         }).Where(b =>
             criteria.Burgers == null
-            || criteria.CombinationMode == CombinationMode.AtLeastOne && (criteria.Burgers.Contains(b.Name) || criteria.Burgers.Contains(b.Name2!))
-            || criteria.CombinationMode == CombinationMode.OnlySelected && criteria.Burgers.Contains(b.Name) && criteria.Burgers.Contains(b.Name2!)
-            || criteria.CombinationMode == CombinationMode.ExactSelection && (
-                criteria.Burgers.Count == 1 && criteria.Burgers[0] == b.Name && b.Name == b.Name2)
-                || criteria.Burgers.Count == 2 && (
-                    criteria.Burgers[0] == b.Name && criteria.Burgers[1] == b.Name2
-                    || criteria.Burgers[0] == b.Name2 && criteria.Burgers[1] == b.Name));
+            || criteria.CombinationMode == CombinationMode.AtLeastOne && b.Products.Any(p => criteria.Burgers.Contains(p.Name))
+            || criteria.CombinationMode == CombinationMode.OnlySelected && b.Products.All(p => criteria.Burgers.Contains(p.Name))
+            || criteria.CombinationMode == CombinationMode.ExactSelection && criteria.Burgers.ToHashSet().SetEquals(b.Products.Select(p => p.Name)));
     }
 
     private IEnumerable<SingleMysteryBurgerDisplay> GetSingleBurgers(IEnumerable<BurgerMystereDisplay> burgers)
     {
-        var singleBurgers = burgers.SelectMany(b => new[] 
-        { 
-            new SingleMysteryBurgerDisplay(b.Name, b.Image, b.Price1, b.Energy1, b.Chance, b.MyCount, b.TotalCount),
-            new SingleMysteryBurgerDisplay(b.Name2!, b.Image2, b.Price2, b.Energy2, b.Chance, b.MyCount, b.TotalCount)
-        })
+        var singleBurgers = burgers.SelectMany(b => b.Products.Select(p =>
+            new SingleMysteryBurgerDisplay(p.Name, p.Image, p.Price, p.Energy, b.Chance, b.MyCount, b.TotalCount)))
             .GroupBy(b => (b.Name, b.Image, b.Price, b.Energy))
             .Select(g => new SingleMysteryBurgerDisplay(
                 g.Key.Name, 
@@ -382,7 +371,7 @@
         });
     }
 
-    private IEnumerable<string> AllBurgers => Data.SelectMany(d => d.Burgers).SelectMany(b => new[] { b.Name, b.Name2! }).Where(n => n != null).Distinct().Order();
+    private IEnumerable<string> AllBurgers => Data.SelectMany(d => d.Burgers).SelectMany(b => b.Products).Select(p => p.Name).Distinct().Order();
 
     private void ToggleSort(string field)
     {

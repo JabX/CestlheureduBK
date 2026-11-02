@@ -163,3131 +163,2392 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new() { Id = "1290", Name = "Whopper Rings" },
                 ]
             );
-        modelBuilder
-            .Entity<MysteryProductDb>()
-            .HasData(
-                [
+        var mysteryProducts = new[]
+            {
                     new
                     {
-                        Id = 1,
                         CampaignId = 1,
-                        ProductId = "702",
+                        ProductIds = new[] { "702" },
                         Chance = 0.14,
                     },
                     new
                     {
-                        Id = 2,
                         CampaignId = 1,
-                        ProductId = "2",
+                        ProductIds = new[] { "2" },
                         Chance = 0.12,
                     },
                     new
                     {
-                        Id = 3,
                         CampaignId = 1,
-                        ProductId = "49",
+                        ProductIds = new[] { "49" },
                         Chance = 0.12,
                     },
                     new
                     {
-                        Id = 4,
                         CampaignId = 1,
-                        ProductId = "1101",
+                        ProductIds = new[] { "1101" },
                         Chance = 0.11,
                     },
                     new
                     {
-                        Id = 5,
                         CampaignId = 1,
-                        ProductId = "463",
-                        Chance = 0.10,
-                    },
-                    new
-                    {
-                        Id = 6,
-                        CampaignId = 1,
-                        ProductId = "46",
-                        Chance = 0.10,
-                    },
-                    new
-                    {
-                        Id = 7,
-                        CampaignId = 1,
-                        ProductId = "953",
-                        Chance = 0.07,
-                    },
-                    new
-                    {
-                        Id = 8,
-                        CampaignId = 1,
-                        ProductId = "802",
-                        Chance = 0.07,
-                    },
-                    new
-                    {
-                        Id = 9,
-                        CampaignId = 1,
-                        ProductId = "1055",
-                        Chance = 0.05,
-                    },
-                    new
-                    {
-                        Id = 10,
-                        CampaignId = 1,
-                        ProductId = "1054",
-                        Chance = 0.05,
-                    },
-                    new
-                    {
-                        Id = 11,
-                        CampaignId = 1,
-                        ProductId = "17",
-                        Chance = 0.04,
-                    },
-                    new
-                    {
-                        Id = 12,
-                        CampaignId = 1,
-                        ProductId = "15",
-                        Chance = 0.03,
-                    },
-                    new
-                    {
-                        Id = 13,
-                        CampaignId = 2,
-                        ProductId = "664",
-                        Chance = 0.26,
-                    },
-                    new
-                    {
-                        Id = 14,
-                        CampaignId = 2,
-                        ProductId = "544",
-                        Chance = 0.26,
-                    },
-                    new
-                    {
-                        Id = 15,
-                        CampaignId = 2,
-                        ProductId = "666",
-                        Chance = 0.24,
-                    },
-                    new
-                    {
-                        Id = 16,
-                        CampaignId = 2,
-                        ProductId = "801",
-                        Chance = 0.24,
-                    },
-                    new
-                    {
-                        Id = 17,
-                        CampaignId = 3,
-                        ProductId = "2",
-                        Chance = 0.16,
-                    },
-                    new
-                    {
-                        Id = 18,
-                        CampaignId = 3,
-                        ProductId = "1101",
-                        Chance = 0.16,
-                    },
-                    new
-                    {
-                        Id = 19,
-                        CampaignId = 3,
-                        ProductId = "702",
-                        Chance = 0.14,
-                    },
-                    new
-                    {
-                        Id = 20,
-                        CampaignId = 3,
-                        ProductId = "49",
-                        Chance = 0.12,
-                    },
-                    new
-                    {
-                        Id = 21,
-                        CampaignId = 3,
-                        ProductId = "46",
-                        Chance = 0.11,
-                    },
-                    new
-                    {
-                        Id = 22,
-                        CampaignId = 3,
-                        ProductId = "802",
-                        Chance = 0.11,
-                    },
-                    new
-                    {
-                        Id = 23,
-                        CampaignId = 3,
-                        ProductId = "1110",
-                        Chance = 0.05,
-                    },
-                    new
-                    {
-                        Id = 24,
-                        CampaignId = 3,
-                        ProductId = "1055",
-                        Chance = 0.04,
-                    },
-                    new
-                    {
-                        Id = 25,
-                        CampaignId = 3,
-                        ProductId = "1054",
-                        Chance = 0.03,
-                    },
-                    new
-                    {
-                        Id = 26,
-                        CampaignId = 3,
-                        ProductId = "213",
-                        Chance = 0.03,
-                    },
-                    new
-                    {
-                        Id = 27,
-                        CampaignId = 3,
-                        ProductId = "17",
-                        Chance = 0.03,
-                    },
-                    new
-                    {
-                        Id = 28,
-                        CampaignId = 3,
-                        ProductId = "15",
-                        Chance = 0.02,
-                    },
-                    new
-                    {
-                        Id = 29,
-                        CampaignId = 4,
-                        ProductId = "664",
-                        Chance = 0.36,
-                    },
-                    new
-                    {
-                        Id = 30,
-                        CampaignId = 4,
-                        ProductId = "666",
-                        Chance = 0.32,
-                    },
-                    new
-                    {
-                        Id = 31,
-                        CampaignId = 4,
-                        ProductId = "801",
-                        Chance = 0.32,
-                    },
-                    new
-                    {
-                        Id = 207,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "1072",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 32,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "1073",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 33,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "84",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 34,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "1084",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 35,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "77",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 36,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "547",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 37,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "1073",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 38,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "84",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 39,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "77",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 40,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "682",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 41,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "1072",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 42,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "1073",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 43,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "213",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 44,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 45,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1072",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 46,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1073",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 47,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 48,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "77",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 49,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "547",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 50,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "213",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 51,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 52,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "213",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 53,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 54,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "213",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 55,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 56,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 57,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "77",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 58,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 59,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "1084",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 60,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "547",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 61,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 62,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 63,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "1110",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 64,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 65,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 66,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "49",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 67,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1110",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 68,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "213",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 69,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "702",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 70,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1084",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 71,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 72,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 73,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "49",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 74,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 75,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 76,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "49",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 77,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 78,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 79,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "702",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 80,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "1084",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 81,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "547",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 82,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 83,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "49",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 84,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "1084",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 85,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "77",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 86,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "547",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 87,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "1084",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 88,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "77",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 89,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "547",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 90,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "84",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 91,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "84",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 92,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "77",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 93,
-                        CampaignId = 5,
-                        ProductId = "1055",
-                        Product2Id = "84",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 94,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 95,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 96,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 97,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "2",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 98,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1101",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 99,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 100,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 101,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 102,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 103,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 104,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 105,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 106,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 107,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 108,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 109,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 110,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "2",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 111,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "1101",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 112,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 113,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 114,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 115,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 116,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "1101",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 117,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 118,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "1084",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 119,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "77",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 120,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "547",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 121,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "1084",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 122,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "547",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 123,
-                        CampaignId = 5,
-                        ProductId = "1055",
-                        Product2Id = "1084",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 124,
-                        CampaignId = 5,
-                        ProductId = "1055",
-                        Product2Id = "77",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 125,
-                        CampaignId = 5,
-                        ProductId = "1055",
-                        Product2Id = "547",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 126,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 127,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "3",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 128,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 129,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "15",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 130,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 131,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 132,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "3",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 133,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 134,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "15",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 135,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 136,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "3",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 137,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 138,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "15",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 139,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 140,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 141,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 142,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 143,
-                        CampaignId = 5,
-                        ProductId = "1055",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 144,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "46",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 145,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 146,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 147,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 148,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 149,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "46",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 150,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 151,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 152,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 153,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "46",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 154,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 155,
-                        CampaignId = 5,
-                        ProductId = "1101",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 156,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "49",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 157,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 158,
-                        CampaignId = 5,
-                        ProductId = "3",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 159,
-                        CampaignId = 5,
-                        ProductId = "17",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 160,
-                        CampaignId = 5,
-                        ProductId = "15",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 161,
-                        CampaignId = 5,
-                        ProductId = "1054",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 162,
-                        CampaignId = 5,
-                        ProductId = "1054",
-                        Product2Id = "1084",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 163,
-                        CampaignId = 5,
-                        ProductId = "1054",
-                        Product2Id = "77",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 164,
-                        CampaignId = 5,
-                        ProductId = "1054",
-                        Product2Id = "547",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 165,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 166,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 167,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 168,
-                        CampaignId = 5,
-                        ProductId = "682",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 169,
-                        CampaignId = 5,
-                        ProductId = "1110",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 170,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 171,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 172,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 173,
-                        CampaignId = 5,
-                        ProductId = "1072",
-                        Product2Id = "16",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 174,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 175,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 176,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 177,
-                        CampaignId = 5,
-                        ProductId = "1073",
-                        Product2Id = "16",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 178,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 179,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 180,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 181,
-                        CampaignId = 5,
-                        ProductId = "213",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 182,
-                        CampaignId = 5,
-                        ProductId = "2",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 183,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 184,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 185,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 186,
-                        CampaignId = 5,
-                        ProductId = "702",
-                        Product2Id = "16",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 187,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "46",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 188,
-                        CampaignId = 5,
-                        ProductId = "49",
-                        Product2Id = "1055",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 189,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "46",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 190,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "802",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 191,
-                        CampaignId = 5,
-                        ProductId = "46",
-                        Product2Id = "1055",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 192,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "802",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 193,
-                        CampaignId = 5,
-                        ProductId = "802",
-                        Product2Id = "1055",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 194,
-                        CampaignId = 5,
-                        ProductId = "3",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 195,
-                        CampaignId = 5,
-                        ProductId = "3",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 196,
-                        CampaignId = 5,
-                        ProductId = "3",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 197,
-                        CampaignId = 5,
-                        ProductId = "17",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 198,
-                        CampaignId = 5,
-                        ProductId = "17",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 199,
-                        CampaignId = 5,
-                        ProductId = "17",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 200,
-                        CampaignId = 5,
-                        ProductId = "15",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 201,
-                        CampaignId = 5,
-                        ProductId = "15",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 202,
-                        CampaignId = 5,
-                        ProductId = "15",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 203,
-                        CampaignId = 5,
-                        ProductId = "16",
-                        Product2Id = "84",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 204,
-                        CampaignId = 5,
-                        ProductId = "16",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 205,
-                        CampaignId = 5,
-                        ProductId = "16",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 206,
-                        CampaignId = 5,
-                        ProductId = "16",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 208,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 209,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 210,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 211,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 212,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 213,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 214,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 215,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 216,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "16",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 217,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 218,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 219,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 220,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "16",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 221,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 222,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 223,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 224,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 225,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "1054",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 226,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "3",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 227,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "17",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 228,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "15",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 229,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "16",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 230,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "46",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 231,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "1055",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 232,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "46",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 233,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "802",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 234,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "1055",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 235,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "802",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 236,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "1055",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 237,
-                        CampaignId = 6,
-                        ProductId = "3",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 238,
-                        CampaignId = 6,
-                        ProductId = "3",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 239,
-                        CampaignId = 6,
-                        ProductId = "3",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 240,
-                        CampaignId = 6,
-                        ProductId = "17",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 241,
-                        CampaignId = 6,
-                        ProductId = "17",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 242,
-                        CampaignId = 6,
-                        ProductId = "17",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 243,
-                        CampaignId = 6,
-                        ProductId = "15",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 244,
-                        CampaignId = 6,
-                        ProductId = "15",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 245,
-                        CampaignId = 6,
-                        ProductId = "15",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 246,
-                        CampaignId = 6,
-                        ProductId = "16",
-                        Product2Id = "84",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 247,
-                        CampaignId = 6,
-                        ProductId = "16",
-                        Product2Id = "1084",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 248,
-                        CampaignId = 6,
-                        ProductId = "16",
-                        Product2Id = "77",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 249,
-                        CampaignId = 6,
-                        ProductId = "16",
-                        Product2Id = "547",
-                        Chance = 0.001,
-                    },
-                    new
-                    {
-                        Id = 250,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "46",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 251,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 252,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 253,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 254,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 255,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "46",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 256,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 257,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 258,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 259,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "46",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 260,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 261,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 262,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "49",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 263,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "802",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 264,
-                        CampaignId = 6,
-                        ProductId = "3",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 265,
-                        CampaignId = 6,
-                        ProductId = "17",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 266,
-                        CampaignId = 6,
-                        ProductId = "15",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 267,
-                        CampaignId = 6,
-                        ProductId = "1054",
-                        Product2Id = "84",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 268,
-                        CampaignId = 6,
-                        ProductId = "1054",
-                        Product2Id = "1084",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 269,
-                        CampaignId = 6,
-                        ProductId = "1054",
-                        Product2Id = "77",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 270,
-                        CampaignId = 6,
-                        ProductId = "1054",
-                        Product2Id = "547",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 271,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 272,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "3",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 273,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 274,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "15",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 275,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 276,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 277,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "3",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 278,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 279,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "15",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 280,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "16",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 281,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "3",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 282,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 283,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "15",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 284,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 285,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "17",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 286,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 287,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "1054",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 288,
-                        CampaignId = 6,
-                        ProductId = "1055",
-                        Product2Id = "1055",
-                        Chance = 0.002,
-                    },
-                    new
-                    {
-                        Id = 289,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 290,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 291,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 292,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "2",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 293,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1101",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 294,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 295,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 296,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 297,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 298,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 299,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 300,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 301,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 302,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 303,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 304,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "2",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 305,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "1101",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 306,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 307,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "46",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 308,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "802",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 309,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "1055",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 310,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "1101",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 311,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "49",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 312,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "1084",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 313,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "77",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 314,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "547",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 315,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "1084",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 316,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "547",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 317,
-                        CampaignId = 6,
-                        ProductId = "1055",
-                        Product2Id = "1084",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 318,
-                        CampaignId = 6,
-                        ProductId = "1055",
-                        Product2Id = "77",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 319,
-                        CampaignId = 6,
-                        ProductId = "1055",
-                        Product2Id = "547",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 320,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "1073",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 321,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "213",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 322,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1073",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 323,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "1073",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 324,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "213",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 325,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "702",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 326,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "702",
-                        Chance = 0.004,
-                    },
-                    new
-                    {
-                        Id = 327,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "1110",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 328,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 329,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1110",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 330,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "213",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 331,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "702",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 332,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1084",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 333,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 334,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 335,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 336,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 337,
-                        CampaignId = 6,
-                        ProductId = "1073",
-                        Product2Id = "49",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 338,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "2",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 339,
-                        CampaignId = 6,
-                        ProductId = "213",
-                        Product2Id = "1101",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 340,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "547",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 341,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "77",
-                        Chance = 0.005,
-                    },
-                    new
-                    {
-                        Id = 342,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "1072",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 343,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 344,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "1072",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 345,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 346,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "77",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 347,
-                        CampaignId = 6,
-                        ProductId = "1110",
-                        Product2Id = "547",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 348,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 349,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 350,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "1084",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 351,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "77",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 352,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "547",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 353,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 354,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "77",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 355,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "702",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 356,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "547",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 357,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "84",
-                        Chance = 0.013,
-                    },
-                    new
-                    {
-                        Id = 358,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "802",
-                        Chance = 0.018,
-                    },
-                    new
-                    {
-                        Id = 359,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "2",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 360,
-                        CampaignId = 6,
-                        ProductId = "682",
-                        Product2Id = "49",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 361,
-                        CampaignId = 6,
-                        ProductId = "1072",
-                        Product2Id = "49",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 362,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "702",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 363,
-                        CampaignId = 6,
-                        ProductId = "2",
-                        Product2Id = "1084",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 364,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "1101",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 365,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "49",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 366,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "1084",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 367,
-                        CampaignId = 6,
-                        ProductId = "1101",
-                        Product2Id = "547",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 368,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "1084",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 369,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "77",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 370,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "547",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 371,
-                        CampaignId = 6,
-                        ProductId = "46",
-                        Product2Id = "84",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 372,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "84",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 373,
-                        CampaignId = 6,
-                        ProductId = "802",
-                        Product2Id = "77",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 374,
-                        CampaignId = 6,
-                        ProductId = "1055",
-                        Product2Id = "84",
-                        Chance = 0.019,
-                    },
-                    new
-                    {
-                        Id = 375,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "1084",
-                        Chance = 0.027,
-                    },
-                    new
-                    {
-                        Id = 376,
-                        CampaignId = 6,
-                        ProductId = "49",
-                        Product2Id = "84",
-                        Chance = 0.027,
-                    },
-                    new
-                    {
-                        Id = 377,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "84",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 378,
-                        CampaignId = 6,
-                        ProductId = "702",
-                        Product2Id = "77",
-                        Chance = 0.033,
-                    },
-                    new
-                    {
-                        Id = 379,
-                        CampaignId = 7,
-                        ProductId = "702",
-                        Chance = 0.15,
-                    },
-                    new
-                    {
-                        Id = 380,
-                        CampaignId = 7,
-                        ProductId = "213",
-                        Chance = 0.03,
-                    },
-                    new
-                    {
-                        Id = 381,
-                        CampaignId = 7,
-                        ProductId = "1110",
-                        Chance = 0.08,
-                    },
-                    new
-                    {
-                        Id = 382,
-                        CampaignId = 7,
-                        ProductId = "2",
-                        Chance = 0.09,
-                    },
-                    new
-                    {
-                        Id = 383,
-                        CampaignId = 7,
-                        ProductId = "1101",
-                        Chance = 0.05,
-                    },
-                    new
-                    {
-                        Id = 384,
-                        CampaignId = 7,
-                        ProductId = "49",
-                        Chance = 0.08,
-                    },
-                    new
-                    {
-                        Id = 385,
-                        CampaignId = 7,
-                        ProductId = "46",
-                        Chance = 0.07,
-                    },
-                    new
-                    {
-                        Id = 386,
-                        CampaignId = 7,
-                        ProductId = "802",
+                        ProductIds = new[] { "463" },
                         Chance = 0.1,
                     },
                     new
                     {
-                        Id = 387,
-                        CampaignId = 7,
-                        ProductId = "1290",
+                        CampaignId = 1,
+                        ProductIds = new[] { "46" },
+                        Chance = 0.1,
+                    },
+                    new
+                    {
+                        CampaignId = 1,
+                        ProductIds = new[] { "953" },
+                        Chance = 0.07,
+                    },
+                    new
+                    {
+                        CampaignId = 1,
+                        ProductIds = new[] { "802" },
+                        Chance = 0.07,
+                    },
+                    new
+                    {
+                        CampaignId = 1,
+                        ProductIds = new[] { "1055" },
                         Chance = 0.05,
                     },
                     new
                     {
-                        Id = 388,
-                        CampaignId = 7,
-                        ProductId = "15",
-                        Chance = 0.02,
+                        CampaignId = 1,
+                        ProductIds = new[] { "1054" },
+                        Chance = 0.05,
                     },
                     new
                     {
-                        Id = 389,
-                        CampaignId = 7,
-                        ProductId = "658",
-                        Chance = 0.025,
+                        CampaignId = 1,
+                        ProductIds = new[] { "17" },
+                        Chance = 0.04,
                     },
                     new
                     {
-                        Id = 390,
-                        CampaignId = 7,
-                        ProductId = "1053",
-                        Chance = 0.025,
+                        CampaignId = 1,
+                        ProductIds = new[] { "15" },
+                        Chance = 0.03,
                     },
                     new
                     {
-                        Id = 391,
-                        CampaignId = 7,
-                        ProductId = "463",
-                        Chance = 0.11,
+                        CampaignId = 2,
+                        ProductIds = new[] { "664" },
+                        Chance = 0.26,
                     },
                     new
                     {
-                        Id = 392,
-                        CampaignId = 7,
-                        ProductId = "433",
+                        CampaignId = 2,
+                        ProductIds = new[] { "544" },
+                        Chance = 0.26,
+                    },
+                    new
+                    {
+                        CampaignId = 2,
+                        ProductIds = new[] { "666" },
+                        Chance = 0.24,
+                    },
+                    new
+                    {
+                        CampaignId = 2,
+                        ProductIds = new[] { "801" },
+                        Chance = 0.24,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "2" },
+                        Chance = 0.16,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "1101" },
+                        Chance = 0.16,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "702" },
+                        Chance = 0.14,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "49" },
                         Chance = 0.12,
                     },
                     new
                     {
-                        Id = 393,
+                        CampaignId = 3,
+                        ProductIds = new[] { "46" },
+                        Chance = 0.11,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "802" },
+                        Chance = 0.11,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "1110" },
+                        Chance = 0.05,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "1055" },
+                        Chance = 0.04,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "1054" },
+                        Chance = 0.03,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "213" },
+                        Chance = 0.03,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "17" },
+                        Chance = 0.03,
+                    },
+                    new
+                    {
+                        CampaignId = 3,
+                        ProductIds = new[] { "15" },
+                        Chance = 0.02,
+                    },
+                    new
+                    {
+                        CampaignId = 4,
+                        ProductIds = new[] { "664" },
+                        Chance = 0.36,
+                    },
+                    new
+                    {
+                        CampaignId = 4,
+                        ProductIds = new[] { "666" },
+                        Chance = 0.32,
+                    },
+                    new
+                    {
+                        CampaignId = 4,
+                        ProductIds = new[] { "801" },
+                        Chance = 0.32,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "1073" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "84" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "1084" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "77" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "547" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "1073" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "84" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "77" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "682" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "1072" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "1073" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "213" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1072" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1073" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "77" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "547" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "213" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "213" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "213" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "77" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "1084" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "547" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "1110" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "49" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1110" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "213" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "702" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1084" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "49" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "49" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "702" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "1084" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "547" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "49" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "1084" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "77" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "547" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "1084" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "77" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "547" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "84" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "84" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "77" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1055", "84" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "2" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1101" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "2" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "1101" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "1101" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "1084" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "77" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "547" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "1084" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "547" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1055", "1084" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1055", "77" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1055", "547" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "3" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "15" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "3" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "15" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "3" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "15" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1055", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "46" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "46" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "46" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1101", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "49" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "3", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "17", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "15", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1054", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1054", "1084" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1054", "77" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1054", "547" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "682", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1110", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "16" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1073", "16" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "213", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "2", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "702", "16" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "46" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "49", "1055" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "46" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "802" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "46", "1055" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "802" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "802", "1055" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "3", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "3", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "3", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "17", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "17", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "17", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "15", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "15", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "15", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "16", "84" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "16", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "16", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "16", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 5,
+                        ProductIds = new[] { "1072", "1072" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "16" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "16" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "1054" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "3" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "17" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "15" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "16" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "46" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "1055" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "46" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "802" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "1055" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "802" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "1055" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "3", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "3", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "3", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "17", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "17", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "17", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "15", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "15", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "15", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "16", "84" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "16", "1084" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "16", "77" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "16", "547" },
+                        Chance = 0.001,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "46" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "46" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "46" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "49" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "802" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "3", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "17", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "15", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1054", "84" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1054", "1084" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1054", "77" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1054", "547" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "3" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "15" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "3" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "15" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "16" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "3" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "15" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "17" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "1054" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1055", "1055" },
+                        Chance = 0.002,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "2" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1101" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "2" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "1101" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "46" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "802" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "1055" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "1101" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "49" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "1084" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "77" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "547" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "1084" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "547" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1055", "1084" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1055", "77" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1055", "547" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "1073" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "213" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1073" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "1073" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "213" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "702" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "702" },
+                        Chance = 0.004,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "1110" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1110" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "213" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "702" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1084" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1073", "49" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "2" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "213", "1101" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "547" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "77" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "1072" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "1072" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "77" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1110", "547" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "1084" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "77" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "547" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "77" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "702" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "547" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "84" },
+                        Chance = 0.013,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "802" },
+                        Chance = 0.018,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "2" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "682", "49" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1072", "49" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "702" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "2", "1084" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "1101" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "49" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "1084" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1101", "547" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "1084" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "77" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "547" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "46", "84" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "84" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "802", "77" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "1055", "84" },
+                        Chance = 0.019,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "1084" },
+                        Chance = 0.027,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "49", "84" },
+                        Chance = 0.027,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "84" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 6,
+                        ProductIds = new[] { "702", "77" },
+                        Chance = 0.033,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "702" },
+                        Chance = 0.15,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "213" },
+                        Chance = 0.03,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "1110" },
+                        Chance = 0.08,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "2" },
+                        Chance = 0.09,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "1101" },
+                        Chance = 0.05,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "49" },
+                        Chance = 0.08,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "46" },
+                        Chance = 0.07,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "802" },
+                        Chance = 0.1,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "1290" },
+                        Chance = 0.05,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "15" },
+                        Chance = 0.02,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "658" },
+                        Chance = 0.025,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "1053" },
+                        Chance = 0.025,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "463" },
+                        Chance = 0.11,
+                    },
+                    new
+                    {
+                        CampaignId = 7,
+                        ProductIds = new[] { "433" },
+                        Chance = 0.12,
+                    },
+                    new
+                    {
                         CampaignId = 8,
-                        ProductId = "664",
+                        ProductIds = new[] { "664" },
                         Chance = 0.2,
                     },
                     new
                     {
-                        Id = 394,
                         CampaignId = 8,
-                        ProductId = "666",
+                        ProductIds = new[] { "666" },
                         Chance = 0.2,
                     },
                     new
                     {
-                        Id = 395,
                         CampaignId = 8,
-                        ProductId = "801",
+                        ProductIds = new[] { "801" },
                         Chance = 0.3,
                     },
                     new
                     {
-                        Id = 396,
                         CampaignId = 8,
-                        ProductId = "508",
+                        ProductIds = new[] { "508" },
                         Chance = 0.3,
                     },
-                ]
-            );
+                }
+                .Select((p, index) => new { Id = index + 1, p.CampaignId, p.ProductIds, p.Chance })
+                .ToArray();
+
+        modelBuilder.Entity<MysteryProductDb>().HasData(mysteryProducts.Select(p => new { p.Id, p.CampaignId, p.Chance }));
+        modelBuilder.Entity<MysteryProductItemDb>().HasData(mysteryProducts.SelectMany(p =>
+            p.ProductIds.Select(productId => new { MysteryProductId = p.Id, ProductId = productId }))
+            .Select((p, index) => new { Id = index + 1, p.MysteryProductId, p.ProductId }));
     }
 }
 
@@ -3353,6 +2614,7 @@ public enum MysteryCampaignKind
     Classic,
     Veggie,
     Duo,
+    Box,
 }
 
 [Table("MysteryCampaigns")]
@@ -3376,12 +2638,20 @@ public record MysteryProductDb
 
     public required MysteryCampaignDb Campaign { get; set; }
 
-    public required ProductDb Product { get; set; }
-
-    public ProductDb? Product2 { get; set; }
+    public IList<MysteryProductItemDb> Products { get; set; } = [];
 
     [Column(TypeName = "decimal(4, 2)")]
     public required double Chance { get; set; }
+}
+
+[Table("MysteryProductItems")]
+public record MysteryProductItemDb
+{
+    public int Id { get; set; }
+
+    public required MysteryProductDb MysteryProduct { get; set; }
+
+    public required ProductDb Product { get; set; }
 }
 
 [Table("MysteryRolls")]

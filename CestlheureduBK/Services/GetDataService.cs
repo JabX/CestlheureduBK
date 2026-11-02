@@ -115,9 +115,7 @@ public class GetDataService(BKDbContext context, UserService userService)
                     ? "Anonyme"
                     : $"{mr.User.Name} ({mr.User.Email.Split('@', StringSplitOptions.None)[0].Substring(0, 2)}..@{mr.User.Email.Split('@', StringSplitOptions.None)[1].Substring(0, 2)}..)",
                 new(mr.Product.Campaign.Start, mr.Product.Campaign.End),
-                mr.Product.Product2 != null
-                    ? $"{mr.Product.Product.Name} + {mr.Product.Product2.Name}"
-                    : mr.Product.Product.Name,
+                string.Join(" + ", mr.Product.Products.Select(p => p.Product.Name)),
                 mr.Price,
                 mr.Product.Campaign.Price,
                 $"{mr.Restaurant.Name} ({mr.Restaurant.Departement})",
@@ -330,41 +328,58 @@ public class GetDataService(BKDbContext context, UserService userService)
 
     public async Task<IList<BurgerMystereListDisplay>> GetBurgerMystere(DateOnly start, string codeRestaurant)
     {
-        return await (
-            from mp in context.MysteryProducts
-            join pr in context.ProductsRestaurants on mp.Product equals pr.Product
-            from pr2 in context.ProductsRestaurants.Where(pr => mp.Product2 == pr.Product).DefaultIfEmpty()
-            where mp.Campaign.Start == start
-            where pr.Restaurant.Id == codeRestaurant
-            where pr2 == null || pr2.Restaurant.Id == codeRestaurant
-            group new
-            {
-                pr,
-                pr2,
-                mp,
-            } by mp.Campaign into g
-            select new BurgerMystereListDisplay(
-                g.Key.Kind == MysteryCampaignKind.Classic ? "Burger Mystère"
-                    : g.Key.Kind == MysteryCampaignKind.Veggie ? "Veggie Mystère"
-                    : "Duo Mystère",
-                g.Key.Price,
-                g.Select(c => new BurgerMystereDisplay(
-                        c.mp.Id,
-                        c.pr.Product.Name,
-                        c.pr.Product.Image,
-                        c.pr2.Product.Name,
-                        c.pr2.Product.Image,
-                        c.pr.Price,
-                        c.pr.Product.Energy ?? 0,
-                        c.pr2 != null ? c.pr2.Price : 0,
-                        c.pr2 != null ? (c.pr2.Product.Energy ?? 0) : 0,
-                        c.mp.Chance,
-                        context.MysteryRolls.Count(mr => mr.Product == c.mp && mr.User.Id == userService.Id),
-                        context.MysteryRolls.Count(mr => mr.Product == c.mp)
-                    ))
-                    .ToList()
+        var combinations = await context
+            .MysteryProducts.Where(mp =>
+                mp.Campaign.Start == start
+                && mp.Products.Any()
+                && mp.Products.All(p =>
+                    context.ProductsRestaurants.Any(pr =>
+                        pr.ProductId == p.Product.Id && pr.RestaurantId == codeRestaurant
+                    )
+                )
             )
-        ).ToListAsync();
+            .Select(mp => new
+            {
+                mp.Campaign,
+                Burger = new BurgerMystereDisplay(
+                    mp.Id,
+                    mp.Products.Select(p => new MysteryProductDisplay(
+                            p.Product.Name,
+                            p.Product.Image,
+                            context
+                                .ProductsRestaurants.Single(pr =>
+                                    pr.ProductId == p.Product.Id && pr.RestaurantId == codeRestaurant
+                                )
+                                .Price,
+                            p.Product.Energy ?? 0
+                        ))
+                        .ToList(),
+                    mp.Chance,
+                    context.MysteryRolls.Count(mr => mr.Product == mp && mr.User.Id == userService.Id),
+                    context.MysteryRolls.Count(mr => mr.Product == mp)
+                ),
+            })
+            .ToListAsync();
+
+        return combinations
+            .GroupBy(c => c.Campaign.Id)
+            .Select(g =>
+            {
+                var campaign = g.First().Campaign;
+                return new BurgerMystereListDisplay(
+                    campaign.Kind switch
+                    {
+                        MysteryCampaignKind.Classic => "Burger Mystère",
+                        MysteryCampaignKind.Veggie => "Veggie Mystère",
+                        MysteryCampaignKind.Duo => "Duo Mystère",
+                        MysteryCampaignKind.Box => "Box Mystère",
+                        _ => throw new InvalidOperationException($"Type de campagne inconnu : {campaign.Kind}"),
+                    },
+                    campaign.Price,
+                    g.Select(c => c.Burger).ToList()
+                );
+            })
+            .ToList();
     }
 
     public async Task<DateTime?> GetOffersUpdate()
