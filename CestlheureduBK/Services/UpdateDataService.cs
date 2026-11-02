@@ -127,17 +127,28 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                         Steps = men
                             .Steps.Select(stp => new StepDb
                             {
-                                Products = products
-                                    .Select(p => p.Product)
-                                    .Where(prd => stp.ProductIds.Contains(prd.Id))
-                                    .ToList(),
+                                Products =
+                                    stp.ProductSIds != null
+                                        ? products
+                                            .Select(p => p.Product)
+                                            .Where(prd => stp.ProductSIds.Contains(prd.Id))
+                                            .ToList()
+                                        : products
+                                            .Select(p => p.Product)
+                                            .Where(prd => stp.ProductIds.Contains(prd.Id))
+                                            .ToList(),
                                 ProductsL =
-                                    stp.ProductLIds != null
+                                    stp.ProductSIds != null
+                                        ? products
+                                            .Select(p => p.Product)
+                                            .Where(prd => stp.ProductIds.Contains(prd.Id))
+                                            .ToList()
+                                    : stp.ProductLIds != null
                                         ? products
                                             .Select(p => p.Product)
                                             .Where(prd => stp.ProductLIds.Contains(prd.Id))
                                             .ToList()
-                                        : [],
+                                    : [],
                                 ProductsXL =
                                     stp.ProductXLIds != null
                                         ? products
@@ -169,8 +180,8 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                             ?? [],
                     },
                     Active = men.Active,
-                    Price = men.Price,
-                    PriceL = men.PriceL,
+                    Price = men.PriceS ?? men.Price,
+                    PriceL = men.PriceS != null ? men.Price : men.PriceL,
                     PriceXL = men.PriceXL,
                     RestaurantId = restaurant.Id,
                     Restaurant = restaurant,

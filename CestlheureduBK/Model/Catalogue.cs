@@ -55,6 +55,7 @@ public record Ingredient(
 
 public record MenuStep(
     Dictionary<string, string> Name,
+    string[]? ProductSIds,
     string[] ProductIds,
     string[]? ProductLIds,
     string[]? ProductXLIds,
