@@ -241,7 +241,7 @@
                 var matching = Data.SingleOrDefault(d => (d.Type == update.Type || d.Type == ItemType.ProductAsMenu && update.Type == ItemType.Menu) && d.Id == update.Id);
                 if (matching != null)
                 {
-                    Data[Array.IndexOf(Data, matching)] = matching with { Energy = update.Energy };
+                    Data[Array.IndexOf(Data, matching)] = matching with { Energy = update.Energy, EnergyMin = update.EnergyMin };
                 }
             }
 

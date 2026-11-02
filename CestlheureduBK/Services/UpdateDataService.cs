@@ -632,10 +632,20 @@ public class UpdateDataService(BKDbContext context) : IDisposable
                 new(ItemType.Product, product.Id, energy.Value),
                 .. (
                     await context
-                        .Menus.Where(men => men.Steps.Any(s => s.DefaultProduct!.Id == product.Id && s.Type == 1))
-                        .Select(men => new { men.Id, Energy = men.Steps.Sum(m => m.DefaultProduct!.Energy) })
+                        .Menus.Where(men => men.Steps.Any(s => s.Products.Any(p => p.Id == product.Id)))
+                        .Select(men => new
+                        {
+                            men.Id,
+                            Energy = men.Steps.Sum(s =>
+                                s.Products.Where(p =>
+                                        !p.RouteId.Replace("-", string.Empty).ToLower().Contains("kingfries")
+                                    )
+                                    .Max(p => p.Energy ?? 0)
+                            ),
+                            EnergyMin = men.Steps.Sum(s => s.Products.Min(p => p.Energy ?? 0)),
+                        })
                         .ToListAsync()
-                ).Select(men => new CatalogueEnergyUpdate(ItemType.Menu, men.Id, men.Energy ?? 0)),
+                ).Select(men => new CatalogueEnergyUpdate(ItemType.Menu, men.Id, men.Energy, men.EnergyMin)),
             ];
         }
 

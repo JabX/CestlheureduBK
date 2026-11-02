@@ -44,7 +44,7 @@ public record CatalogueDisplay(
     public double EnergyValue => Energy / Price;
 }
 
-public record CatalogueEnergyUpdate(ItemType Type, string Id, double Energy);
+public record CatalogueEnergyUpdate(ItemType Type, string Id, double Energy, double? EnergyMin = null);
 
 public record SnackProductDisplay(string Name, string? Image, int Amount, double Price, double Ratio)
 {
