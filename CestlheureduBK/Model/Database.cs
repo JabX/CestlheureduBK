@@ -122,6 +122,14 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                         Kind = MysteryCampaignKind.Veggie,
                         Price = 3,
                     },
+                    new()
+                    {
+                        Id = 9,
+                        Start = new DateOnly(2026, 11, 3),
+                        End = new DateOnly(2026, 11, 23),
+                        Kind = MysteryCampaignKind.Box,
+                        Price = 10,
+                    },
                 ]
             );
 
@@ -136,7 +144,11 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new() { Id = "17", Name = "Double Whopper Cheese" },
                     new() { Id = "46", Name = "Steakhouse" },
                     new() { Id = "49", Name = "Whopper" },
+                    new() { Id = "53", Name = "Moyennes frites" },
+                    new() { Id = "73", Name = "King Nuggets (4)" },
+                    new() { Id = "76", Name = "Chili Cheese (4)" },
                     new() { Id = "77", Name = "Chili Cheese (6)" },
+                    new() { Id = "83", Name = "Onion Rings (6)" },
                     new() { Id = "84", Name = "Onion Rings (9)" },
                     new() { Id = "213", Name = "Big Fish" },
                     new() { Id = "433", Name = "Wrap Chicken Cheese and Bacon" },
@@ -160,7 +172,17 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                     new() { Id = "1084", Name = "King Nuggets (7)" },
                     new() { Id = "1101", Name = "Double Cheese Bacon" },
                     new() { Id = "1110", Name = "Double King" },
+                    new() { Id = "1276", Name = "Krispper Tenders x2" },
                     new() { Id = "1290", Name = "Whopper Rings" },
+                    new() { Id = "1328", Name = "Tortilla Cheese & Bacon" },
+                    new() { Id = "1396", Name = "Tortilla Extra Cheddar" },
+                    new() { Id = "1398", Name = "Smoky Chicken" },
+                    new() { Id = "1400", Name = "King Bacon" },
+                    new() { Id = "1401", Name = "King Chicken Bacon" },
+                    new() { Id = "1402", Name = "King Fish" },
+                    new() { Id = "1511", Name = "CBK" },
+                    new() { Id = "1512", Name = "Double CBK" },
+                    new() { Id = "1602", Name = "Master Poulet Raclette Poivre" },
                 ]
             );
         var mysteryProducts = new[]
@@ -2540,6 +2562,174 @@ public class BKDbContext(DbContextOptions<BKDbContext> options) : DbContext(opti
                         CampaignId = 8,
                         ProductIds = new[] { "508" },
                         Chance = 0.3,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "49", "1400", "1276", "53" },
+                        Chance = 0.043,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "49", "1400", "83", "53" },
+                        Chance = 0.057,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "49", "1398", "73", "53" },
+                        Chance = 0.06,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "49", "1402", "76", "53" },
+                        Chance = 0.01,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "49", "1328", "83", "53" },
+                        Chance = 0.03,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "2", "1400", "83", "53" },
+                        Chance = 0.06,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "2", "1398", "73", "53" },
+                        Chance = 0.059,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "2", "1398", "1276", "53" },
+                        Chance = 0.015,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "2", "1401", "83", "53" },
+                        Chance = 0.06,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "2", "1401", "76", "53" },
+                        Chance = 0.047,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1511", "1400", "83", "53" },
+                        Chance = 0.06,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1511", "1400", "73", "53" },
+                        Chance = 0.043,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1511", "1398", "76", "53" },
+                        Chance = 0.034,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1511", "1402", "76", "53" },
+                        Chance = 0.056,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1511", "1101", "83", "53" },
+                        Chance = 0.014,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1511", "1101", "83", "53" },
+                        Chance = 0.04,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1396", "1398", "73", "53" },
+                        Chance = 0.04,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "46", "1398", "73", "53" },
+                        Chance = 0.02,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "46", "1401", "76", "53" },
+                        Chance = 0.05,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "802", "1400", "83", "53" },
+                        Chance = 0.037,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "802", "1328", "73", "53" },
+                        Chance = 0.035,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "3", "1400", "76", "53" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "15", "1400", "76", "53" },
+                        Chance = 0.005,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "16", "1401", "83", "53" },
+                        Chance = 0.02,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "17", "1398", "83", "53" },
+                        Chance = 0.02,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1512", "1398", "76", "53" },
+                        Chance = 0.06,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "658", "1400", "83", "53" },
+                        Chance = 0.01,
+                    },
+                    new
+                    {
+                        CampaignId = 9,
+                        ProductIds = new[] { "1602", "1398", "76", "53" },
+                        Chance = 0.01,
                     },
                 }
                 .Select((p, index) => new { Id = index + 1, p.CampaignId, p.ProductIds, p.Chance })

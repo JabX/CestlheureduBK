@@ -200,6 +200,14 @@ namespace CestlheureduBK.Migrations
                             Kind = 1,
                             Price = 3.0,
                             Start = new DateOnly(2026, 1, 20)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            End = new DateOnly(2026, 11, 23),
+                            Kind = 3,
+                            Price = 10.0,
+                            Start = new DateOnly(2026, 11, 3)
                         });
                 });
 
@@ -2597,6 +2605,174 @@ namespace CestlheureduBK.Migrations
                             Id = 396,
                             CampaignId = 8,
                             Chance = 0.29999999999999999
+                        },
+                        new
+                        {
+                            Id = 397,
+                            CampaignId = 9,
+                            Chance = 0.042999999999999997
+                        },
+                        new
+                        {
+                            Id = 398,
+                            CampaignId = 9,
+                            Chance = 0.057000000000000002
+                        },
+                        new
+                        {
+                            Id = 399,
+                            CampaignId = 9,
+                            Chance = 0.059999999999999998
+                        },
+                        new
+                        {
+                            Id = 400,
+                            CampaignId = 9,
+                            Chance = 0.01
+                        },
+                        new
+                        {
+                            Id = 401,
+                            CampaignId = 9,
+                            Chance = 0.029999999999999999
+                        },
+                        new
+                        {
+                            Id = 402,
+                            CampaignId = 9,
+                            Chance = 0.059999999999999998
+                        },
+                        new
+                        {
+                            Id = 403,
+                            CampaignId = 9,
+                            Chance = 0.058999999999999997
+                        },
+                        new
+                        {
+                            Id = 404,
+                            CampaignId = 9,
+                            Chance = 0.014999999999999999
+                        },
+                        new
+                        {
+                            Id = 405,
+                            CampaignId = 9,
+                            Chance = 0.059999999999999998
+                        },
+                        new
+                        {
+                            Id = 406,
+                            CampaignId = 9,
+                            Chance = 0.047
+                        },
+                        new
+                        {
+                            Id = 407,
+                            CampaignId = 9,
+                            Chance = 0.059999999999999998
+                        },
+                        new
+                        {
+                            Id = 408,
+                            CampaignId = 9,
+                            Chance = 0.042999999999999997
+                        },
+                        new
+                        {
+                            Id = 409,
+                            CampaignId = 9,
+                            Chance = 0.034000000000000002
+                        },
+                        new
+                        {
+                            Id = 410,
+                            CampaignId = 9,
+                            Chance = 0.056000000000000001
+                        },
+                        new
+                        {
+                            Id = 411,
+                            CampaignId = 9,
+                            Chance = 0.014
+                        },
+                        new
+                        {
+                            Id = 412,
+                            CampaignId = 9,
+                            Chance = 0.040000000000000001
+                        },
+                        new
+                        {
+                            Id = 413,
+                            CampaignId = 9,
+                            Chance = 0.040000000000000001
+                        },
+                        new
+                        {
+                            Id = 414,
+                            CampaignId = 9,
+                            Chance = 0.02
+                        },
+                        new
+                        {
+                            Id = 415,
+                            CampaignId = 9,
+                            Chance = 0.050000000000000003
+                        },
+                        new
+                        {
+                            Id = 416,
+                            CampaignId = 9,
+                            Chance = 0.036999999999999998
+                        },
+                        new
+                        {
+                            Id = 417,
+                            CampaignId = 9,
+                            Chance = 0.035000000000000003
+                        },
+                        new
+                        {
+                            Id = 418,
+                            CampaignId = 9,
+                            Chance = 0.0050000000000000001
+                        },
+                        new
+                        {
+                            Id = 419,
+                            CampaignId = 9,
+                            Chance = 0.0050000000000000001
+                        },
+                        new
+                        {
+                            Id = 420,
+                            CampaignId = 9,
+                            Chance = 0.02
+                        },
+                        new
+                        {
+                            Id = 421,
+                            CampaignId = 9,
+                            Chance = 0.02
+                        },
+                        new
+                        {
+                            Id = 422,
+                            CampaignId = 9,
+                            Chance = 0.059999999999999998
+                        },
+                        new
+                        {
+                            Id = 423,
+                            CampaignId = 9,
+                            Chance = 0.01
+                        },
+                        new
+                        {
+                            Id = 424,
+                            CampaignId = 9,
+                            Chance = 0.01
                         });
                 });
 
@@ -7079,6 +7255,678 @@ namespace CestlheureduBK.Migrations
                             Id = 743,
                             MysteryProductId = 396,
                             ProductId = "508"
+                        },
+                        new
+                        {
+                            Id = 744,
+                            MysteryProductId = 397,
+                            ProductId = "49"
+                        },
+                        new
+                        {
+                            Id = 745,
+                            MysteryProductId = 397,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 746,
+                            MysteryProductId = 397,
+                            ProductId = "1276"
+                        },
+                        new
+                        {
+                            Id = 747,
+                            MysteryProductId = 397,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 748,
+                            MysteryProductId = 398,
+                            ProductId = "49"
+                        },
+                        new
+                        {
+                            Id = 749,
+                            MysteryProductId = 398,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 750,
+                            MysteryProductId = 398,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 751,
+                            MysteryProductId = 398,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 752,
+                            MysteryProductId = 399,
+                            ProductId = "49"
+                        },
+                        new
+                        {
+                            Id = 753,
+                            MysteryProductId = 399,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 754,
+                            MysteryProductId = 399,
+                            ProductId = "73"
+                        },
+                        new
+                        {
+                            Id = 755,
+                            MysteryProductId = 399,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 756,
+                            MysteryProductId = 400,
+                            ProductId = "49"
+                        },
+                        new
+                        {
+                            Id = 757,
+                            MysteryProductId = 400,
+                            ProductId = "1402"
+                        },
+                        new
+                        {
+                            Id = 758,
+                            MysteryProductId = 400,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 759,
+                            MysteryProductId = 400,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 760,
+                            MysteryProductId = 401,
+                            ProductId = "49"
+                        },
+                        new
+                        {
+                            Id = 761,
+                            MysteryProductId = 401,
+                            ProductId = "1328"
+                        },
+                        new
+                        {
+                            Id = 762,
+                            MysteryProductId = 401,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 763,
+                            MysteryProductId = 401,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 764,
+                            MysteryProductId = 402,
+                            ProductId = "2"
+                        },
+                        new
+                        {
+                            Id = 765,
+                            MysteryProductId = 402,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 766,
+                            MysteryProductId = 402,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 767,
+                            MysteryProductId = 402,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 768,
+                            MysteryProductId = 403,
+                            ProductId = "2"
+                        },
+                        new
+                        {
+                            Id = 769,
+                            MysteryProductId = 403,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 770,
+                            MysteryProductId = 403,
+                            ProductId = "73"
+                        },
+                        new
+                        {
+                            Id = 771,
+                            MysteryProductId = 403,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 772,
+                            MysteryProductId = 404,
+                            ProductId = "2"
+                        },
+                        new
+                        {
+                            Id = 773,
+                            MysteryProductId = 404,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 774,
+                            MysteryProductId = 404,
+                            ProductId = "1276"
+                        },
+                        new
+                        {
+                            Id = 775,
+                            MysteryProductId = 404,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 776,
+                            MysteryProductId = 405,
+                            ProductId = "2"
+                        },
+                        new
+                        {
+                            Id = 777,
+                            MysteryProductId = 405,
+                            ProductId = "1401"
+                        },
+                        new
+                        {
+                            Id = 778,
+                            MysteryProductId = 405,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 779,
+                            MysteryProductId = 405,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 780,
+                            MysteryProductId = 406,
+                            ProductId = "2"
+                        },
+                        new
+                        {
+                            Id = 781,
+                            MysteryProductId = 406,
+                            ProductId = "1401"
+                        },
+                        new
+                        {
+                            Id = 782,
+                            MysteryProductId = 406,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 783,
+                            MysteryProductId = 406,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 784,
+                            MysteryProductId = 407,
+                            ProductId = "1511"
+                        },
+                        new
+                        {
+                            Id = 785,
+                            MysteryProductId = 407,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 786,
+                            MysteryProductId = 407,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 787,
+                            MysteryProductId = 407,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 788,
+                            MysteryProductId = 408,
+                            ProductId = "1511"
+                        },
+                        new
+                        {
+                            Id = 789,
+                            MysteryProductId = 408,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 790,
+                            MysteryProductId = 408,
+                            ProductId = "73"
+                        },
+                        new
+                        {
+                            Id = 791,
+                            MysteryProductId = 408,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 792,
+                            MysteryProductId = 409,
+                            ProductId = "1511"
+                        },
+                        new
+                        {
+                            Id = 793,
+                            MysteryProductId = 409,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 794,
+                            MysteryProductId = 409,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 795,
+                            MysteryProductId = 409,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 796,
+                            MysteryProductId = 410,
+                            ProductId = "1511"
+                        },
+                        new
+                        {
+                            Id = 797,
+                            MysteryProductId = 410,
+                            ProductId = "1402"
+                        },
+                        new
+                        {
+                            Id = 798,
+                            MysteryProductId = 410,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 799,
+                            MysteryProductId = 410,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 800,
+                            MysteryProductId = 411,
+                            ProductId = "1511"
+                        },
+                        new
+                        {
+                            Id = 801,
+                            MysteryProductId = 411,
+                            ProductId = "1101"
+                        },
+                        new
+                        {
+                            Id = 802,
+                            MysteryProductId = 411,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 803,
+                            MysteryProductId = 411,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 804,
+                            MysteryProductId = 412,
+                            ProductId = "1511"
+                        },
+                        new
+                        {
+                            Id = 805,
+                            MysteryProductId = 412,
+                            ProductId = "1101"
+                        },
+                        new
+                        {
+                            Id = 806,
+                            MysteryProductId = 412,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 807,
+                            MysteryProductId = 412,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 808,
+                            MysteryProductId = 413,
+                            ProductId = "1396"
+                        },
+                        new
+                        {
+                            Id = 809,
+                            MysteryProductId = 413,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 810,
+                            MysteryProductId = 413,
+                            ProductId = "73"
+                        },
+                        new
+                        {
+                            Id = 811,
+                            MysteryProductId = 413,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 812,
+                            MysteryProductId = 414,
+                            ProductId = "46"
+                        },
+                        new
+                        {
+                            Id = 813,
+                            MysteryProductId = 414,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 814,
+                            MysteryProductId = 414,
+                            ProductId = "73"
+                        },
+                        new
+                        {
+                            Id = 815,
+                            MysteryProductId = 414,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 816,
+                            MysteryProductId = 415,
+                            ProductId = "46"
+                        },
+                        new
+                        {
+                            Id = 817,
+                            MysteryProductId = 415,
+                            ProductId = "1401"
+                        },
+                        new
+                        {
+                            Id = 818,
+                            MysteryProductId = 415,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 819,
+                            MysteryProductId = 415,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 820,
+                            MysteryProductId = 416,
+                            ProductId = "802"
+                        },
+                        new
+                        {
+                            Id = 821,
+                            MysteryProductId = 416,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 822,
+                            MysteryProductId = 416,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 823,
+                            MysteryProductId = 416,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 824,
+                            MysteryProductId = 417,
+                            ProductId = "802"
+                        },
+                        new
+                        {
+                            Id = 825,
+                            MysteryProductId = 417,
+                            ProductId = "1328"
+                        },
+                        new
+                        {
+                            Id = 826,
+                            MysteryProductId = 417,
+                            ProductId = "73"
+                        },
+                        new
+                        {
+                            Id = 827,
+                            MysteryProductId = 417,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 828,
+                            MysteryProductId = 418,
+                            ProductId = "3"
+                        },
+                        new
+                        {
+                            Id = 829,
+                            MysteryProductId = 418,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 830,
+                            MysteryProductId = 418,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 831,
+                            MysteryProductId = 418,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 832,
+                            MysteryProductId = 419,
+                            ProductId = "15"
+                        },
+                        new
+                        {
+                            Id = 833,
+                            MysteryProductId = 419,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 834,
+                            MysteryProductId = 419,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 835,
+                            MysteryProductId = 419,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 836,
+                            MysteryProductId = 420,
+                            ProductId = "16"
+                        },
+                        new
+                        {
+                            Id = 837,
+                            MysteryProductId = 420,
+                            ProductId = "1401"
+                        },
+                        new
+                        {
+                            Id = 838,
+                            MysteryProductId = 420,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 839,
+                            MysteryProductId = 420,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 840,
+                            MysteryProductId = 421,
+                            ProductId = "17"
+                        },
+                        new
+                        {
+                            Id = 841,
+                            MysteryProductId = 421,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 842,
+                            MysteryProductId = 421,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 843,
+                            MysteryProductId = 421,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 844,
+                            MysteryProductId = 422,
+                            ProductId = "1512"
+                        },
+                        new
+                        {
+                            Id = 845,
+                            MysteryProductId = 422,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 846,
+                            MysteryProductId = 422,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 847,
+                            MysteryProductId = 422,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 848,
+                            MysteryProductId = 423,
+                            ProductId = "658"
+                        },
+                        new
+                        {
+                            Id = 849,
+                            MysteryProductId = 423,
+                            ProductId = "1400"
+                        },
+                        new
+                        {
+                            Id = 850,
+                            MysteryProductId = 423,
+                            ProductId = "83"
+                        },
+                        new
+                        {
+                            Id = 851,
+                            MysteryProductId = 423,
+                            ProductId = "53"
+                        },
+                        new
+                        {
+                            Id = 852,
+                            MysteryProductId = 424,
+                            ProductId = "1602"
+                        },
+                        new
+                        {
+                            Id = 853,
+                            MysteryProductId = 424,
+                            ProductId = "1398"
+                        },
+                        new
+                        {
+                            Id = 854,
+                            MysteryProductId = 424,
+                            ProductId = "76"
+                        },
+                        new
+                        {
+                            Id = 855,
+                            MysteryProductId = 424,
+                            ProductId = "53"
                         });
                 });
 
@@ -7214,9 +8062,37 @@ namespace CestlheureduBK.Migrations
                         },
                         new
                         {
+                            Id = "53",
+                            AvailableInCatalogue = false,
+                            Name = "Moyennes frites",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "73",
+                            AvailableInCatalogue = false,
+                            Name = "King Nuggets (4)",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "76",
+                            AvailableInCatalogue = false,
+                            Name = "Chili Cheese (4)",
+                            RouteId = ""
+                        },
+                        new
+                        {
                             Id = "77",
                             AvailableInCatalogue = false,
                             Name = "Chili Cheese (6)",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "83",
+                            AvailableInCatalogue = false,
+                            Name = "Onion Rings (6)",
                             RouteId = ""
                         },
                         new
@@ -7382,9 +8258,79 @@ namespace CestlheureduBK.Migrations
                         },
                         new
                         {
+                            Id = "1276",
+                            AvailableInCatalogue = false,
+                            Name = "Krispper Tenders x2",
+                            RouteId = ""
+                        },
+                        new
+                        {
                             Id = "1290",
                             AvailableInCatalogue = false,
                             Name = "Whopper Rings",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1328",
+                            AvailableInCatalogue = false,
+                            Name = "Tortilla Cheese & Bacon",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1396",
+                            AvailableInCatalogue = false,
+                            Name = "Tortilla Extra Cheddar",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1398",
+                            AvailableInCatalogue = false,
+                            Name = "Smoky Chicken",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1400",
+                            AvailableInCatalogue = false,
+                            Name = "King Bacon",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1401",
+                            AvailableInCatalogue = false,
+                            Name = "King Chicken Bacon",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1402",
+                            AvailableInCatalogue = false,
+                            Name = "King Fish",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1511",
+                            AvailableInCatalogue = false,
+                            Name = "CBK",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1512",
+                            AvailableInCatalogue = false,
+                            Name = "Double CBK",
+                            RouteId = ""
+                        },
+                        new
+                        {
+                            Id = "1602",
+                            AvailableInCatalogue = false,
+                            Name = "Master Poulet Raclette Poivre",
                             RouteId = ""
                         });
                 });

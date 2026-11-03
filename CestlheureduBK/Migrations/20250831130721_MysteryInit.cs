@@ -116,7 +116,11 @@ namespace CestlheureduBK.Migrations
                     { "17", false, "Double Whopper Cheese" },
                     { "46", false, "Steakhouse" },
                     { "49", false, "Whopper" },
+                    { "53", false, "Moyennes frites" },
+                    { "73", false, "King Nuggets (4)" },
+                    { "76", false, "Chili Cheese (4)" },
                     { "77", false, "Chili Cheese (6)" },
+                    { "83", false, "Onion Rings (6)" },
                     { "84", false, "Onion Rings (9)" },
                     { "213", false, "Big Fish" },
                     { "433", false, "Wrap Chicken Cheese and Bacon" },
@@ -140,7 +144,17 @@ namespace CestlheureduBK.Migrations
                     { "1084", false, "King Nuggets (7)" },
                     { "1101", false, "Double Cheese Bacon" },
                     { "1110", false, "Double King" },
+                    { "1276", false, "Krispper Tenders x2" },
                     { "1290", false, "Whopper Rings" },
+                    { "1328", false, "Tortilla Cheese & Bacon" },
+                    { "1396", false, "Tortilla Extra Cheddar" },
+                    { "1398", false, "Smoky Chicken" },
+                    { "1400", false, "King Bacon" },
+                    { "1401", false, "King Chicken Bacon" },
+                    { "1402", false, "King Fish" },
+                    { "1511", false, "CBK" },
+                    { "1512", false, "Double CBK" },
+                    { "1602", false, "Master Poulet Raclette Poivre" },
                 }
             );
 
@@ -214,8 +228,6 @@ namespace CestlheureduBK.Migrations
             migrationBuilder.DropTable(name: "MysteryProducts");
 
             migrationBuilder.DropTable(name: "MysteryCampaigns");
-
-            migrationBuilder.DeleteData(table: "Products", keyColumn: "Id", keyValue: "953");
         }
     }
 }
