@@ -351,7 +351,8 @@ public class GetDataService(BKDbContext context, UserService userService)
                                     pr.ProductId == p.Product.Id && pr.RestaurantId == codeRestaurant
                                 )
                                 .Price,
-                            p.Product.Energy ?? 0
+                            p.Product.Energy ?? 0,
+                            p.Type
                         ))
                         .ToList(),
                     mp.Chance,

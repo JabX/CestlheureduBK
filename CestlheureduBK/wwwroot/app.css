@@ -173,6 +173,20 @@ th, .rz-column-title, .rz-column-title-content {
     font-size: 0.7em;
 }
 
+.mystere-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, min(100%, 420px));
+    justify-content: start;
+    gap: 1rem;
+}
+
+.mystere-product {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
 .image {
     width: 130px;
 }

@@ -2789,6 +2789,9 @@ namespace CestlheureduBK.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MysteryProductId");
@@ -2802,5131 +2805,5986 @@ namespace CestlheureduBK.Migrations
                         {
                             Id = 1,
                             MysteryProductId = 1,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 2,
                             MysteryProductId = 2,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 3,
                             MysteryProductId = 3,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 4,
                             MysteryProductId = 4,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 5,
                             MysteryProductId = 5,
-                            ProductId = "463"
+                            ProductId = "463",
+                            Type = 0
                         },
                         new
                         {
                             Id = 6,
                             MysteryProductId = 6,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 7,
                             MysteryProductId = 7,
-                            ProductId = "953"
+                            ProductId = "953",
+                            Type = 0
                         },
                         new
                         {
                             Id = 8,
                             MysteryProductId = 8,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 9,
                             MysteryProductId = 9,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 10,
                             MysteryProductId = 10,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 11,
                             MysteryProductId = 11,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 12,
                             MysteryProductId = 12,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 13,
                             MysteryProductId = 13,
-                            ProductId = "664"
+                            ProductId = "664",
+                            Type = 0
                         },
                         new
                         {
                             Id = 14,
                             MysteryProductId = 14,
-                            ProductId = "544"
+                            ProductId = "544",
+                            Type = 0
                         },
                         new
                         {
                             Id = 15,
                             MysteryProductId = 15,
-                            ProductId = "666"
+                            ProductId = "666",
+                            Type = 0
                         },
                         new
                         {
                             Id = 16,
                             MysteryProductId = 16,
-                            ProductId = "801"
+                            ProductId = "801",
+                            Type = 0
                         },
                         new
                         {
                             Id = 17,
                             MysteryProductId = 17,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 18,
                             MysteryProductId = 18,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 19,
                             MysteryProductId = 19,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 20,
                             MysteryProductId = 20,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 21,
                             MysteryProductId = 21,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 22,
                             MysteryProductId = 22,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 23,
                             MysteryProductId = 23,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 24,
                             MysteryProductId = 24,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 25,
                             MysteryProductId = 25,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 26,
                             MysteryProductId = 26,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 27,
                             MysteryProductId = 27,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 28,
                             MysteryProductId = 28,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 29,
                             MysteryProductId = 29,
-                            ProductId = "664"
+                            ProductId = "664",
+                            Type = 0
                         },
                         new
                         {
                             Id = 30,
                             MysteryProductId = 30,
-                            ProductId = "666"
+                            ProductId = "666",
+                            Type = 0
                         },
                         new
                         {
                             Id = 31,
                             MysteryProductId = 31,
-                            ProductId = "801"
+                            ProductId = "801",
+                            Type = 0
                         },
                         new
                         {
                             Id = 32,
                             MysteryProductId = 32,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 33,
                             MysteryProductId = 32,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 34,
                             MysteryProductId = 33,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 35,
                             MysteryProductId = 33,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 36,
                             MysteryProductId = 34,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 37,
                             MysteryProductId = 34,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 38,
                             MysteryProductId = 35,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 39,
                             MysteryProductId = 35,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 40,
                             MysteryProductId = 36,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 41,
                             MysteryProductId = 36,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 42,
                             MysteryProductId = 37,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 43,
                             MysteryProductId = 37,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 44,
                             MysteryProductId = 38,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 45,
                             MysteryProductId = 38,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 46,
                             MysteryProductId = 39,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 47,
                             MysteryProductId = 39,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 48,
                             MysteryProductId = 40,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 49,
                             MysteryProductId = 40,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 50,
                             MysteryProductId = 41,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 51,
                             MysteryProductId = 41,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 52,
                             MysteryProductId = 42,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 53,
                             MysteryProductId = 42,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 54,
                             MysteryProductId = 43,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 55,
                             MysteryProductId = 43,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 56,
                             MysteryProductId = 44,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 57,
                             MysteryProductId = 44,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 58,
                             MysteryProductId = 45,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 59,
                             MysteryProductId = 45,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 60,
                             MysteryProductId = 46,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 61,
                             MysteryProductId = 46,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 62,
                             MysteryProductId = 47,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 63,
                             MysteryProductId = 47,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 64,
                             MysteryProductId = 48,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 65,
                             MysteryProductId = 48,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 66,
                             MysteryProductId = 49,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 67,
                             MysteryProductId = 49,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 68,
                             MysteryProductId = 50,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 69,
                             MysteryProductId = 50,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 70,
                             MysteryProductId = 51,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 71,
                             MysteryProductId = 51,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 72,
                             MysteryProductId = 52,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 73,
                             MysteryProductId = 52,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 74,
                             MysteryProductId = 53,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 75,
                             MysteryProductId = 53,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 76,
                             MysteryProductId = 54,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 77,
                             MysteryProductId = 54,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 78,
                             MysteryProductId = 55,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 79,
                             MysteryProductId = 55,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 80,
                             MysteryProductId = 56,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 81,
                             MysteryProductId = 56,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 82,
                             MysteryProductId = 57,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 83,
                             MysteryProductId = 57,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 84,
                             MysteryProductId = 58,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 85,
                             MysteryProductId = 58,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 86,
                             MysteryProductId = 59,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 87,
                             MysteryProductId = 59,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 88,
                             MysteryProductId = 60,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 89,
                             MysteryProductId = 60,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 90,
                             MysteryProductId = 61,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 91,
                             MysteryProductId = 61,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 92,
                             MysteryProductId = 62,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 93,
                             MysteryProductId = 62,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 94,
                             MysteryProductId = 63,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 95,
                             MysteryProductId = 63,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 96,
                             MysteryProductId = 64,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 97,
                             MysteryProductId = 64,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 98,
                             MysteryProductId = 65,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 99,
                             MysteryProductId = 65,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 100,
                             MysteryProductId = 66,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 101,
                             MysteryProductId = 66,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 102,
                             MysteryProductId = 67,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 103,
                             MysteryProductId = 67,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 104,
                             MysteryProductId = 68,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 105,
                             MysteryProductId = 68,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 106,
                             MysteryProductId = 69,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 107,
                             MysteryProductId = 69,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 108,
                             MysteryProductId = 70,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 109,
                             MysteryProductId = 70,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 110,
                             MysteryProductId = 71,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 111,
                             MysteryProductId = 71,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 112,
                             MysteryProductId = 72,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 113,
                             MysteryProductId = 72,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 114,
                             MysteryProductId = 73,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 115,
                             MysteryProductId = 73,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 116,
                             MysteryProductId = 74,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 117,
                             MysteryProductId = 74,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 118,
                             MysteryProductId = 75,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 119,
                             MysteryProductId = 75,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 120,
                             MysteryProductId = 76,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 121,
                             MysteryProductId = 76,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 122,
                             MysteryProductId = 77,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 123,
                             MysteryProductId = 77,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 124,
                             MysteryProductId = 78,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 125,
                             MysteryProductId = 78,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 126,
                             MysteryProductId = 79,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 127,
                             MysteryProductId = 79,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 128,
                             MysteryProductId = 80,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 129,
                             MysteryProductId = 80,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 130,
                             MysteryProductId = 81,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 131,
                             MysteryProductId = 81,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 132,
                             MysteryProductId = 82,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 133,
                             MysteryProductId = 82,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 134,
                             MysteryProductId = 83,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 135,
                             MysteryProductId = 83,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 136,
                             MysteryProductId = 84,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 137,
                             MysteryProductId = 84,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 138,
                             MysteryProductId = 85,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 139,
                             MysteryProductId = 85,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 140,
                             MysteryProductId = 86,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 141,
                             MysteryProductId = 86,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 142,
                             MysteryProductId = 87,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 143,
                             MysteryProductId = 87,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 144,
                             MysteryProductId = 88,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 145,
                             MysteryProductId = 88,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 146,
                             MysteryProductId = 89,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 147,
                             MysteryProductId = 89,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 148,
                             MysteryProductId = 90,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 149,
                             MysteryProductId = 90,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 150,
                             MysteryProductId = 91,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 151,
                             MysteryProductId = 91,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 152,
                             MysteryProductId = 92,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 153,
                             MysteryProductId = 92,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 154,
                             MysteryProductId = 93,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 155,
                             MysteryProductId = 93,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 156,
                             MysteryProductId = 94,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 157,
                             MysteryProductId = 94,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 158,
                             MysteryProductId = 95,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 159,
                             MysteryProductId = 95,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 160,
                             MysteryProductId = 96,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 161,
                             MysteryProductId = 96,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 162,
                             MysteryProductId = 97,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 163,
                             MysteryProductId = 97,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 164,
                             MysteryProductId = 98,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 165,
                             MysteryProductId = 98,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 166,
                             MysteryProductId = 99,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 167,
                             MysteryProductId = 99,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 168,
                             MysteryProductId = 100,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 169,
                             MysteryProductId = 100,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 170,
                             MysteryProductId = 101,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 171,
                             MysteryProductId = 101,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 172,
                             MysteryProductId = 102,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 173,
                             MysteryProductId = 102,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 174,
                             MysteryProductId = 103,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 175,
                             MysteryProductId = 103,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 176,
                             MysteryProductId = 104,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 177,
                             MysteryProductId = 104,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 178,
                             MysteryProductId = 105,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 179,
                             MysteryProductId = 105,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 180,
                             MysteryProductId = 106,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 181,
                             MysteryProductId = 106,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 182,
                             MysteryProductId = 107,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 183,
                             MysteryProductId = 107,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 184,
                             MysteryProductId = 108,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 185,
                             MysteryProductId = 108,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 186,
                             MysteryProductId = 109,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 187,
                             MysteryProductId = 109,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 188,
                             MysteryProductId = 110,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 189,
                             MysteryProductId = 110,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 190,
                             MysteryProductId = 111,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 191,
                             MysteryProductId = 111,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 192,
                             MysteryProductId = 112,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 193,
                             MysteryProductId = 112,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 194,
                             MysteryProductId = 113,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 195,
                             MysteryProductId = 113,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 196,
                             MysteryProductId = 114,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 197,
                             MysteryProductId = 114,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 198,
                             MysteryProductId = 115,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 199,
                             MysteryProductId = 115,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 200,
                             MysteryProductId = 116,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 201,
                             MysteryProductId = 116,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 202,
                             MysteryProductId = 117,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 203,
                             MysteryProductId = 117,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 204,
                             MysteryProductId = 118,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 205,
                             MysteryProductId = 118,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 206,
                             MysteryProductId = 119,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 207,
                             MysteryProductId = 119,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 208,
                             MysteryProductId = 120,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 209,
                             MysteryProductId = 120,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 210,
                             MysteryProductId = 121,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 211,
                             MysteryProductId = 121,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 212,
                             MysteryProductId = 122,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 213,
                             MysteryProductId = 122,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 214,
                             MysteryProductId = 123,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 215,
                             MysteryProductId = 123,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 216,
                             MysteryProductId = 124,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 217,
                             MysteryProductId = 124,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 218,
                             MysteryProductId = 125,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 219,
                             MysteryProductId = 125,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 220,
                             MysteryProductId = 126,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 221,
                             MysteryProductId = 126,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 222,
                             MysteryProductId = 127,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 223,
                             MysteryProductId = 127,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 224,
                             MysteryProductId = 128,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 225,
                             MysteryProductId = 128,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 226,
                             MysteryProductId = 129,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 227,
                             MysteryProductId = 129,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 228,
                             MysteryProductId = 130,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 229,
                             MysteryProductId = 130,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 230,
                             MysteryProductId = 131,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 231,
                             MysteryProductId = 131,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 232,
                             MysteryProductId = 132,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 233,
                             MysteryProductId = 132,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 234,
                             MysteryProductId = 133,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 235,
                             MysteryProductId = 133,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 236,
                             MysteryProductId = 134,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 237,
                             MysteryProductId = 134,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 238,
                             MysteryProductId = 135,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 239,
                             MysteryProductId = 135,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 240,
                             MysteryProductId = 136,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 241,
                             MysteryProductId = 136,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 242,
                             MysteryProductId = 137,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 243,
                             MysteryProductId = 137,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 244,
                             MysteryProductId = 138,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 245,
                             MysteryProductId = 138,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 246,
                             MysteryProductId = 139,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 247,
                             MysteryProductId = 139,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 248,
                             MysteryProductId = 140,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 249,
                             MysteryProductId = 140,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 250,
                             MysteryProductId = 141,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 251,
                             MysteryProductId = 141,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 252,
                             MysteryProductId = 142,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 253,
                             MysteryProductId = 142,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 254,
                             MysteryProductId = 143,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 255,
                             MysteryProductId = 143,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 256,
                             MysteryProductId = 144,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 257,
                             MysteryProductId = 144,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 258,
                             MysteryProductId = 145,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 259,
                             MysteryProductId = 145,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 260,
                             MysteryProductId = 146,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 261,
                             MysteryProductId = 146,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 262,
                             MysteryProductId = 147,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 263,
                             MysteryProductId = 147,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 264,
                             MysteryProductId = 148,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 265,
                             MysteryProductId = 148,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 266,
                             MysteryProductId = 149,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 267,
                             MysteryProductId = 149,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 268,
                             MysteryProductId = 150,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 269,
                             MysteryProductId = 150,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 270,
                             MysteryProductId = 151,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 271,
                             MysteryProductId = 151,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 272,
                             MysteryProductId = 152,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 273,
                             MysteryProductId = 152,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 274,
                             MysteryProductId = 153,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 275,
                             MysteryProductId = 153,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 276,
                             MysteryProductId = 154,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 277,
                             MysteryProductId = 154,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 278,
                             MysteryProductId = 155,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 279,
                             MysteryProductId = 155,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 280,
                             MysteryProductId = 156,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 281,
                             MysteryProductId = 156,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 282,
                             MysteryProductId = 157,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 283,
                             MysteryProductId = 157,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 284,
                             MysteryProductId = 158,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 285,
                             MysteryProductId = 158,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 286,
                             MysteryProductId = 159,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 287,
                             MysteryProductId = 159,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 288,
                             MysteryProductId = 160,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 289,
                             MysteryProductId = 160,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 290,
                             MysteryProductId = 161,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 291,
                             MysteryProductId = 161,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 292,
                             MysteryProductId = 162,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 293,
                             MysteryProductId = 162,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 294,
                             MysteryProductId = 163,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 295,
                             MysteryProductId = 163,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 296,
                             MysteryProductId = 164,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 297,
                             MysteryProductId = 164,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 298,
                             MysteryProductId = 165,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 299,
                             MysteryProductId = 165,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 300,
                             MysteryProductId = 166,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 301,
                             MysteryProductId = 166,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 302,
                             MysteryProductId = 167,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 303,
                             MysteryProductId = 167,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 304,
                             MysteryProductId = 168,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 305,
                             MysteryProductId = 168,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 306,
                             MysteryProductId = 169,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 307,
                             MysteryProductId = 169,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 308,
                             MysteryProductId = 170,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 309,
                             MysteryProductId = 170,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 310,
                             MysteryProductId = 171,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 311,
                             MysteryProductId = 171,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 312,
                             MysteryProductId = 172,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 313,
                             MysteryProductId = 172,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 314,
                             MysteryProductId = 173,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 315,
                             MysteryProductId = 173,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 316,
                             MysteryProductId = 174,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 317,
                             MysteryProductId = 174,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 318,
                             MysteryProductId = 175,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 319,
                             MysteryProductId = 175,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 320,
                             MysteryProductId = 176,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 321,
                             MysteryProductId = 176,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 322,
                             MysteryProductId = 177,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 323,
                             MysteryProductId = 177,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 324,
                             MysteryProductId = 178,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 325,
                             MysteryProductId = 178,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 326,
                             MysteryProductId = 179,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 327,
                             MysteryProductId = 179,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 328,
                             MysteryProductId = 180,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 329,
                             MysteryProductId = 180,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 330,
                             MysteryProductId = 181,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 331,
                             MysteryProductId = 181,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 332,
                             MysteryProductId = 182,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 333,
                             MysteryProductId = 182,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 334,
                             MysteryProductId = 183,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 335,
                             MysteryProductId = 183,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 336,
                             MysteryProductId = 184,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 337,
                             MysteryProductId = 184,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 338,
                             MysteryProductId = 185,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 339,
                             MysteryProductId = 185,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 340,
                             MysteryProductId = 186,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 341,
                             MysteryProductId = 186,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 342,
                             MysteryProductId = 187,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 343,
                             MysteryProductId = 187,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 344,
                             MysteryProductId = 188,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 345,
                             MysteryProductId = 188,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 346,
                             MysteryProductId = 189,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 347,
                             MysteryProductId = 189,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 348,
                             MysteryProductId = 190,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 349,
                             MysteryProductId = 190,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 350,
                             MysteryProductId = 191,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 351,
                             MysteryProductId = 191,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 352,
                             MysteryProductId = 192,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 353,
                             MysteryProductId = 192,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 354,
                             MysteryProductId = 193,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 355,
                             MysteryProductId = 193,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 356,
                             MysteryProductId = 194,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 357,
                             MysteryProductId = 194,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 358,
                             MysteryProductId = 195,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 359,
                             MysteryProductId = 195,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 360,
                             MysteryProductId = 196,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 361,
                             MysteryProductId = 196,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 362,
                             MysteryProductId = 197,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 363,
                             MysteryProductId = 197,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 364,
                             MysteryProductId = 198,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 365,
                             MysteryProductId = 198,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 366,
                             MysteryProductId = 199,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 367,
                             MysteryProductId = 199,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 368,
                             MysteryProductId = 200,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 369,
                             MysteryProductId = 200,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 370,
                             MysteryProductId = 201,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 371,
                             MysteryProductId = 201,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 372,
                             MysteryProductId = 202,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 373,
                             MysteryProductId = 202,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 374,
                             MysteryProductId = 203,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 375,
                             MysteryProductId = 203,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 376,
                             MysteryProductId = 204,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 377,
                             MysteryProductId = 204,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 378,
                             MysteryProductId = 205,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 379,
                             MysteryProductId = 205,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 380,
                             MysteryProductId = 206,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 381,
                             MysteryProductId = 206,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 382,
                             MysteryProductId = 207,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 383,
                             MysteryProductId = 207,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 384,
                             MysteryProductId = 208,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 385,
                             MysteryProductId = 208,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 386,
                             MysteryProductId = 209,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 387,
                             MysteryProductId = 209,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 388,
                             MysteryProductId = 210,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 389,
                             MysteryProductId = 210,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 390,
                             MysteryProductId = 211,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 391,
                             MysteryProductId = 211,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 392,
                             MysteryProductId = 212,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 393,
                             MysteryProductId = 212,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 394,
                             MysteryProductId = 213,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 395,
                             MysteryProductId = 213,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 396,
                             MysteryProductId = 214,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 397,
                             MysteryProductId = 214,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 398,
                             MysteryProductId = 215,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 399,
                             MysteryProductId = 215,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 400,
                             MysteryProductId = 216,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 401,
                             MysteryProductId = 216,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 402,
                             MysteryProductId = 217,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 403,
                             MysteryProductId = 217,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 404,
                             MysteryProductId = 218,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 405,
                             MysteryProductId = 218,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 406,
                             MysteryProductId = 219,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 407,
                             MysteryProductId = 219,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 408,
                             MysteryProductId = 220,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 409,
                             MysteryProductId = 220,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 410,
                             MysteryProductId = 221,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 411,
                             MysteryProductId = 221,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 412,
                             MysteryProductId = 222,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 413,
                             MysteryProductId = 222,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 414,
                             MysteryProductId = 223,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 415,
                             MysteryProductId = 223,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 416,
                             MysteryProductId = 224,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 417,
                             MysteryProductId = 224,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 418,
                             MysteryProductId = 225,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 419,
                             MysteryProductId = 225,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 420,
                             MysteryProductId = 226,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 421,
                             MysteryProductId = 226,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 422,
                             MysteryProductId = 227,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 423,
                             MysteryProductId = 227,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 424,
                             MysteryProductId = 228,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 425,
                             MysteryProductId = 228,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 426,
                             MysteryProductId = 229,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 427,
                             MysteryProductId = 229,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 428,
                             MysteryProductId = 230,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 429,
                             MysteryProductId = 230,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 430,
                             MysteryProductId = 231,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 431,
                             MysteryProductId = 231,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 432,
                             MysteryProductId = 232,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 433,
                             MysteryProductId = 232,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 434,
                             MysteryProductId = 233,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 435,
                             MysteryProductId = 233,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 436,
                             MysteryProductId = 234,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 437,
                             MysteryProductId = 234,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 438,
                             MysteryProductId = 235,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 439,
                             MysteryProductId = 235,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 440,
                             MysteryProductId = 236,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 441,
                             MysteryProductId = 236,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 442,
                             MysteryProductId = 237,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 443,
                             MysteryProductId = 237,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 444,
                             MysteryProductId = 238,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 445,
                             MysteryProductId = 238,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 446,
                             MysteryProductId = 239,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 447,
                             MysteryProductId = 239,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 448,
                             MysteryProductId = 240,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 449,
                             MysteryProductId = 240,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 450,
                             MysteryProductId = 241,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 451,
                             MysteryProductId = 241,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 452,
                             MysteryProductId = 242,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 453,
                             MysteryProductId = 242,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 454,
                             MysteryProductId = 243,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 455,
                             MysteryProductId = 243,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 456,
                             MysteryProductId = 244,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 457,
                             MysteryProductId = 244,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 458,
                             MysteryProductId = 245,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 459,
                             MysteryProductId = 245,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 460,
                             MysteryProductId = 246,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 461,
                             MysteryProductId = 246,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 462,
                             MysteryProductId = 247,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 463,
                             MysteryProductId = 247,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 464,
                             MysteryProductId = 248,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 465,
                             MysteryProductId = 248,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 466,
                             MysteryProductId = 249,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 467,
                             MysteryProductId = 249,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 468,
                             MysteryProductId = 250,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 469,
                             MysteryProductId = 250,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 470,
                             MysteryProductId = 251,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 471,
                             MysteryProductId = 251,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 472,
                             MysteryProductId = 252,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 473,
                             MysteryProductId = 252,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 474,
                             MysteryProductId = 253,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 475,
                             MysteryProductId = 253,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 476,
                             MysteryProductId = 254,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 477,
                             MysteryProductId = 254,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 478,
                             MysteryProductId = 255,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 479,
                             MysteryProductId = 255,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 480,
                             MysteryProductId = 256,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 481,
                             MysteryProductId = 256,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 482,
                             MysteryProductId = 257,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 483,
                             MysteryProductId = 257,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 484,
                             MysteryProductId = 258,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 485,
                             MysteryProductId = 258,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 486,
                             MysteryProductId = 259,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 487,
                             MysteryProductId = 259,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 488,
                             MysteryProductId = 260,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 489,
                             MysteryProductId = 260,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 490,
                             MysteryProductId = 261,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 491,
                             MysteryProductId = 261,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 492,
                             MysteryProductId = 262,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 493,
                             MysteryProductId = 262,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 494,
                             MysteryProductId = 263,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 495,
                             MysteryProductId = 263,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 496,
                             MysteryProductId = 264,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 497,
                             MysteryProductId = 264,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 498,
                             MysteryProductId = 265,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 499,
                             MysteryProductId = 265,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 500,
                             MysteryProductId = 266,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 501,
                             MysteryProductId = 266,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 502,
                             MysteryProductId = 267,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 503,
                             MysteryProductId = 267,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 504,
                             MysteryProductId = 268,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 505,
                             MysteryProductId = 268,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 506,
                             MysteryProductId = 269,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 507,
                             MysteryProductId = 269,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 508,
                             MysteryProductId = 270,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 509,
                             MysteryProductId = 270,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 510,
                             MysteryProductId = 271,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 511,
                             MysteryProductId = 271,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 512,
                             MysteryProductId = 272,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 513,
                             MysteryProductId = 272,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 514,
                             MysteryProductId = 273,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 515,
                             MysteryProductId = 273,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 516,
                             MysteryProductId = 274,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 517,
                             MysteryProductId = 274,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 518,
                             MysteryProductId = 275,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 519,
                             MysteryProductId = 275,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 520,
                             MysteryProductId = 276,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 521,
                             MysteryProductId = 276,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 522,
                             MysteryProductId = 277,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 523,
                             MysteryProductId = 277,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 524,
                             MysteryProductId = 278,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 525,
                             MysteryProductId = 278,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 526,
                             MysteryProductId = 279,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 527,
                             MysteryProductId = 279,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 528,
                             MysteryProductId = 280,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 529,
                             MysteryProductId = 280,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 0
                         },
                         new
                         {
                             Id = 530,
                             MysteryProductId = 281,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 531,
                             MysteryProductId = 281,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 0
                         },
                         new
                         {
                             Id = 532,
                             MysteryProductId = 282,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 533,
                             MysteryProductId = 282,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 534,
                             MysteryProductId = 283,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 535,
                             MysteryProductId = 283,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 536,
                             MysteryProductId = 284,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 537,
                             MysteryProductId = 284,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 538,
                             MysteryProductId = 285,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 539,
                             MysteryProductId = 285,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 0
                         },
                         new
                         {
                             Id = 540,
                             MysteryProductId = 286,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 541,
                             MysteryProductId = 286,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 542,
                             MysteryProductId = 287,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 543,
                             MysteryProductId = 287,
-                            ProductId = "1054"
+                            ProductId = "1054",
+                            Type = 0
                         },
                         new
                         {
                             Id = 544,
                             MysteryProductId = 288,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 545,
                             MysteryProductId = 288,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 546,
                             MysteryProductId = 289,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 547,
                             MysteryProductId = 289,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 548,
                             MysteryProductId = 290,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 549,
                             MysteryProductId = 290,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 550,
                             MysteryProductId = 291,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 551,
                             MysteryProductId = 291,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 552,
                             MysteryProductId = 292,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 553,
                             MysteryProductId = 292,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 554,
                             MysteryProductId = 293,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 555,
                             MysteryProductId = 293,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 556,
                             MysteryProductId = 294,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 557,
                             MysteryProductId = 294,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 558,
                             MysteryProductId = 295,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 559,
                             MysteryProductId = 295,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 560,
                             MysteryProductId = 296,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 561,
                             MysteryProductId = 296,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 562,
                             MysteryProductId = 297,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 563,
                             MysteryProductId = 297,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 564,
                             MysteryProductId = 298,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 565,
                             MysteryProductId = 298,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 566,
                             MysteryProductId = 299,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 567,
                             MysteryProductId = 299,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 568,
                             MysteryProductId = 300,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 569,
                             MysteryProductId = 300,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 570,
                             MysteryProductId = 301,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 571,
                             MysteryProductId = 301,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 572,
                             MysteryProductId = 302,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 573,
                             MysteryProductId = 302,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 574,
                             MysteryProductId = 303,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 575,
                             MysteryProductId = 303,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 576,
                             MysteryProductId = 304,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 577,
                             MysteryProductId = 304,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 578,
                             MysteryProductId = 305,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 579,
                             MysteryProductId = 305,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 580,
                             MysteryProductId = 306,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 581,
                             MysteryProductId = 306,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 582,
                             MysteryProductId = 307,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 583,
                             MysteryProductId = 307,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 584,
                             MysteryProductId = 308,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 585,
                             MysteryProductId = 308,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 586,
                             MysteryProductId = 309,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 587,
                             MysteryProductId = 309,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 588,
                             MysteryProductId = 310,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 589,
                             MysteryProductId = 310,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 590,
                             MysteryProductId = 311,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 591,
                             MysteryProductId = 311,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 592,
                             MysteryProductId = 312,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 593,
                             MysteryProductId = 312,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 594,
                             MysteryProductId = 313,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 595,
                             MysteryProductId = 313,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 596,
                             MysteryProductId = 314,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 597,
                             MysteryProductId = 314,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 598,
                             MysteryProductId = 315,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 599,
                             MysteryProductId = 315,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 600,
                             MysteryProductId = 316,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 601,
                             MysteryProductId = 316,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 602,
                             MysteryProductId = 317,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 603,
                             MysteryProductId = 317,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 604,
                             MysteryProductId = 318,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 605,
                             MysteryProductId = 318,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 606,
                             MysteryProductId = 319,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 607,
                             MysteryProductId = 319,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 608,
                             MysteryProductId = 320,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 609,
                             MysteryProductId = 320,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 610,
                             MysteryProductId = 321,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 611,
                             MysteryProductId = 321,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 612,
                             MysteryProductId = 322,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 613,
                             MysteryProductId = 322,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 614,
                             MysteryProductId = 323,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 615,
                             MysteryProductId = 323,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 616,
                             MysteryProductId = 324,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 617,
                             MysteryProductId = 324,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 618,
                             MysteryProductId = 325,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 619,
                             MysteryProductId = 325,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 620,
                             MysteryProductId = 326,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 621,
                             MysteryProductId = 326,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 622,
                             MysteryProductId = 327,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 623,
                             MysteryProductId = 327,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 624,
                             MysteryProductId = 328,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 625,
                             MysteryProductId = 328,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 626,
                             MysteryProductId = 329,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 627,
                             MysteryProductId = 329,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 628,
                             MysteryProductId = 330,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 629,
                             MysteryProductId = 330,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 630,
                             MysteryProductId = 331,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 631,
                             MysteryProductId = 331,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 632,
                             MysteryProductId = 332,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 633,
                             MysteryProductId = 332,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 634,
                             MysteryProductId = 333,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 635,
                             MysteryProductId = 333,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 636,
                             MysteryProductId = 334,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 637,
                             MysteryProductId = 334,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 638,
                             MysteryProductId = 335,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 639,
                             MysteryProductId = 335,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 640,
                             MysteryProductId = 336,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 641,
                             MysteryProductId = 336,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 642,
                             MysteryProductId = 337,
-                            ProductId = "1073"
+                            ProductId = "1073",
+                            Type = 0
                         },
                         new
                         {
                             Id = 643,
                             MysteryProductId = 337,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 644,
                             MysteryProductId = 338,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 645,
                             MysteryProductId = 338,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 646,
                             MysteryProductId = 339,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 647,
                             MysteryProductId = 339,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 648,
                             MysteryProductId = 340,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 649,
                             MysteryProductId = 340,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 650,
                             MysteryProductId = 341,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 651,
                             MysteryProductId = 341,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 652,
                             MysteryProductId = 342,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 653,
                             MysteryProductId = 342,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 654,
                             MysteryProductId = 343,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 655,
                             MysteryProductId = 343,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 656,
                             MysteryProductId = 344,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 657,
                             MysteryProductId = 344,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 658,
                             MysteryProductId = 345,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 659,
                             MysteryProductId = 345,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 660,
                             MysteryProductId = 346,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 661,
                             MysteryProductId = 346,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 662,
                             MysteryProductId = 347,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 663,
                             MysteryProductId = 347,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 664,
                             MysteryProductId = 348,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 665,
                             MysteryProductId = 348,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 666,
                             MysteryProductId = 349,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 667,
                             MysteryProductId = 349,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 668,
                             MysteryProductId = 350,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 669,
                             MysteryProductId = 350,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 670,
                             MysteryProductId = 351,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 671,
                             MysteryProductId = 351,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 672,
                             MysteryProductId = 352,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 673,
                             MysteryProductId = 352,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 674,
                             MysteryProductId = 353,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 675,
                             MysteryProductId = 353,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 676,
                             MysteryProductId = 354,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 677,
                             MysteryProductId = 354,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 678,
                             MysteryProductId = 355,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 679,
                             MysteryProductId = 355,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 680,
                             MysteryProductId = 356,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 681,
                             MysteryProductId = 356,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 682,
                             MysteryProductId = 357,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 683,
                             MysteryProductId = 357,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 684,
                             MysteryProductId = 358,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 685,
                             MysteryProductId = 358,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 686,
                             MysteryProductId = 359,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 687,
                             MysteryProductId = 359,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 688,
                             MysteryProductId = 360,
-                            ProductId = "682"
+                            ProductId = "682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 689,
                             MysteryProductId = 360,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 690,
                             MysteryProductId = 361,
-                            ProductId = "1072"
+                            ProductId = "1072",
+                            Type = 0
                         },
                         new
                         {
                             Id = 691,
                             MysteryProductId = 361,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 692,
                             MysteryProductId = 362,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 693,
                             MysteryProductId = 362,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 694,
                             MysteryProductId = 363,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 695,
                             MysteryProductId = 363,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 696,
                             MysteryProductId = 364,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 697,
                             MysteryProductId = 364,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 698,
                             MysteryProductId = 365,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 699,
                             MysteryProductId = 365,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 700,
                             MysteryProductId = 366,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 701,
                             MysteryProductId = 366,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 702,
                             MysteryProductId = 367,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 703,
                             MysteryProductId = 367,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 704,
                             MysteryProductId = 368,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 705,
                             MysteryProductId = 368,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 706,
                             MysteryProductId = 369,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 707,
                             MysteryProductId = 369,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 708,
                             MysteryProductId = 370,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 709,
                             MysteryProductId = 370,
-                            ProductId = "547"
+                            ProductId = "547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 710,
                             MysteryProductId = 371,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 711,
                             MysteryProductId = 371,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 712,
                             MysteryProductId = 372,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 713,
                             MysteryProductId = 372,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 714,
                             MysteryProductId = 373,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 715,
                             MysteryProductId = 373,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 716,
                             MysteryProductId = 374,
-                            ProductId = "1055"
+                            ProductId = "1055",
+                            Type = 0
                         },
                         new
                         {
                             Id = 717,
                             MysteryProductId = 374,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 718,
                             MysteryProductId = 375,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 719,
                             MysteryProductId = 375,
-                            ProductId = "1084"
+                            ProductId = "1084",
+                            Type = 0
                         },
                         new
                         {
                             Id = 720,
                             MysteryProductId = 376,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 721,
                             MysteryProductId = 376,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 722,
                             MysteryProductId = 377,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 723,
                             MysteryProductId = 377,
-                            ProductId = "84"
+                            ProductId = "84",
+                            Type = 0
                         },
                         new
                         {
                             Id = 724,
                             MysteryProductId = 378,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 725,
                             MysteryProductId = 378,
-                            ProductId = "77"
+                            ProductId = "77",
+                            Type = 0
                         },
                         new
                         {
                             Id = 726,
                             MysteryProductId = 379,
-                            ProductId = "702"
+                            ProductId = "702",
+                            Type = 0
                         },
                         new
                         {
                             Id = 727,
                             MysteryProductId = 380,
-                            ProductId = "213"
+                            ProductId = "213",
+                            Type = 0
                         },
                         new
                         {
                             Id = 728,
                             MysteryProductId = 381,
-                            ProductId = "1110"
+                            ProductId = "1110",
+                            Type = 0
                         },
                         new
                         {
                             Id = 729,
                             MysteryProductId = 382,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 0
                         },
                         new
                         {
                             Id = 730,
                             MysteryProductId = 383,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 0
                         },
                         new
                         {
                             Id = 731,
                             MysteryProductId = 384,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 0
                         },
                         new
                         {
                             Id = 732,
                             MysteryProductId = 385,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 0
                         },
                         new
                         {
                             Id = 733,
                             MysteryProductId = 386,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 0
                         },
                         new
                         {
                             Id = 734,
                             MysteryProductId = 387,
-                            ProductId = "1290"
+                            ProductId = "1290",
+                            Type = 0
                         },
                         new
                         {
                             Id = 735,
                             MysteryProductId = 388,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 0
                         },
                         new
                         {
                             Id = 736,
                             MysteryProductId = 389,
-                            ProductId = "658"
+                            ProductId = "658",
+                            Type = 0
                         },
                         new
                         {
                             Id = 737,
                             MysteryProductId = 390,
-                            ProductId = "1053"
+                            ProductId = "1053",
+                            Type = 0
                         },
                         new
                         {
                             Id = 738,
                             MysteryProductId = 391,
-                            ProductId = "463"
+                            ProductId = "463",
+                            Type = 0
                         },
                         new
                         {
                             Id = 739,
                             MysteryProductId = 392,
-                            ProductId = "433"
+                            ProductId = "433",
+                            Type = 0
                         },
                         new
                         {
                             Id = 740,
                             MysteryProductId = 393,
-                            ProductId = "664"
+                            ProductId = "664",
+                            Type = 0
                         },
                         new
                         {
                             Id = 741,
                             MysteryProductId = 394,
-                            ProductId = "666"
+                            ProductId = "666",
+                            Type = 0
                         },
                         new
                         {
                             Id = 742,
                             MysteryProductId = 395,
-                            ProductId = "801"
+                            ProductId = "801",
+                            Type = 0
                         },
                         new
                         {
                             Id = 743,
                             MysteryProductId = 396,
-                            ProductId = "508"
+                            ProductId = "508",
+                            Type = 0
                         },
                         new
                         {
                             Id = 744,
                             MysteryProductId = 397,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 1
                         },
                         new
                         {
                             Id = 745,
                             MysteryProductId = 397,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 746,
                             MysteryProductId = 397,
-                            ProductId = "1276"
+                            ProductId = "1276",
+                            Type = 3
                         },
                         new
                         {
                             Id = 747,
                             MysteryProductId = 397,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 748,
                             MysteryProductId = 398,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 1
                         },
                         new
                         {
                             Id = 749,
                             MysteryProductId = 398,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 750,
                             MysteryProductId = 398,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 751,
                             MysteryProductId = 398,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 752,
                             MysteryProductId = 399,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 1
                         },
                         new
                         {
                             Id = 753,
                             MysteryProductId = 399,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 754,
                             MysteryProductId = 399,
-                            ProductId = "73"
+                            ProductId = "73",
+                            Type = 3
                         },
                         new
                         {
                             Id = 755,
                             MysteryProductId = 399,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 756,
                             MysteryProductId = 400,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 1
                         },
                         new
                         {
                             Id = 757,
                             MysteryProductId = 400,
-                            ProductId = "1402"
+                            ProductId = "1402",
+                            Type = 2
                         },
                         new
                         {
                             Id = 758,
                             MysteryProductId = 400,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 759,
                             MysteryProductId = 400,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 760,
                             MysteryProductId = 401,
-                            ProductId = "49"
+                            ProductId = "49",
+                            Type = 1
                         },
                         new
                         {
                             Id = 761,
                             MysteryProductId = 401,
-                            ProductId = "1328"
+                            ProductId = "1328",
+                            Type = 2
                         },
                         new
                         {
                             Id = 762,
                             MysteryProductId = 401,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 763,
                             MysteryProductId = 401,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 764,
                             MysteryProductId = 402,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 1
                         },
                         new
                         {
                             Id = 765,
                             MysteryProductId = 402,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 766,
                             MysteryProductId = 402,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 767,
                             MysteryProductId = 402,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 768,
                             MysteryProductId = 403,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 1
                         },
                         new
                         {
                             Id = 769,
                             MysteryProductId = 403,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 770,
                             MysteryProductId = 403,
-                            ProductId = "73"
+                            ProductId = "73",
+                            Type = 3
                         },
                         new
                         {
                             Id = 771,
                             MysteryProductId = 403,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 772,
                             MysteryProductId = 404,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 1
                         },
                         new
                         {
                             Id = 773,
                             MysteryProductId = 404,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 774,
                             MysteryProductId = 404,
-                            ProductId = "1276"
+                            ProductId = "1276",
+                            Type = 3
                         },
                         new
                         {
                             Id = 775,
                             MysteryProductId = 404,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 776,
                             MysteryProductId = 405,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 1
                         },
                         new
                         {
                             Id = 777,
                             MysteryProductId = 405,
-                            ProductId = "1401"
+                            ProductId = "1401",
+                            Type = 2
                         },
                         new
                         {
                             Id = 778,
                             MysteryProductId = 405,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 779,
                             MysteryProductId = 405,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 780,
                             MysteryProductId = 406,
-                            ProductId = "2"
+                            ProductId = "2",
+                            Type = 1
                         },
                         new
                         {
                             Id = 781,
                             MysteryProductId = 406,
-                            ProductId = "1401"
+                            ProductId = "1401",
+                            Type = 2
                         },
                         new
                         {
                             Id = 782,
                             MysteryProductId = 406,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 783,
                             MysteryProductId = 406,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 784,
                             MysteryProductId = 407,
-                            ProductId = "1511"
+                            ProductId = "1511",
+                            Type = 1
                         },
                         new
                         {
                             Id = 785,
                             MysteryProductId = 407,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 786,
                             MysteryProductId = 407,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 787,
                             MysteryProductId = 407,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 788,
                             MysteryProductId = 408,
-                            ProductId = "1511"
+                            ProductId = "1511",
+                            Type = 1
                         },
                         new
                         {
                             Id = 789,
                             MysteryProductId = 408,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 790,
                             MysteryProductId = 408,
-                            ProductId = "73"
+                            ProductId = "73",
+                            Type = 3
                         },
                         new
                         {
                             Id = 791,
                             MysteryProductId = 408,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 792,
                             MysteryProductId = 409,
-                            ProductId = "1511"
+                            ProductId = "1511",
+                            Type = 1
                         },
                         new
                         {
                             Id = 793,
                             MysteryProductId = 409,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 794,
                             MysteryProductId = 409,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 795,
                             MysteryProductId = 409,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 796,
                             MysteryProductId = 410,
-                            ProductId = "1511"
+                            ProductId = "1511",
+                            Type = 1
                         },
                         new
                         {
                             Id = 797,
                             MysteryProductId = 410,
-                            ProductId = "1402"
+                            ProductId = "1402",
+                            Type = 2
                         },
                         new
                         {
                             Id = 798,
                             MysteryProductId = 410,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 799,
                             MysteryProductId = 410,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 800,
                             MysteryProductId = 411,
-                            ProductId = "1511"
+                            ProductId = "1511",
+                            Type = 1
                         },
                         new
                         {
                             Id = 801,
                             MysteryProductId = 411,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 2
                         },
                         new
                         {
                             Id = 802,
                             MysteryProductId = 411,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 803,
                             MysteryProductId = 411,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 804,
                             MysteryProductId = 412,
-                            ProductId = "1511"
+                            ProductId = "1511",
+                            Type = 1
                         },
                         new
                         {
                             Id = 805,
                             MysteryProductId = 412,
-                            ProductId = "1101"
+                            ProductId = "1101",
+                            Type = 2
                         },
                         new
                         {
                             Id = 806,
                             MysteryProductId = 412,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 807,
                             MysteryProductId = 412,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 808,
                             MysteryProductId = 413,
-                            ProductId = "1396"
+                            ProductId = "1396",
+                            Type = 1
                         },
                         new
                         {
                             Id = 809,
                             MysteryProductId = 413,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 810,
                             MysteryProductId = 413,
-                            ProductId = "73"
+                            ProductId = "73",
+                            Type = 3
                         },
                         new
                         {
                             Id = 811,
                             MysteryProductId = 413,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 812,
                             MysteryProductId = 414,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 1
                         },
                         new
                         {
                             Id = 813,
                             MysteryProductId = 414,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 814,
                             MysteryProductId = 414,
-                            ProductId = "73"
+                            ProductId = "73",
+                            Type = 3
                         },
                         new
                         {
                             Id = 815,
                             MysteryProductId = 414,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 816,
                             MysteryProductId = 415,
-                            ProductId = "46"
+                            ProductId = "46",
+                            Type = 1
                         },
                         new
                         {
                             Id = 817,
                             MysteryProductId = 415,
-                            ProductId = "1401"
+                            ProductId = "1401",
+                            Type = 2
                         },
                         new
                         {
                             Id = 818,
                             MysteryProductId = 415,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 819,
                             MysteryProductId = 415,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 820,
                             MysteryProductId = 416,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 1
                         },
                         new
                         {
                             Id = 821,
                             MysteryProductId = 416,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 822,
                             MysteryProductId = 416,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 823,
                             MysteryProductId = 416,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 824,
                             MysteryProductId = 417,
-                            ProductId = "802"
+                            ProductId = "802",
+                            Type = 1
                         },
                         new
                         {
                             Id = 825,
                             MysteryProductId = 417,
-                            ProductId = "1328"
+                            ProductId = "1328",
+                            Type = 2
                         },
                         new
                         {
                             Id = 826,
                             MysteryProductId = 417,
-                            ProductId = "73"
+                            ProductId = "73",
+                            Type = 3
                         },
                         new
                         {
                             Id = 827,
                             MysteryProductId = 417,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 828,
                             MysteryProductId = 418,
-                            ProductId = "3"
+                            ProductId = "3",
+                            Type = 1
                         },
                         new
                         {
                             Id = 829,
                             MysteryProductId = 418,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 830,
                             MysteryProductId = 418,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 831,
                             MysteryProductId = 418,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 832,
                             MysteryProductId = 419,
-                            ProductId = "15"
+                            ProductId = "15",
+                            Type = 1
                         },
                         new
                         {
                             Id = 833,
                             MysteryProductId = 419,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 834,
                             MysteryProductId = 419,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 835,
                             MysteryProductId = 419,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 836,
                             MysteryProductId = 420,
-                            ProductId = "16"
+                            ProductId = "16",
+                            Type = 1
                         },
                         new
                         {
                             Id = 837,
                             MysteryProductId = 420,
-                            ProductId = "1401"
+                            ProductId = "1401",
+                            Type = 2
                         },
                         new
                         {
                             Id = 838,
                             MysteryProductId = 420,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 839,
                             MysteryProductId = 420,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 840,
                             MysteryProductId = 421,
-                            ProductId = "17"
+                            ProductId = "17",
+                            Type = 1
                         },
                         new
                         {
                             Id = 841,
                             MysteryProductId = 421,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 842,
                             MysteryProductId = 421,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 843,
                             MysteryProductId = 421,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 844,
                             MysteryProductId = 422,
-                            ProductId = "1512"
+                            ProductId = "1512",
+                            Type = 1
                         },
                         new
                         {
                             Id = 845,
                             MysteryProductId = 422,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 846,
                             MysteryProductId = 422,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 847,
                             MysteryProductId = 422,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 848,
                             MysteryProductId = 423,
-                            ProductId = "658"
+                            ProductId = "658",
+                            Type = 1
                         },
                         new
                         {
                             Id = 849,
                             MysteryProductId = 423,
-                            ProductId = "1400"
+                            ProductId = "1400",
+                            Type = 2
                         },
                         new
                         {
                             Id = 850,
                             MysteryProductId = 423,
-                            ProductId = "83"
+                            ProductId = "83",
+                            Type = 3
                         },
                         new
                         {
                             Id = 851,
                             MysteryProductId = 423,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         },
                         new
                         {
                             Id = 852,
                             MysteryProductId = 424,
-                            ProductId = "1602"
+                            ProductId = "1602",
+                            Type = 1
                         },
                         new
                         {
                             Id = 853,
                             MysteryProductId = 424,
-                            ProductId = "1398"
+                            ProductId = "1398",
+                            Type = 2
                         },
                         new
                         {
                             Id = 854,
                             MysteryProductId = 424,
-                            ProductId = "76"
+                            ProductId = "76",
+                            Type = 3
                         },
                         new
                         {
                             Id = 855,
                             MysteryProductId = 424,
-                            ProductId = "53"
+                            ProductId = "53",
+                            Type = 4
                         });
                 });
 

@@ -39,9 +39,9 @@
             {
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
                     <RadzenLabel Text="Afficher les" Component="costBy" />
-                    <span style="cursor:pointer" @onclick=@(() => criteria.OnlyOne = false)>Combinaisons</span>
-                    <RadzenSwitch Name="onlyOne" Value="criteria.OnlyOne" Change="@(() => criteria.OnlyOne = !criteria.OnlyOne)" />
-                    <span style="cursor:pointer" @onclick=@(() => criteria.OnlyOne = true)>Produits seuls</span>
+                    <span style="cursor:pointer" @onclick=@(() => OnDisplayChange(false))>Combinaisons</span>
+                    <RadzenSwitch Name="onlyOne" Value="criteria.OnlyOne" Change="OnDisplayChange" />
+                    <span style="cursor:pointer" @onclick=@(() => OnDisplayChange(true))>Produits seuls</span>
                 </RadzenStack>
                 <br />
                 @if (!criteria.OnlyOne)
@@ -105,13 +105,15 @@
                     <Columns>
                         <RadzenDataGridColumn Title="Produit">
                             <Template Context="data">
-                                @foreach (var product in data.Products)
-                                {
-                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
-                                        <img src="@product.Image" class="image" />
-                                        <span>@product.Name</span>
-                                    </RadzenStack>
-                                }
+                                <div class="mystere-products">
+                                    @foreach (var product in data.Products)
+                                    {
+                                        <div class="mystere-product">
+                                            <img src="@product.Image" class="image" />
+                                            <span>@product.Name</span>
+                                        </div>
+                                    }
+                                </div>
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn HeaderCssClass="col-3">
@@ -200,10 +202,44 @@
             }
             else
             {
-                <span>@GetSingleBurgers(campaign.Burgers).Count() produits</span>
+                var productTypes = campaign.ProductTypes;
+                @if (productTypes.Length > 1)
+                {
+                    <RadzenPanel AllowCollapse="true" Collapsed="!filter" Expand="@(() => filter = true)" Collapse="@(() => filter = false)">
+                        <HeaderTemplate>
+                            @if (criteria != new MysteryCriteria { OnlyOne = true })
+                            {
+                                <RadzenButton Text="Réinitialiser" Variant="Variant.Outlined" Icon="replay" Click="@(() => criteria = new() { OnlyOne = true })" />
+                            }
+                            <span @onclick="@(() => filter = !filter)">Filtres</span>
+                        </HeaderTemplate>
+                        <ChildContent>
+                            <RadzenCard Variant="Variant.Flat">
+                                <RadzenStack>
+                                    <RadzenStack Orientation="Orientation.Vertical" Wrap="FlexWrap.Wrap">
+                                        <RadzenLabel Text="Type de produit" Component="productType" />
+                                        <RadzenRadioButtonList Name="productType"
+                                                               @bind-Value="criteria.ProductType"
+                                                               TValue="MysteryProductType?">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Tous" Value="@((MysteryProductType?)null)" />
+                                                @foreach (var type in productTypes)
+                                                {
+                                                    <RadzenRadioButtonListItem Text="@GetProductTypeName(type)" Value="@((MysteryProductType?)type)" />
+                                                }
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </RadzenStack>
+                                </RadzenStack>
+                            </RadzenCard>
+                        </ChildContent>
+                    </RadzenPanel>
+                    <br />
+                }
+                <span>@GetSingleBurgers(campaign).Count() produits</span>
                 <br />
                 <br />
-                <RadzenDataGrid Data="@GetSingleBurgers(campaign.Burgers)">
+                <RadzenDataGrid Data="@GetSingleBurgers(campaign)">
                     <Columns>
                         <RadzenDataGridColumn Title="Produit">
                             <HeaderTemplate>
@@ -218,7 +254,15 @@
                             <Template Context="data">
                                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
                                     <img src="@data.Image" class="image" />
-                                    <span>@data.Name</span>
+                                    <RadzenStack Gap="0">
+                                        <span>@data.Name</span>
+                                        @if (data.Type is not (MysteryProductType.Any or MysteryProductType.Fries))
+                                        {
+                                            <RadzenStack Orientation="Orientation.Horizontal" Style="font-size:0.8em;column-gap:6px" Wrap="FlexWrap.Wrap">
+                                                <span style="font-weight:600">@GetProductTypeName(data.Type)</span>
+                                            </RadzenStack>
+                                        }
+                                    </RadzenStack>
                                 </RadzenStack>
                             </Template>
                         </RadzenDataGridColumn>
@@ -259,7 +303,10 @@
                             <Template Context="data">
                                 <RadzenStack AlignItems="AlignItems.Start" Gap="0">
                                     <span>@(data.Price.ToString("0.00 €") ?? "-")</span>
-                                    <span class="detail">(x @((data.Price * campaign.ProductCount / campaign.Price).ToString("0.00")))</span>
+                                    @if (productTypes.Length == 1)
+                                    {
+                                        <span class="detail">(x @((data.Price * 2 / campaign.Price).ToString("0.00")))</span>
+                                    }
                                 </RadzenStack>
                             </Template>
                         </RadzenDataGridColumn>
@@ -342,20 +389,33 @@
             || criteria.CombinationMode == CombinationMode.ExactSelection && criteria.Burgers.ToHashSet().SetEquals(b.Products.Select(p => p.Name)));
     }
 
-    private IEnumerable<SingleMysteryBurgerDisplay> GetSingleBurgers(IEnumerable<BurgerMystereDisplay> burgers)
+    private static string GetProductTypeName(MysteryProductType type) => type switch
     {
-        var singleBurgers = burgers.SelectMany(b => b.Products.Select(p =>
-            new SingleMysteryBurgerDisplay(p.Name, p.Image, p.Price, p.Energy, b.Chance, b.MyCount, b.TotalCount)))
-            .GroupBy(b => (b.Name, b.Image, b.Price, b.Energy))
+        MysteryProductType.Any => "Produit mystère",
+        MysteryProductType.MainBurger => "Burger principal",
+        MysteryProductType.SideBurger => "Burger secondaire",
+        MysteryProductType.Snack => "Snack",
+        MysteryProductType.Fries => "Frites",
+        _ => throw new InvalidOperationException($"Type de produit mystère inconnu : {type}"),
+    };
+
+    private IEnumerable<SingleMysteryBurgerDisplay> GetSingleBurgers(BurgerMystereListDisplay campaign)
+    {
+        var hasMultipleTypes = campaign.ProductTypes.Length > 1;
+        var singleBurgers = campaign.Burgers.SelectMany(b => b.Products.Select(p =>
+            new SingleMysteryBurgerDisplay(p.Name, p.Image, p.Price, p.Energy, p.Type, b.Chance, b.MyCount, b.TotalCount)))
+            .GroupBy(b => (b.Name, b.Image, b.Price, b.Energy, b.Type))
             .Select(g => new SingleMysteryBurgerDisplay(
                 g.Key.Name, 
                 g.Key.Image,
                 g.Key.Price,
                 g.Key.Energy,
+                g.Key.Type,
                 Chance: g.Sum(b => b.Chance), 
                 MyCount: g.Sum(b => b.MyCount), 
                 TotalCount: g.Sum(b => b.TotalCount)
-            ));
+            ))
+            .Where(b => !hasMultipleTypes || criteria.ProductType == null || b.Type == criteria.ProductType);
 
         return ((criteria.SortBy, criteria.Asc) switch
         {
@@ -377,6 +437,14 @@
     {
         criteria.Asc = !criteria.Asc;
         criteria.SortBy = field;
+    }
+
+    private void OnDisplayChange(bool onlyOne)
+    {
+        if (criteria.OnlyOne != onlyOne)
+        {
+            criteria = new() { OnlyOne = onlyOne };
+        }
     }
 
     private void OnMonthChange(object change)
@@ -431,8 +499,10 @@
 
         public IList<string>? Burgers { get; set; }
 
+        public MysteryProductType? ProductType { get; set; }
+
         public bool OnlyOne { get; set; }
     }
 
-    private record SingleMysteryBurgerDisplay(string Name, string? Image, double Price, double Energy, double Chance, int MyCount, int TotalCount);
+    private record SingleMysteryBurgerDisplay(string Name, string? Image, double Price, double Energy, MysteryProductType Type, double Chance, int MyCount, int TotalCount);
 }
